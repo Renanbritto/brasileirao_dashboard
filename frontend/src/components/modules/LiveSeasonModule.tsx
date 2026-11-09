@@ -50,6 +50,7 @@ interface LiveSeasonModuleProps {
 }
 
 type TableFilterMode = "overall" | "form5" | "home" | "away";
+type TableViewType = "official" | "analytics";
 
 export function LiveSeasonModule({
   data,
@@ -58,6 +59,7 @@ export function LiveSeasonModule({
   favoriteClubSlug,
 }: LiveSeasonModuleProps) {
   const [tableMode, setTableMode] = useState<TableFilterMode>("overall");
+  const [tableViewType, setTableViewType] = useState<TableViewType>("official");
   const [simScores, setSimScores] = useState<
     Record<number, { home: number | ""; away: number | "" }>
   >({});
@@ -387,297 +389,450 @@ export function LiveSeasonModule({
         {/* Standings + Monte Carlo Probabilities */}
         <Card className="xl:col-span-7">
           <CardHeader className="pb-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <CardTitle className="text-base sm:text-lg">
-                    Tabela & Probabilidades Monte Carlo (10.000 Cenários)
-                  </CardTitle>
-                  {simulatedStandings && (
-                    <Badge variant="warning" className="animate-pulse font-mono">
-                      Simulação ({simulatedCount}J)
-                    </Badge>
-                  )}
+            <div className="flex flex-col gap-3.5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <div className="flex items-center gap-2.5">
+                    {/* View Mode Toggle: Tabela Oficial vs Probabilidades */}
+                    <div className="obsidian-well inline-flex rounded-2xl p-1">
+                      <button
+                        onClick={() => setTableViewType("official")}
+                        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
+                          tableViewType === "official"
+                            ? "bg-gradient-to-b from-emerald-400 to-emerald-500 text-zinc-950 shadow-[0_2px_12px_rgba(16,185,129,0.4)]"
+                            : "text-zinc-400 hover:text-white"
+                        }`}
+                      >
+                        <Trophy className="h-3.5 w-3.5" />
+                        Tabela Oficial
+                      </button>
+                      <button
+                        onClick={() => setTableViewType("analytics")}
+                        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
+                          tableViewType === "analytics"
+                            ? "bg-gradient-to-b from-emerald-400 to-emerald-500 text-zinc-950 shadow-[0_2px_12px_rgba(16,185,129,0.4)]"
+                            : "text-zinc-400 hover:text-white"
+                        }`}
+                      >
+                        <Sparkles className="h-3.5 w-3.5" />
+                        Probabilidades Monte Carlo
+                      </button>
+                    </div>
+
+                    {simulatedStandings && (
+                      <Badge variant="warning" className="animate-pulse font-mono">
+                        Simulação ({simulatedCount}J)
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-                <CardDescription>
-                  Alterne entre a classificação geral, o recorte de momento (últimas 5 rodadas) e o desempenho Casa/Fora
-                </CardDescription>
+
+                {/* Table Scope Filters: Geral, Últimos 5J, Casa, Fora */}
+                <div className="obsidian-well inline-flex flex-wrap rounded-2xl p-1">
+                  {(
+                    [
+                      { key: "overall", label: "Geral" },
+                      { key: "form5", label: "Últimos 5J" },
+                      { key: "home", label: "Casa" },
+                      { key: "away", label: "Fora" },
+                    ] as { key: TableFilterMode; label: string }[]
+                  ).map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setTableMode(tab.key)}
+                      className={`rounded-xl px-3 py-1 text-xs font-extrabold transition-all ${
+                        tableMode === tab.key
+                          ? "bg-zinc-800 text-emerald-300 shadow-sm ring-1 ring-emerald-400/40"
+                          : "text-zinc-400 hover:text-white"
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* Table View Mode Switcher Well */}
-              <div className="obsidian-well inline-flex flex-wrap rounded-2xl p-1">
-                {(
-                  [
-                    { key: "overall", label: "Geral" },
-                    { key: "form5", label: "Últimos 5J" },
-                    { key: "home", label: "Casa" },
-                    { key: "away", label: "Fora" },
-                  ] as { key: TableFilterMode; label: string }[]
-                ).map((tab) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setTableMode(tab.key)}
-                    className={`rounded-xl px-3 py-1 text-xs font-extrabold transition-all ${
-                      tableMode === tab.key
-                        ? "bg-gradient-to-b from-emerald-400 to-emerald-500 text-zinc-950 shadow-[0_2px_12px_rgba(16,185,129,0.4)]"
-                        : "text-zinc-400 hover:text-white"
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
+              <CardDescription>
+                {tableViewType === "official"
+                  ? `Classificação oficial da Série ${division} (${year}) com pontos, vitórias, empates, derrotas, gols pró, gols contra, saldo de gols e aproveitamento.`
+                  : `Simulação de Monte Carlo com 10.000 cenários estocásticos: probabilidades preditivas de título, G4 e risco de rebaixamento.`}
+              </CardDescription>
             </div>
           </CardHeader>
 
           <CardContent className="px-0 pt-0 pb-3">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-12 text-center">#</TableHead>
-                  <TableHead>Clube</TableHead>
-                  <TableHead className="text-center">P</TableHead>
-                  <TableHead className="text-center">J</TableHead>
-                  <TableHead className="text-center">V</TableHead>
-                  <TableHead className="text-center">SG</TableHead>
-                  <TableHead className="text-center">% Aprov</TableHead>
-                  <TableHead className="text-center">Momento (5J)</TableHead>
-                  <TableHead className="text-right">
-                    {division === "A" ? "Título / G4" : "Título / Acesso"}
-                  </TableHead>
-                  <TableHead className="text-right">Risco Z4</TableHead>
-                  <TableHead className="hidden md:table-cell text-center">
-                    Próx. 3J (SOS)
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {displayedStandings.map((team, idx) => {
-                  const isFav = team.club.slug === favoriteClubSlug;
-                  const delta =
-                    team.sim_position_delta !== undefined
-                      ? team.sim_position_delta
-                      : team.position_delta;
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  {tableViewType === "official" ? (
+                    <TableRow>
+                      <TableHead className="w-12 text-center">#</TableHead>
+                      <TableHead>Clube</TableHead>
+                      <TableHead className="text-center font-extrabold text-white">P</TableHead>
+                      <TableHead className="text-center" title="Jogos Disputados">J</TableHead>
+                      <TableHead className="text-center" title="Vitórias">V</TableHead>
+                      <TableHead className="text-center" title="Empates">E</TableHead>
+                      <TableHead className="text-center" title="Derrotas">D</TableHead>
+                      <TableHead className="text-center" title="Gols Pró (Marcados)">GP</TableHead>
+                      <TableHead className="text-center" title="Gols Contra (Sofridos)">GC</TableHead>
+                      <TableHead className="text-center" title="Saldo de Gols">SG</TableHead>
+                      <TableHead className="text-center" title="Aproveitamento">%</TableHead>
+                      <TableHead className="text-center">Últimos 5J</TableHead>
+                    </TableRow>
+                  ) : (
+                    <TableRow>
+                      <TableHead className="w-12 text-center">#</TableHead>
+                      <TableHead>Clube</TableHead>
+                      <TableHead className="text-center">P</TableHead>
+                      <TableHead className="text-center">J</TableHead>
+                      <TableHead className="text-center">V</TableHead>
+                      <TableHead className="text-center">SG</TableHead>
+                      <TableHead className="text-center">% Aprov</TableHead>
+                      <TableHead className="text-center">Momento (5J)</TableHead>
+                      <TableHead className="text-right">
+                        {division === "A" ? "Título / G4" : "Título / Acesso"}
+                      </TableHead>
+                      <TableHead className="text-right">Risco Z4</TableHead>
+                      <TableHead className="hidden md:table-cell text-center">
+                        Próx. 3J (SOS)
+                      </TableHead>
+                    </TableRow>
+                  )}
+                </TableHeader>
+                <TableBody>
+                  {displayedStandings.map((team, idx) => {
+                    const isFav = team.club.slug === favoriteClubSlug;
+                    const delta =
+                      team.sim_position_delta !== undefined
+                        ? team.sim_position_delta
+                        : team.position_delta;
 
-                  const ptsShow =
-                    tableMode === "form5"
+                    const isForm5 = tableMode === "form5";
+                    const isHome = tableMode === "home";
+                    const isAway = tableMode === "away";
+
+                    const ptsShow = isForm5
                       ? team.points_last_5
-                      : tableMode === "home"
+                      : isHome
                       ? team.home_points
-                      : tableMode === "away"
+                      : isAway
                       ? team.away_points
                       : team.points;
 
-                  const gamesShow =
-                    tableMode === "form5"
+                    const gamesShow = isForm5
                       ? 5
-                      : tableMode === "home"
+                      : isHome
                       ? team.home_played
-                      : tableMode === "away"
+                      : isAway
                       ? team.away_played
                       : team.played;
 
-                  const winsShow =
-                    tableMode === "form5"
+                    const winsShow = isForm5
                       ? team.form_last_5.filter((r) => r === "V").length
-                      : tableMode === "home"
+                      : isHome
                       ? team.home_wins
-                      : tableMode === "away"
+                      : isAway
                       ? team.away_wins
                       : team.wins;
 
-                  const aprovShow =
-                    tableMode === "form5"
+                    const drawsShow = isForm5
+                      ? team.form_last_5.filter((r) => r === "E").length
+                      : isHome
+                      ? team.home_draws
+                      : isAway
+                      ? team.away_draws
+                      : team.draws;
+
+                    const lossesShow = isForm5
+                      ? team.form_last_5.filter((r) => r === "D").length
+                      : isHome
+                      ? team.home_losses
+                      : isAway
+                      ? team.away_losses
+                      : team.losses;
+
+                    const gfShow = isHome
+                      ? team.home_gf
+                      : isAway
+                      ? team.away_gf
+                      : team.goals_for;
+
+                    const gaShow = isHome
+                      ? team.home_ga
+                      : isAway
+                      ? team.away_ga
+                      : team.goals_against;
+
+                    const sgShow = isHome
+                      ? team.home_gf - team.home_ga
+                      : isAway
+                      ? team.away_gf - team.away_ga
+                      : team.goal_diff;
+
+                    const aprovShow = isForm5
                       ? team.aprov_last_5
-                      : tableMode === "home"
+                      : isHome
                       ? team.aprov_home
-                      : tableMode === "away"
+                      : isAway
                       ? team.aprov_away
                       : team.aproveitamento;
 
-                  return (
-                    <TableRow
-                      key={team.club.slug}
-                      className={`${getZoneStyle(team.position)} ${
-                        isFav
-                          ? "bg-amber-500/15 ring-1 ring-inset ring-amber-400/50"
-                          : ""
-                      }`}
-                    >
-                      {/* Position & Delta */}
-                      <TableCell className="text-center font-mono font-bold">
-                        <div className="flex items-center justify-center gap-1">
-                          <span className="text-xs text-zinc-100">
-                            {tableMode === "overall" ? team.position : idx + 1}º
-                          </span>
-                          {delta > 0 && (
-                            <span className="flex items-center text-[10px] font-bold text-emerald-400">
-                              <ArrowUpRight className="h-3 w-3" />
-                              {delta}
-                            </span>
-                          )}
-                          {delta < 0 && (
-                            <span className="flex items-center text-[10px] font-bold text-rose-400">
-                              <ArrowDownRight className="h-3 w-3" />
-                              {Math.abs(delta)}
-                            </span>
-                          )}
-                          {delta === 0 && (
-                            <Minus className="h-2.5 w-2.5 text-zinc-600" />
-                          )}
-                        </div>
-                      </TableCell>
-
-                      {/* Club Info */}
-                      <TableCell>
-                        <div className="flex items-center gap-2.5">
-                          <ClubCrest club={team.club} size="sm" />
-                          <div>
-                            <div className="flex items-center gap-1.5">
-                              <span className="font-bold text-white text-xs sm:text-sm">
-                                {team.club.name}
-                              </span>
-                              {isFav && (
-                                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                              )}
-                              {team.club.turf_type === "Sintético" && (
-                                <span
-                                  title="Estádio com Gramado Sintético"
-                                  className="rounded-md border border-emerald-400/30 bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-bold text-emerald-300"
-                                >
-                                  Sint.
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </TableCell>
-
-                      {/* P, J, V, SG, % */}
-                      <TableCell className="text-center font-mono font-extrabold text-white">
-                        {ptsShow}
-                      </TableCell>
-                      <TableCell className="text-center font-mono text-xs text-zinc-400">
-                        {gamesShow}
-                      </TableCell>
-                      <TableCell className="text-center font-mono text-xs text-zinc-300">
-                        {winsShow}
-                      </TableCell>
-                      <TableCell
-                        className={`text-center font-mono text-xs font-bold ${
-                          team.goal_diff > 0
-                            ? "text-emerald-400"
-                            : team.goal_diff < 0
-                            ? "text-rose-400"
-                            : "text-zinc-400"
+                    return (
+                      <TableRow
+                        key={team.club.slug}
+                        className={`${getZoneStyle(team.position)} ${
+                          isFav
+                            ? "bg-amber-500/15 ring-1 ring-inset ring-amber-400/50"
+                            : ""
                         }`}
                       >
-                        {team.goal_diff > 0 ? `+${team.goal_diff}` : team.goal_diff}
-                      </TableCell>
-                      <TableCell className="text-center font-mono text-xs font-bold text-zinc-300">
-                        {aprovShow}%
-                      </TableCell>
-
-                      {/* Form Last 5 Pills */}
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-1">
-                          {team.form_last_5.map((res, i) => (
-                            <span
-                              key={i}
-                              className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
-                                res === "V"
-                                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.2)]"
-                                  : res === "E"
-                                  ? "bg-white/[0.06] text-zinc-300 border border-white/10"
-                                  : "bg-rose-500/20 text-rose-300 border border-rose-400/40"
-                              }`}
-                            >
-                              {res}
+                        {/* Position & Delta */}
+                        <TableCell className="text-center font-mono font-bold">
+                          <div className="flex items-center justify-center gap-1">
+                            <span className="text-xs text-zinc-100">
+                              {tableMode === "overall" ? team.position : idx + 1}º
                             </span>
-                          ))}
-                        </div>
-                      </TableCell>
-
-                      {/* Title / G4 Probabilities */}
-                      <TableCell className="text-right font-mono">
-                        <div className="flex flex-col items-end">
-                          <div className="flex items-center gap-1 text-xs font-extrabold text-emerald-400">
-                            <span>{team.prob_g4}%</span>
-                            {team.sim_prob_g4_delta ? (
-                              <span
-                                className={`text-[10px] ${
-                                  team.sim_prob_g4_delta > 0
-                                    ? "text-emerald-300"
-                                    : "text-rose-400"
-                                }`}
-                              >
-                                ({team.sim_prob_g4_delta > 0 ? "+" : ""}
-                                {team.sim_prob_g4_delta}%)
+                            {delta > 0 && (
+                              <span className="flex items-center text-[10px] font-bold text-emerald-400">
+                                <ArrowUpRight className="h-3 w-3" />
+                                {delta}
                               </span>
-                            ) : null}
+                            )}
+                            {delta < 0 && (
+                              <span className="flex items-center text-[10px] font-bold text-rose-400">
+                                <ArrowDownRight className="h-3 w-3" />
+                                {Math.abs(delta)}
+                              </span>
+                            )}
+                            {delta === 0 && (
+                              <Minus className="h-2.5 w-2.5 text-zinc-600" />
+                            )}
                           </div>
-                          {team.prob_title >= 1.0 && (
-                            <span className="text-[10px] font-semibold text-amber-300">
-                              {team.prob_title}% tít.
-                            </span>
-                          )}
-                        </div>
-                      </TableCell>
+                        </TableCell>
 
-                      {/* Z4 Relegation Risk */}
-                      <TableCell className="text-right font-mono">
-                        <div className="flex flex-col items-end">
-                          <span
-                            className={`text-xs font-extrabold ${
-                              team.prob_z4 >= 50
-                                ? "text-rose-400"
-                                : team.prob_z4 >= 15
-                                ? "text-amber-400"
-                                : "text-zinc-500"
-                            }`}
-                          >
-                            {team.prob_z4}%
-                          </span>
-                          <div className="mt-1 h-1.5 w-14 overflow-hidden rounded-full bg-black/60 border border-white/[0.05]">
-                            <div
-                              className={`h-full rounded-full ${
-                                team.prob_z4 >= 50
-                                  ? "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]"
-                                  : team.prob_z4 >= 15
-                                  ? "bg-amber-400"
-                                  : "bg-emerald-500/40"
-                              }`}
-                              style={{ width: `${Math.min(100, team.prob_z4)}%` }}
-                            />
+                        {/* Club Info */}
+                        <TableCell>
+                          <div className="flex items-center gap-2.5">
+                            <ClubCrest club={team.club} size="sm" />
+                            <div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-bold text-white text-xs sm:text-sm">
+                                  {team.club.name}
+                                </span>
+                                {isFav && (
+                                  <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                                )}
+                                {team.club.turf_type === "Sintético" && (
+                                  <span
+                                    title="Estádio com Gramado Sintético"
+                                    className="rounded-md border border-emerald-400/30 bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-bold text-emerald-300"
+                                  >
+                                    Sint.
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </TableCell>
+                        </TableCell>
 
-                      {/* Next 3 Opponents Semaphore */}
-                      <TableCell className="hidden md:table-cell">
-                        <div className="flex items-center justify-center gap-1">
-                          {team.remaining_schedule.slice(0, 3).map((rem, idxRem) => (
-                            <span
-                              key={idxRem}
-                              title={`R${rem.round}: vs ${rem.opponent_name} (${rem.opponent_position}º) - ${rem.venue === "C" ? "Casa" : "Fora"} [${rem.difficulty}]`}
-                              className={`rounded-md px-1.5 py-0.5 text-[9px] font-bold ${
-                                rem.difficulty === "PEDREIRA"
-                                  ? "bg-rose-500/20 text-rose-300 border border-rose-400/30"
-                                  : rem.difficulty === "EQUILIBRADO"
-                                  ? "bg-amber-500/20 text-amber-300 border border-amber-400/30"
-                                  : "bg-emerald-500/20 text-emerald-300 border border-emerald-400/30"
+                        {/* P (Pontos) */}
+                        <TableCell className="text-center font-mono font-extrabold text-white text-sm">
+                          {ptsShow}
+                        </TableCell>
+
+                        {/* J (Jogos) */}
+                        <TableCell className="text-center font-mono text-xs text-zinc-400">
+                          {gamesShow}
+                        </TableCell>
+
+                        {/* V (Vitórias) */}
+                        <TableCell className="text-center font-mono text-xs font-bold text-emerald-400">
+                          {winsShow}
+                        </TableCell>
+
+                        {tableViewType === "official" ? (
+                          <>
+                            {/* E (Empates) */}
+                            <TableCell className="text-center font-mono text-xs text-zinc-300">
+                              {drawsShow}
+                            </TableCell>
+
+                            {/* D (Derrotas) */}
+                            <TableCell className="text-center font-mono text-xs font-bold text-rose-400">
+                              {lossesShow}
+                            </TableCell>
+
+                            {/* GP (Gols Pró) */}
+                            <TableCell className="text-center font-mono text-xs text-zinc-300">
+                              {gfShow}
+                            </TableCell>
+
+                            {/* GC (Gols Contra) */}
+                            <TableCell className="text-center font-mono text-xs text-zinc-400">
+                              {gaShow}
+                            </TableCell>
+
+                            {/* SG (Saldo de Gols) */}
+                            <TableCell
+                              className={`text-center font-mono text-xs font-bold ${
+                                sgShow > 0
+                                  ? "text-emerald-400"
+                                  : sgShow < 0
+                                  ? "text-rose-400"
+                                  : "text-zinc-400"
                               }`}
                             >
-                              {rem.opponent_short}({rem.venue})
-                            </span>
-                          ))}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                              {sgShow > 0 ? `+${sgShow}` : sgShow}
+                            </TableCell>
+
+                            {/* % Aproveitamento */}
+                            <TableCell className="text-center font-mono text-xs font-bold text-zinc-300">
+                              {aprovShow}%
+                            </TableCell>
+
+                            {/* Forma Últimos 5J */}
+                            <TableCell className="text-center">
+                              <div className="flex items-center justify-center gap-1">
+                                {team.form_last_5.map((res, i) => (
+                                  <span
+                                    key={i}
+                                    className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
+                                      res === "V"
+                                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.2)]"
+                                        : res === "E"
+                                        ? "bg-white/[0.06] text-zinc-300 border border-white/10"
+                                        : "bg-rose-500/20 text-rose-300 border border-rose-400/40"
+                                    }`}
+                                  >
+                                    {res}
+                                  </span>
+                                ))}
+                              </div>
+                            </TableCell>
+                          </>
+                        ) : (
+                          <>
+                            {/* SG (Saldo) */}
+                            <TableCell
+                              className={`text-center font-mono text-xs font-bold ${
+                                team.goal_diff > 0
+                                  ? "text-emerald-400"
+                                  : team.goal_diff < 0
+                                  ? "text-rose-400"
+                                  : "text-zinc-400"
+                              }`}
+                            >
+                              {team.goal_diff > 0 ? `+${team.goal_diff}` : team.goal_diff}
+                            </TableCell>
+
+                            {/* % Aproveitamento */}
+                            <TableCell className="text-center font-mono text-xs font-bold text-zinc-300">
+                              {aprovShow}%
+                            </TableCell>
+
+                            {/* Form Last 5 Pills */}
+                            <TableCell className="text-center">
+                              <div className="flex items-center justify-center gap-1">
+                                {team.form_last_5.map((res, i) => (
+                                  <span
+                                    key={i}
+                                    className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
+                                      res === "V"
+                                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.2)]"
+                                        : res === "E"
+                                        ? "bg-white/[0.06] text-zinc-300 border border-white/10"
+                                        : "bg-rose-500/20 text-rose-300 border border-rose-400/40"
+                                    }`}
+                                  >
+                                    {res}
+                                  </span>
+                                ))}
+                              </div>
+                            </TableCell>
+
+                            {/* Title / G4 Probabilities */}
+                            <TableCell className="text-right font-mono">
+                              <div className="flex flex-col items-end">
+                                <div className="flex items-center gap-1 text-xs font-extrabold text-emerald-400">
+                                  <span>{team.prob_g4}%</span>
+                                  {team.sim_prob_g4_delta ? (
+                                    <span
+                                      className={`text-[10px] ${
+                                        team.sim_prob_g4_delta > 0
+                                          ? "text-emerald-300"
+                                          : "text-rose-400"
+                                      }`}
+                                    >
+                                      ({team.sim_prob_g4_delta > 0 ? "+" : ""}
+                                      {team.sim_prob_g4_delta}%)
+                                    </span>
+                                  ) : null}
+                                </div>
+                                {team.prob_title >= 1.0 && (
+                                  <span className="text-[10px] font-semibold text-amber-300">
+                                    {team.prob_title}% tít.
+                                  </span>
+                                )}
+                              </div>
+                            </TableCell>
+
+                            {/* Z4 Relegation Risk */}
+                            <TableCell className="text-right font-mono">
+                              <div className="flex flex-col items-end">
+                                <span
+                                  className={`text-xs font-extrabold ${
+                                    team.prob_z4 >= 50
+                                      ? "text-rose-400"
+                                      : team.prob_z4 >= 15
+                                      ? "text-amber-400"
+                                      : "text-zinc-500"
+                                  }`}
+                                >
+                                  {team.prob_z4}%
+                                </span>
+                                <div className="mt-1 h-1.5 w-14 overflow-hidden rounded-full bg-black/60 border border-white/[0.05]">
+                                  <div
+                                    className={`h-full rounded-full ${
+                                      team.prob_z4 >= 50
+                                        ? "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]"
+                                        : team.prob_z4 >= 15
+                                        ? "bg-amber-400"
+                                        : "bg-emerald-500/40"
+                                    }`}
+                                    style={{ width: `${Math.min(100, team.prob_z4)}%` }}
+                                  />
+                                </div>
+                              </div>
+                            </TableCell>
+
+                            {/* Next 3 Opponents Semaphore */}
+                            <TableCell className="hidden md:table-cell">
+                              <div className="flex items-center justify-center gap-1">
+                                {team.remaining_schedule.slice(0, 3).map((rem, idxRem) => (
+                                  <span
+                                    key={idxRem}
+                                    title={`R${rem.round}: vs ${rem.opponent_name} (${rem.opponent_position}º) - ${rem.venue === "C" ? "Casa" : "Fora"} [${rem.difficulty}]`}
+                                    className={`rounded-md px-1.5 py-0.5 text-[9px] font-bold ${
+                                      rem.difficulty === "PEDREIRA"
+                                        ? "bg-rose-500/20 text-rose-300 border border-rose-400/30"
+                                        : rem.difficulty === "EQUILIBRADO"
+                                        ? "bg-amber-500/20 text-amber-300 border border-amber-400/30"
+                                        : "bg-emerald-500/20 text-emerald-300 border border-emerald-400/30"
+                                    }`}
+                                  >
+                                    {rem.opponent_short}({rem.venue})
+                                  </span>
+                                ))}
+                              </div>
+                            </TableCell>
+                          </>
+                        )}
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
 
             {/* Zone Legend */}
             <div className="mt-4 flex flex-wrap items-center gap-4 px-5 text-[11px] text-zinc-400">
