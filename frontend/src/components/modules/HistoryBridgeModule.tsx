@@ -28,6 +28,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ClubCrest } from "@/components/ui/ClubCrest";
 import { HistoryBridgeData, fetchHistoryBridge } from "@/lib/api";
 
 interface HistoryBridgeModuleProps {
@@ -180,12 +181,7 @@ export function HistoryBridgeModule({
                   >
                     <div className="col-span-2 flex items-center justify-between pr-2 text-left pl-1">
                       <div className="flex items-center gap-1.5 truncate">
-                        <span
-                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[9px] font-black text-white"
-                          style={{ backgroundColor: row.club.primary_color }}
-                        >
-                          {row.club.short_name}
-                        </span>
+                        <ClubCrest club={row.club} size="xs" />
                         <span className="truncate font-bold text-white">
                           {row.club.name}
                         </span>

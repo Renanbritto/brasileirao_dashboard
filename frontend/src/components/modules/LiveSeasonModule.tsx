@@ -33,6 +33,7 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
+import { ClubCrest } from "@/components/ui/ClubCrest";
 import {
   SeasonOverview,
   StandingTeam,
@@ -238,10 +239,13 @@ export function LiveSeasonModule({
             </div>
             <div className="mt-3 flex items-end justify-between">
               <div>
-                <p className="text-xl font-extrabold tracking-tight text-white">
-                  {leader?.club.name}
-                </p>
-                <p className="mt-0.5 text-xs text-zinc-400">
+                <div className="flex items-center gap-2.5">
+                  <ClubCrest club={leader?.club} size="md" />
+                  <p className="text-xl font-extrabold tracking-tight text-white">
+                    {leader?.club.name}
+                  </p>
+                </div>
+                <p className="mt-1 text-xs text-zinc-400">
                   <strong className="font-mono text-zinc-100">
                     {leader?.points} pts
                   </strong>{" "}
@@ -275,10 +279,13 @@ export function LiveSeasonModule({
             </div>
             <div className="mt-3 flex items-end justify-between">
               <div>
-                <p className="text-xl font-extrabold tracking-tight text-white">
-                  4º {g4Cutoff?.club.name}
-                </p>
-                <p className="mt-0.5 text-xs text-zinc-400">
+                <div className="flex items-center gap-2.5">
+                  <ClubCrest club={g4Cutoff?.club} size="md" />
+                  <p className="text-xl font-extrabold tracking-tight text-white">
+                    4º {g4Cutoff?.club.name}
+                  </p>
+                </div>
+                <p className="mt-1 text-xs text-zinc-400">
                   Atual: <strong className="font-mono text-zinc-100">{g4Cutoff?.points}p</strong> •
                   Número Mágico:{" "}
                   <strong className="font-mono text-sky-300">
@@ -310,11 +317,22 @@ export function LiveSeasonModule({
             </div>
             <div className="mt-3 flex items-end justify-between">
               <div>
-                <p className="text-lg font-extrabold tracking-tight text-white">
-                  16º {z4FirstOut?.club.short_name} ({z4FirstOut?.points}p) × 17º{" "}
-                  {z4FirstIn?.club.short_name} ({z4FirstIn?.points}p)
-                </p>
-                <p className="mt-0.5 text-xs text-zinc-400">
+                <div className="flex items-center gap-2 text-sm sm:text-base font-extrabold tracking-tight text-white">
+                  <div className="flex items-center gap-1.5">
+                    <span>16º</span>
+                    <ClubCrest club={z4FirstOut?.club} size="xs" />
+                    <span>{z4FirstOut?.club.name}</span>
+                    <span className="text-xs font-mono text-zinc-400">({z4FirstOut?.points}p)</span>
+                  </div>
+                  <span className="text-zinc-500 font-normal">×</span>
+                  <div className="flex items-center gap-1.5">
+                    <span>17º</span>
+                    <ClubCrest club={z4FirstIn?.club} size="xs" />
+                    <span>{z4FirstIn?.club.name}</span>
+                    <span className="text-xs font-mono text-rose-400">({z4FirstIn?.points}p)</span>
+                  </div>
+                </div>
+                <p className="mt-1 text-xs text-zinc-400">
                   Corte Seguro:{" "}
                   <strong className="font-mono text-rose-300">
                     {data.season.magic_escape_z4_pts} pts
@@ -513,12 +531,7 @@ export function LiveSeasonModule({
                       {/* Club Info */}
                       <TableCell>
                         <div className="flex items-center gap-2.5">
-                          <span
-                            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[9px] font-black text-white ring-1 ring-white/25 shadow-sm"
-                            style={{ backgroundColor: team.club.primary_color }}
-                          >
-                            {team.club.short_name}
-                          </span>
+                          <ClubCrest club={team.club} size="sm" />
                           <div>
                             <div className="flex items-center gap-1.5">
                               <span className="font-bold text-white text-xs sm:text-sm">
@@ -791,12 +804,7 @@ export function LiveSeasonModule({
                           {match.home_position}º lugar
                         </p>
                       </div>
-                      <span
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-[10px] font-black text-white ring-1 ring-white/25 shadow"
-                        style={{ backgroundColor: match.home_club.primary_color }}
-                      >
-                        {match.home_club.short_name}
-                      </span>
+                      <ClubCrest club={match.home_club} size="md" />
                     </div>
 
                     {/* Score Box */}
@@ -828,12 +836,7 @@ export function LiveSeasonModule({
 
                     {/* Away Club */}
                     <div className="flex flex-1 items-center gap-2.5 text-left">
-                      <span
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-[10px] font-black text-white ring-1 ring-white/25 shadow"
-                        style={{ backgroundColor: match.away_club.primary_color }}
-                      >
-                        {match.away_club.short_name}
-                      </span>
+                      <ClubCrest club={match.away_club} size="md" />
                       <div>
                         <p className="text-xs font-extrabold text-white">
                           {match.away_club.name}
@@ -1109,12 +1112,7 @@ export function LiveSeasonModule({
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-[180px]">
-                        <span
-                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[10px] font-black text-white ring-1 ring-white/25"
-                          style={{ backgroundColor: team.club.primary_color }}
-                        >
-                          {team.club.short_name}
-                        </span>
+                        <ClubCrest club={team.club} size="sm" />
                         <div>
                           <p className="text-xs font-extrabold text-white">
                             {team.position}º {team.club.name}
