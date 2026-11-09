@@ -229,7 +229,7 @@ export function HeadToHeadModule({
               {/* Top 6 Most Likely Scorelines */}
               <div>
                 <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-                  🎯 Top 6 Placares Exatos Mais Prováveis
+                  Top 6 Placares Exatos Mais Prováveis
                 </p>
                 <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                   {h2h.poisson.top_scorelines.map((sc, i) => (
@@ -257,7 +257,7 @@ export function HeadToHeadModule({
               </div>
 
               <p className="rounded-lg border border-slate-800 bg-slate-950/60 p-2.5 text-xs text-slate-300">
-                🏟️ {h2h.poisson.turf_advantage_note}
+                {h2h.poisson.turf_advantage_note}
               </p>
             </CardContent>
           </Card>
@@ -364,10 +364,10 @@ export function HeadToHeadModule({
 
                 <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 space-y-1">
                   <p className="font-semibold text-amber-300">
-                    🔒 Tabu Vigente: {h2h.history_h2h.tabu_summary}
+                    Tabu Vigente: {h2h.history_h2h.tabu_summary}
                   </p>
                   <p className="text-slate-300">
-                    💥 Maior Goleada: <strong>{h2h.history_h2h.biggest_rout}</strong>
+                    Maior Goleada: <strong>{h2h.history_h2h.biggest_rout}</strong>
                   </p>
                 </div>
               </CardContent>

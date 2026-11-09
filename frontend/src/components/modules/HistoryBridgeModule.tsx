@@ -67,7 +67,7 @@ export function HistoryBridgeModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
-                🎢 Maior Índice Ioiô (Gangorra)
+                Maior Índice Ioiô (Gangorra)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
                 <Repeat className="h-4 w-4" />
@@ -88,7 +88,7 @@ export function HistoryBridgeModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
-                👑 Sobrevivência do Campeão da B
+                Sobrevivência do Campeão da B
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
                 <ShieldCheck className="h-4 w-4" />
@@ -107,7 +107,7 @@ export function HistoryBridgeModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-rose-400">
-                ⚠️ O Drama do 4º Colocado da B
+                O Drama do 4º Colocado da B
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-rose-400">
                 <TrendingDown className="h-4 w-4" />
@@ -126,7 +126,7 @@ export function HistoryBridgeModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-sky-400">
-                🔄 Taxa de &ldquo;Bate e Volta&rdquo;
+                Taxa de &ldquo;Bate e Volta&rdquo;
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-sky-400">
                 <Trophy className="h-4 w-4" />

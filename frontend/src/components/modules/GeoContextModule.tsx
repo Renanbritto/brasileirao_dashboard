@@ -78,7 +78,7 @@ export function GeoContextModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
-                🏰 Fortaleza em Casa (Mandante)
+                Fortaleza em Casa (Mandante)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
                 <Home className="h-4 w-4" />
@@ -100,7 +100,7 @@ export function GeoContextModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-sky-400">
-                ✈️ Visitante Mais Indigesto
+                Visitante Mais Indigesto
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-sky-400">
                 <Compass className="h-4 w-4" />
@@ -123,7 +123,7 @@ export function GeoContextModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
-                🌎 Maior Desgaste Aéreo (Viagens)
+                Maior Desgaste Aéreo (Viagens)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
                 <Plane className="h-4 w-4" />
@@ -147,7 +147,7 @@ export function GeoContextModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-400">
-                🏟️ Maior Média de Público
+                Maior Média de Público
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-purple-400">
                 <Users className="h-4 w-4" />
@@ -405,7 +405,7 @@ export function GeoContextModule({
                   className="rounded-xl border border-slate-800 bg-slate-950/70 p-3"
                 >
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-200">🕒 {slot}</span>
+                    <span className="font-bold text-slate-200">{slot}</span>
                     <span
                       className={`font-extrabold ${
                         pct >= 55
