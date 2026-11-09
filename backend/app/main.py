@@ -40,3 +40,4 @@ app.include_router(api_v1_router, prefix=settings.API_V1_STR, tags=["Brasileirã
 @app.get("/health")
 def health_check():
     return {"status": "ok", "service": settings.PROJECT_NAME, "version": settings.VERSION}
+

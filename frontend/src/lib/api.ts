@@ -339,3 +339,4 @@ export async function fetchHistoryBridge(): Promise<HistoryBridgeData> {
   if (!res.ok) throw new Error("Failed to fetch History Bridge");
   return res.json();
 }
+

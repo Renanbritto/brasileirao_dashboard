@@ -152,3 +152,4 @@ def build_head_to_head_analysis(
             "biggest_rout": f"{tabu_holder} {biggest_rout} {tabu_victim} (Brasileirão {rout_year})",
         },
     }
+

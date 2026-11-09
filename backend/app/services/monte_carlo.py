@@ -210,3 +210,4 @@ def calculate_fan_target(
         "verdict_color": verdict_color,
         "explanation": explanation,
     }
+
