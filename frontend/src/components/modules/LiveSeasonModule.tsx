@@ -319,19 +319,19 @@ export function LiveSeasonModule({
             </div>
             <div className="mt-3 flex items-end justify-between">
               <div>
-                <div className="flex items-center gap-2 text-sm sm:text-base font-extrabold tracking-tight text-white">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm font-extrabold tracking-tight text-white">
                   <div className="flex items-center gap-1.5">
-                    <span>16º</span>
+                    <span className="text-zinc-400">16º</span>
                     <ClubCrest club={z4FirstOut?.club} size="xs" />
-                    <span>{z4FirstOut?.club.name}</span>
-                    <span className="text-xs font-mono text-zinc-400">({z4FirstOut?.points}p)</span>
+                    <span>{z4FirstOut?.club.short_name || z4FirstOut?.club.name}</span>
+                    <span className="text-[11px] font-mono text-zinc-400">({z4FirstOut?.points}p)</span>
                   </div>
-                  <span className="text-zinc-500 font-normal">×</span>
+                  <span className="text-zinc-600 font-normal">×</span>
                   <div className="flex items-center gap-1.5">
-                    <span>17º</span>
+                    <span className="text-rose-400">17º</span>
                     <ClubCrest club={z4FirstIn?.club} size="xs" />
-                    <span>{z4FirstIn?.club.name}</span>
-                    <span className="text-xs font-mono text-rose-400">({z4FirstIn?.points}p)</span>
+                    <span className="text-rose-200">{z4FirstIn?.club.short_name || z4FirstIn?.club.name}</span>
+                    <span className="text-[11px] font-mono text-rose-400">({z4FirstIn?.points}p)</span>
                   </div>
                 </div>
                 <p className="mt-1 text-xs text-zinc-400">
