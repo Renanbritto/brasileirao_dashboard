@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ClubCrest } from "@/components/ui/ClubCrest";
 import { SeasonOverview, H2HAnalysis, fetchHeadToHead } from "@/lib/api";
 
 interface HeadToHeadModuleProps {
@@ -79,15 +80,7 @@ export function HeadToHeadModule({
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             {/* Home Club Selector */}
             <div className="flex flex-1 items-center gap-3 w-full">
-              <div
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-black text-white shadow-lg"
-                style={{
-                  backgroundColor:
-                    h2h?.home_team.club.primary_color || "#10b981",
-                }}
-              >
-                {h2h?.home_team.club.short_name}
-              </div>
+              <ClubCrest club={h2h?.home_team.club} size="lg" />
               <div className="flex-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
                   Mandante (Em Casa)
@@ -134,15 +127,7 @@ export function HeadToHeadModule({
                   ))}
                 </select>
               </div>
-              <div
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-black text-white shadow-lg"
-                style={{
-                  backgroundColor:
-                    h2h?.away_team.club.primary_color || "#0ea5e9",
-                }}
-              >
-                {h2h?.away_team.club.short_name}
-              </div>
+              <ClubCrest club={h2h?.away_team.club} size="lg" />
             </div>
           </div>
         </CardContent>
@@ -338,13 +323,16 @@ export function HeadToHeadModule({
                     </span>
                     <p className="text-[10px] text-slate-400">Jogos</p>
                   </div>
-                  <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-2.5">
+                  <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-2.5 flex flex-col items-center">
                     <span className="text-lg font-black text-emerald-400">
                       {h2h.history_h2h.home_club_wins}
                     </span>
-                    <p className="text-[10px] text-slate-300">
-                      Vit. {h2h.home_team.club.short_name}
-                    </p>
+                    <div className="mt-1 flex items-center gap-1">
+                      <ClubCrest club={h2h.home_team.club} size="xs" />
+                      <p className="text-[10px] text-slate-300">
+                        Vit. {h2h.home_team.club.short_name}
+                      </p>
+                    </div>
                   </div>
                   <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5">
                     <span className="text-lg font-black text-slate-300">
@@ -352,13 +340,16 @@ export function HeadToHeadModule({
                     </span>
                     <p className="text-[10px] text-slate-400">Empates</p>
                   </div>
-                  <div className="rounded-lg border border-sky-500/30 bg-sky-500/10 p-2.5">
+                  <div className="rounded-lg border border-sky-500/30 bg-sky-500/10 p-2.5 flex flex-col items-center">
                     <span className="text-lg font-black text-sky-400">
                       {h2h.history_h2h.away_club_wins}
                     </span>
-                    <p className="text-[10px] text-slate-300">
-                      Vit. {h2h.away_team.club.short_name}
-                    </p>
+                    <div className="mt-1 flex items-center gap-1">
+                      <ClubCrest club={h2h.away_team.club} size="xs" />
+                      <p className="text-[10px] text-slate-300">
+                        Vit. {h2h.away_team.club.short_name}
+                      </p>
+                    </div>
                   </div>
                 </div>
 

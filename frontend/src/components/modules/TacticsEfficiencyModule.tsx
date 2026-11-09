@@ -24,6 +24,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ClubCrest } from "@/components/ui/ClubCrest";
 import { SeasonOverview } from "@/lib/api";
 
 interface TacticsEfficiencyModuleProps {
@@ -454,12 +455,7 @@ export function TacticsEfficiencyModule({
                     }`}
                   >
                     <div className="col-span-2 flex items-center gap-2 text-left pl-1">
-                      <span
-                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[9px] font-black text-white"
-                        style={{ backgroundColor: t.club.primary_color }}
-                      >
-                        {t.club.short_name}
-                      </span>
+                      <ClubCrest club={t.club} size="xs" />
                       <span className="truncate font-semibold text-slate-200">
                         {t.club.name}
                       </span>
@@ -513,12 +509,7 @@ export function TacticsEfficiencyModule({
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span
-                          className="flex h-6 w-6 items-center justify-center rounded text-[10px] font-black text-white"
-                          style={{ backgroundColor: t.club.primary_color }}
-                        >
-                          {t.club.short_name}
-                        </span>
+                        <ClubCrest club={t.club} size="sm" />
                         <span className="text-xs font-bold text-white">
                           {t.club.name}
                         </span>

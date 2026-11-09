@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ClubCrest } from "@/components/ui/ClubCrest";
 import { Club } from "@/lib/api";
 import { MODULES_LIST } from "@/components/layout/DashboardSidebar";
 
@@ -187,10 +188,7 @@ export function DashboardHeader({
                 Meu Clube:
               </span>
               {favClub ? (
-                <span
-                  className="inline-block h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-white/40"
-                  style={{ backgroundColor: favClub.primary_color }}
-                />
+                <ClubCrest club={favClub} size="xs" />
               ) : (
                 <Shield className="h-3.5 w-3.5 text-zinc-500 shrink-0" />
               )}
