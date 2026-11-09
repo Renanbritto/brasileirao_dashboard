@@ -114,62 +114,68 @@ export function RoundsTurnsModule({
     <div className="space-y-6">
       {/* Highlight Cards: Rei do Returno, Cavalo Paraguaio, Robin Hood */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card className="border-emerald-500/30 bg-gradient-to-br from-slate-900 to-emerald-950/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-emerald">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
                 🚀 Rei do Returno (Maior Arrancada)
               </span>
-              <TrendingUp className="h-4 w-4 text-emerald-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
+                <TrendingUp className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-xl font-black text-white">
+            <p className="mt-2.5 text-xl font-black text-white">
               {reiDoReturno?.fullName}{" "}
-              <span className="text-emerald-400">
+              <span className="font-mono text-emerald-400">
                 (+{reiDoReturno?.delta}% aprov.)
               </span>
             </p>
-            <p className="mt-1 text-xs text-slate-400">
-              Saltou de <strong>{reiDoReturno?.aprov1}%</strong> ({reiDoReturno?.rank1}º no 1º turno) para{" "}
-              <strong className="text-emerald-300">{reiDoReturno?.aprov2}%</strong> ({reiDoReturno?.rank2}º no 2º turno)
+            <p className="mt-1 text-xs text-zinc-400">
+              Saltou de <strong className="font-mono text-zinc-200">{reiDoReturno?.aprov1}%</strong> ({reiDoReturno?.rank1}º no 1º turno) para{" "}
+              <strong className="font-mono text-emerald-300">{reiDoReturno?.aprov2}%</strong> ({reiDoReturno?.rank2}º no 2º turno)
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-rose-500/30 bg-gradient-to-br from-slate-900 to-rose-950/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-rose">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-rose-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-rose-400">
                 📉 Índice &ldquo;Cavalo Paraguaio&rdquo; (Maior Queda)
               </span>
-              <TrendingDown className="h-4 w-4 text-rose-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-rose-400">
+                <TrendingDown className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-xl font-black text-white">
+            <p className="mt-2.5 text-xl font-black text-white">
               {cavaloParaguaio?.fullName}{" "}
-              <span className="text-rose-400">
+              <span className="font-mono text-rose-400">
                 ({cavaloParaguaio?.delta}% aprov.)
               </span>
             </p>
-            <p className="mt-1 text-xs text-slate-400">
-              Caiu de <strong>{cavaloParaguaio?.aprov1}%</strong> ({cavaloParaguaio?.rank1}º no 1º turno) para{" "}
-              <strong className="text-rose-300">{cavaloParaguaio?.aprov2}%</strong> ({cavaloParaguaio?.rank2}º no 2º turno)
+            <p className="mt-1 text-xs text-zinc-400">
+              Caiu de <strong className="font-mono text-zinc-200">{cavaloParaguaio?.aprov1}%</strong> ({cavaloParaguaio?.rank1}º no 1º turno) para{" "}
+              <strong className="font-mono text-rose-300">{cavaloParaguaio?.aprov2}%</strong> ({cavaloParaguaio?.rank2}º no 2º turno)
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-amber-500/30 bg-gradient-to-br from-slate-900 to-amber-950/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-amber">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
                 🏹 Clube &ldquo;Robin Hood&rdquo; da Edição
               </span>
-              <Award className="h-4 w-4 text-amber-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
+                <Award className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-xl font-black text-white">
+            <p className="mt-2.5 text-xl font-black text-white">
               {robinHoodList[0]?.club.name}
             </p>
-            <p className="mt-1 text-xs text-slate-400">
-              Rende <strong>{robinHoodList[0]?.aprov_vs_g6}%</strong> contra o G6, mas apenas{" "}
-              <strong>{robinHoodList[0]?.aprov_vs_z4}%</strong> contra times do Z4!
+            <p className="mt-1 text-xs text-zinc-400">
+              Rende <strong className="font-mono text-amber-300">{robinHoodList[0]?.aprov_vs_g6}%</strong> contra o G6, mas apenas{" "}
+              <strong className="font-mono text-zinc-200">{robinHoodList[0]?.aprov_vs_z4}%</strong> contra times do Z4!
             </p>
           </CardContent>
         </Card>

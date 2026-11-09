@@ -74,40 +74,44 @@ export function GeoContextModule({
     <div className="space-y-6">
       {/* Top 4 Geo & Stadium KPIs */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="border-emerald-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-emerald">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-emerald-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
                 🏰 Fortaleza em Casa (Mandante)
               </span>
-              <Home className="h-4 w-4 text-emerald-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
+                <Home className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
-              {bestHome?.club.name} ({bestHome?.aprov_home}%)
+            <p className="mt-2.5 text-lg font-extrabold text-white">
+              {bestHome?.club.name} (<span className="font-mono">{bestHome?.aprov_home}%</span>)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               {bestHome?.home_wins}V {bestHome?.home_draws}E {bestHome?.home_losses}D no{" "}
-              <strong className="text-slate-200">
+              <strong className="text-zinc-200">
                 {bestHome?.club.stadium_name}
               </strong>
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-sky-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-sky">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-sky-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-sky-400">
                 ✈️ Visitante Mais Indigesto
               </span>
-              <Compass className="h-4 w-4 text-sky-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-sky-400">
+                <Compass className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
-              {bestVisitor?.club.name} ({bestVisitor?.aprov_away}%)
+            <p className="mt-2.5 text-lg font-extrabold text-white">
+              {bestVisitor?.club.name} (<span className="font-mono">{bestVisitor?.aprov_away}%</span>)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Somou{" "}
-              <strong className="text-sky-300">
+              <strong className="font-mono text-sky-300">
                 {bestVisitor?.away_points} pontos
               </strong>{" "}
               fora de casa ({bestVisitor?.away_wins} vitórias longe de seus domínios)
@@ -115,21 +119,23 @@ export function GeoContextModule({
           </CardContent>
         </Card>
 
-        <Card className="border-amber-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-amber">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-amber-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
                 🌎 Maior Desgaste Aéreo (Viagens)
               </span>
-              <Plane className="h-4 w-4 text-amber-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
+                <Plane className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
+            <p className="mt-2.5 text-lg font-extrabold text-white">
               {mostTraveled[0]?.club.name} (
-              {mostTraveled[0]?.travel_km.toLocaleString("pt-BR")} km)
+              <span className="font-mono">{mostTraveled[0]?.travel_km.toLocaleString("pt-BR")} km</span>)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Equivalente a{" "}
-              <strong className="text-amber-300">
+              <strong className="font-mono text-amber-300">
                 {(mostTraveled[0]?.travel_km / 40075).toFixed(1)} voltas
               </strong>{" "}
               ao redor da Terra na temporada!
@@ -137,21 +143,23 @@ export function GeoContextModule({
           </CardContent>
         </Card>
 
-        <Card className="border-purple-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-purple">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-purple-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-400">
                 🏟️ Maior Média de Público
               </span>
-              <Users className="h-4 w-4 text-purple-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-purple-400">
+                <Users className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
+            <p className="mt-2.5 text-lg font-extrabold text-white">
               {highestAttendance?.club.name} (
-              {highestAttendance?.avg_attendance.toLocaleString("pt-BR")})
+              <span className="font-mono">{highestAttendance?.avg_attendance.toLocaleString("pt-BR")}</span>)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Taxa de ocupação de{" "}
-              <strong className="text-purple-300">
+              <strong className="font-mono text-purple-300">
                 {highestAttendance?.occupation_rate}%
               </strong>{" "}
               no {highestAttendance?.club.stadium_name}

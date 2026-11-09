@@ -55,7 +55,7 @@ export default function BrasileiraoDashboardPage() {
   const isCurrentSeason = overview?.season.is_current ?? true;
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
+    <div className="obsidian-canvas flex min-h-screen text-zinc-100">
       {/* Left Collapsible Sidebar Navigation */}
       <DashboardSidebar
         activeModule={activeModule}
@@ -82,20 +82,20 @@ export default function BrasileiraoDashboardPage() {
           isCurrentSeason={isCurrentSeason}
         />
 
-        <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-6 sm:px-6">
+        <main className="mx-auto w-full max-w-[1640px] flex-1 px-4 py-6 sm:px-6">
           {loading && !overview ? (
-            <div className="flex h-72 flex-col items-center justify-center rounded-2xl border border-slate-800 bg-slate-900/40 p-8 text-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
-              <p className="mt-3 text-sm font-semibold text-slate-300">
+            <div className="obsidian-glass flex h-72 flex-col items-center justify-center rounded-2xl p-8 text-center">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-400 border-t-transparent" />
+              <p className="mt-3 text-sm font-semibold text-zinc-300">
                 Carregando motor analítico da Série {division} ({year})...
               </p>
             </div>
           ) : error && !overview ? (
-            <div className="rounded-2xl border border-rose-500/40 bg-rose-950/20 p-6 text-center">
+            <div className="obsidian-kpi-rose rounded-2xl border p-6 text-center">
               <p className="text-base font-bold text-rose-300">{error}</p>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-zinc-400">
                 Verifique se o servidor FastAPI está rodando em{" "}
-                <code className="text-emerald-400">http://localhost:8000</code>
+                <code className="font-mono text-emerald-400">http://localhost:8000</code>
               </p>
             </div>
           ) : overview ? (
@@ -142,15 +142,13 @@ export default function BrasileiraoDashboardPage() {
           ) : null}
         </main>
 
-        <footer className="border-t border-slate-800/80 bg-slate-950 py-4 text-center text-xs text-slate-500">
-          <div className="mx-auto max-w-[1600px] px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <footer className="border-t border-white/[0.06] bg-[#05070d]/80 backdrop-blur-xl py-4 text-center text-xs text-zinc-500">
+          <div className="mx-auto max-w-[1640px] px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
             <span>
-              🇧🇷 <strong>Brasileirão Analytics (Série A & B)</strong> — Next.js 15 +
-              shadcn/ui + Recharts + Python FastAPI
+              🇧🇷 <strong className="text-zinc-300">Brasileirão Analytics (Série A & B)</strong> — Obsidian Glass Design System • Next.js 15 + shadcn/ui + FastAPI
             </span>
-            <span>
-              Motor Matemático: Simulação de Monte Carlo (10k cenários) • Modelo de
-              Poisson • Distância Aérea Haversine
+            <span className="font-mono text-[11px]">
+              Monte Carlo (10k cenários) • Modelo de Poisson • Distância Aérea Haversine
             </span>
           </div>
         </footer>

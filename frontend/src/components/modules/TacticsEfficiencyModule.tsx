@@ -106,20 +106,22 @@ export function TacticsEfficiencyModule({
     <div className="space-y-6">
       {/* Top 4 Tactical KPIs */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="border-emerald-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-emerald">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-emerald-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
                 🎯 Ataque Mais Cirúrgico
               </span>
-              <Target className="h-4 w-4 text-emerald-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
+                <Target className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
+            <p className="mt-2.5 text-lg font-extrabold text-white">
               {maisLetal?.club.name}
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Precisa de apenas{" "}
-              <strong className="text-emerald-300">
+              <strong className="font-mono text-emerald-300">
                 {maisLetal?.shots_per_goal} chutes
               </strong>{" "}
               para marcar 1 gol ({maisLetal?.goals_for} gols em {maisLetal?.xg_for} xG)
@@ -127,20 +129,22 @@ export function TacticsEfficiencyModule({
           </CardContent>
         </Card>
 
-        <Card className="border-sky-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-sky">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-sky-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-sky-400">
                 🧱 Muralha Defensiva (Clean Sheets)
               </span>
-              <Shield className="h-4 w-4 text-sky-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-sky-400">
+                <Shield className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
+            <p className="mt-2.5 text-lg font-extrabold text-white">
               {muralhaDefensiva?.club.name} ({muralhaDefensiva?.clean_sheets} jogos)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Saiu sem sofrer gol em{" "}
-              <strong className="text-sky-300">
+              <strong className="font-mono text-sky-300">
                 {muralhaDefensiva?.clean_sheet_rate}%
               </strong>{" "}
               das partidas ({muralhaDefensiva?.shots_conceded_per_goal} chutes sofridos/gol)
@@ -148,20 +152,22 @@ export function TacticsEfficiencyModule({
           </CardContent>
         </Card>
 
-        <Card className="border-amber-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-amber">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-amber-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
                 ⏱️ Rei dos Acréscimos (85&apos;+)
               </span>
-              <Clock className="h-4 w-4 text-amber-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
+                <Clock className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
+            <p className="mt-2.5 text-lg font-extrabold text-white">
               {reiDosAcrescimos?.club.name} ({reiDosAcrescimos?.goals_85_plus} gols)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Marcou{" "}
-              <strong className="text-amber-300">
+              <strong className="font-mono text-amber-300">
                 {reiDosAcrescimos?.goals_76_90} gols
               </strong>{" "}
               nos 15 minutos finais (76&apos;–90+&apos;)
@@ -169,18 +175,20 @@ export function TacticsEfficiencyModule({
           </CardContent>
         </Card>
 
-        <Card className="border-purple-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-purple">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-purple-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-400">
                 🔥 Poder de Reação (Viradas)
               </span>
-              <Flame className="h-4 w-4 text-purple-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-purple-400">
+                <Flame className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
+            <p className="mt-2.5 text-lg font-extrabold text-white">
               {reiDaVirada?.club.name} (+{reiDaVirada?.comeback_points} pts)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               Pontos conquistados após sair atrás no placar (desperdiçou{" "}
               {reiDaVirada?.points_dropped_leading} pts vencendo)
             </p>

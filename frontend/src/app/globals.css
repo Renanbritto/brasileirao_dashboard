@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-    --card: 224 64% 6.5%;
-    --card-foreground: 213 31% 91%;
-    --popover: 224 71% 5%;
-    --popover-foreground: 215 20.2% 65.1%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 65%;
-    --accent: 216 34% 14%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 216 34% 15%;
-    --input: 216 34% 15%;
-    --ring: 142.1 70.6% 45.3%;
-    --radius: 0.75rem;
+    --background: 225 45% 3%;
+    --foreground: 210 20% 96%;
+    --card: 225 38% 5.5%;
+    --card-foreground: 210 20% 96%;
+    --popover: 225 42% 4.5%;
+    --popover-foreground: 215 16% 72%;
+    --primary: 158 84% 42%;
+    --primary-foreground: 225 45% 4%;
+    --secondary: 225 28% 9.5%;
+    --secondary-foreground: 210 20% 96%;
+    --muted: 225 25% 9%;
+    --muted-foreground: 215 15% 62%;
+    --accent: 225 28% 12%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 348 83% 47%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 20% 14%;
+    --input: 220 20% 14%;
+    --ring: 158 84% 42%;
+    --radius: 1rem;
   }
 }
 
@@ -32,24 +32,135 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-emerald-500/30 selection:text-emerald-200;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-[#04060a] text-zinc-100 antialiased selection:bg-emerald-500/30 selection:text-emerald-200;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom sleek scrollbar */
+/* ==========================================================================
+   OBSIDIAN GLASS DESIGN SYSTEM
+   ========================================================================== */
+
+.obsidian-canvas {
+  background-color: #04060a;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 15% -10%, rgba(16, 185, 129, 0.09), transparent 60%),
+    radial-gradient(ellipse 65% 45% at 88% 8%, rgba(14, 165, 233, 0.075), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 50% 105%, rgba(245, 158, 11, 0.055), transparent 60%),
+    radial-gradient(rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+  background-attachment: fixed;
+}
+
+.obsidian-glass {
+  position: relative;
+  background: linear-gradient(
+    145deg,
+    rgba(16, 20, 30, 0.76) 0%,
+    rgba(9, 12, 18, 0.84) 100%
+  );
+  backdrop-filter: blur(24px) saturate(165%);
+  -webkit-backdrop-filter: blur(24px) saturate(165%);
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
+    inset 0 0 24px 0 rgba(255, 255, 255, 0.015),
+    0 22px 48px -12px rgba(0, 0, 0, 0.82);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.obsidian-glass:hover {
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+/* Specular Top-Edge Shimmer on Cards */
+.obsidian-glass::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.24) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Recessed Glass Well for Inputs, Filters & Segmented Pills */
+.obsidian-well {
+  background: rgba(4, 6, 11, 0.72);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Subtle Inner Sub-Card */
+.obsidian-subcard {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.035) 0%,
+    rgba(6, 9, 15, 0.65) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+    0 10px 24px -8px rgba(0, 0, 0, 0.65);
+}
+
+/* Colored Ambient Glow Washes for Hero KPIs */
+.obsidian-kpi-emerald {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(16, 185, 129, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(16, 20, 30, 0.8) 0%, rgba(8, 11, 17, 0.88) 100%);
+  border-color: rgba(16, 185, 129, 0.24);
+}
+
+.obsidian-kpi-sky {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(14, 165, 233, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(16, 20, 30, 0.8) 0%, rgba(8, 11, 17, 0.88) 100%);
+  border-color: rgba(14, 165, 233, 0.24);
+}
+
+.obsidian-kpi-rose {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(244, 63, 94, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(16, 20, 30, 0.8) 0%, rgba(8, 11, 17, 0.88) 100%);
+  border-color: rgba(244, 63, 94, 0.24);
+}
+
+.obsidian-kpi-amber {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(245, 158, 11, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(16, 20, 30, 0.8) 0%, rgba(8, 11, 17, 0.88) 100%);
+  border-color: rgba(245, 158, 11, 0.24);
+}
+
+.obsidian-kpi-purple {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(168, 85, 247, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(16, 20, 30, 0.8) 0%, rgba(8, 11, 17, 0.88) 100%);
+  border-color: rgba(168, 85, 247, 0.24);
+}
+
+/* Custom Sleek Obsidian Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(5, 7, 12, 0.75);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.8);
+  background: rgba(255, 255, 255, 0.14);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.6);
+  background: rgba(16, 185, 129, 0.55);
 }
-

@@ -63,71 +63,79 @@ export function HistoryBridgeModule({
     <div className="space-y-6">
       {/* Top 4 Historical Insights */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="border-amber-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-amber">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-amber-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
                 🎢 Maior Índice Ioiô (Gangorra)
               </span>
-              <Repeat className="h-4 w-4 text-amber-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
+                <Repeat className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
+            <p className="mt-2.5 text-lg font-extrabold text-white">
               {bridge.yo_yo_ranking[0]?.name} (
-              {bridge.yo_yo_ranking[0]?.yo_yo_index} transições)
+              <span className="font-mono">{bridge.yo_yo_ranking[0]?.yo_yo_index}</span> transições)
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               {bridge.yo_yo_ranking[0]?.promotions_to_a} acessos e{" "}
               {bridge.yo_yo_ranking[0]?.relegations_to_b} quedas nos pontos corridos
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-emerald-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-emerald">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-emerald-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
                 👑 Sobrevivência do Campeão da B
               </span>
-              <ShieldCheck className="h-4 w-4 text-emerald-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
-              76,0% permanecem na Série A
+            <p className="mt-2.5 text-lg font-extrabold text-white">
+              <span className="font-mono text-emerald-400">76,0%</span> permanecem na Série A
             </p>
-            <p className="text-xs text-slate-400">
-              Média de <strong>48,4 pts</strong> (12º lugar) no ano seguinte ao título da B
+            <p className="text-xs text-zinc-400">
+              Média de <strong className="font-mono text-zinc-200">48,4 pts</strong> (12º lugar) no ano seguinte ao título da B
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-rose-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-rose">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-rose-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-rose-400">
                 ⚠️ O Drama do 4º Colocado da B
               </span>
-              <TrendingDown className="h-4 w-4 text-rose-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-rose-400">
+                <TrendingDown className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
-              59,0% caem de volta no 1º ano
+            <p className="mt-2.5 text-lg font-extrabold text-white">
+              <span className="font-mono text-rose-400">59,0%</span> caem de volta no 1º ano
             </p>
-            <p className="text-xs text-slate-400">
-              Subir em 4º lugar rende média de apenas <strong>40,6 pts</strong> na Série A
+            <p className="text-xs text-zinc-400">
+              Subir em 4º lugar rende média de apenas <strong className="font-mono text-zinc-200">40,6 pts</strong> na Série A
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-sky-500/30">
-          <CardContent className="p-4 pt-4">
+        <Card className="obsidian-kpi-sky">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-sky-400">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-sky-400">
                 🔄 Taxa de &ldquo;Bate e Volta&rdquo;
               </span>
-              <Trophy className="h-4 w-4 text-sky-400" />
+              <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-sky-400">
+                <Trophy className="h-4 w-4" />
+              </div>
             </div>
-            <p className="mt-2 text-lg font-extrabold text-white">
-              Apenas 36,5% voltam de imediato
+            <p className="mt-2.5 text-lg font-extrabold text-white">
+              Apenas <span className="font-mono text-sky-400">36,5%</span> voltam de imediato
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-zinc-400">
               63,5% dos rebaixados da Série A levam 2+ anos para subir (ou caem à C)
             </p>
           </CardContent>
