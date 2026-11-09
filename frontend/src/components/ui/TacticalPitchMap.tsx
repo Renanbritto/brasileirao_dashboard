@@ -14,6 +14,7 @@ import {
   Layers,
   Activity,
   Target,
+  Sliders,
 } from "lucide-react";
 import { StandingTeam } from "@/lib/api";
 import { ClubCrest } from "@/components/ui/ClubCrest";
@@ -45,6 +46,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
   );
   const [mode, setMode] = useState<"attack" | "defense">("attack");
   const [showGridLines, setShowGridLines] = useState<boolean>(true);
+  const [intensityMode, setIntensityMode] = useState<"high" | "normal">("high");
   const [hoveredSector, setHoveredSector] = useState<string | null>(null);
 
   const currentTeam =
@@ -97,7 +99,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         pct: atk.left_pct,
         secondaryStat: `${atk.goals_left} Gols Marcados`,
         tier: attackRanking.left as ThermalTier,
-        tierLabel: attackRanking.left === "hot" ? "Foco Primário (Mancha Intensa)" : attackRanking.left === "warm" ? "Fluxo Regular" : "Sub-explorado",
+        tierLabel: attackRanking.left === "hot" ? "Foco Primário (Mancha Incandescente)" : attackRanking.left === "warm" ? "Fluxo Regular" : "Sub-explorado",
         tierColor: attackRanking.left === "hot" ? "#f87171" : attackRanking.left === "warm" ? "#fcd34d" : "#7dd3fc",
         tierBorder: attackRanking.left === "hot" ? "border-rose-500/50" : attackRanking.left === "warm" ? "border-amber-500/50" : "border-sky-500/40",
         tierBg: attackRanking.left === "hot" ? "bg-rose-950/40" : attackRanking.left === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
@@ -123,7 +125,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         pct: atk.center_pct,
         secondaryStat: `${atk.goals_center} Gols • ${atk.outside_box_pct}% Chutes de Fora`,
         tier: attackRanking.center as ThermalTier,
-        tierLabel: attackRanking.center === "hot" ? "Foco Primário (Mancha Intensa)" : attackRanking.center === "warm" ? "Fluxo Regular" : "Sub-explorado",
+        tierLabel: attackRanking.center === "hot" ? "Foco Primário (Mancha Incandescente)" : attackRanking.center === "warm" ? "Fluxo Regular" : "Sub-explorado",
         tierColor: attackRanking.center === "hot" ? "#f87171" : attackRanking.center === "warm" ? "#fcd34d" : "#7dd3fc",
         tierBorder: attackRanking.center === "hot" ? "border-rose-500/50" : attackRanking.center === "warm" ? "border-amber-500/50" : "border-sky-500/40",
         tierBg: attackRanking.center === "hot" ? "bg-rose-950/40" : attackRanking.center === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
@@ -136,7 +138,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         pct: atk.right_pct,
         secondaryStat: `${atk.goals_right} Gols Marcados`,
         tier: attackRanking.right as ThermalTier,
-        tierLabel: attackRanking.right === "hot" ? "Foco Primário (Mancha Intensa)" : attackRanking.right === "warm" ? "Fluxo Regular" : "Sub-explorado",
+        tierLabel: attackRanking.right === "hot" ? "Foco Primário (Mancha Incandescente)" : attackRanking.right === "warm" ? "Fluxo Regular" : "Sub-explorado",
         tierColor: attackRanking.right === "hot" ? "#f87171" : attackRanking.right === "warm" ? "#fcd34d" : "#7dd3fc",
         tierBorder: attackRanking.right === "hot" ? "border-rose-500/50" : attackRanking.right === "warm" ? "border-amber-500/50" : "border-sky-500/40",
         tierBg: attackRanking.right === "hot" ? "bg-rose-950/40" : attackRanking.right === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
@@ -238,7 +240,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
           </div>
         </div>
 
-        {/* Controls: Mode Toggle + Grid Toggle */}
+        {/* Controls: Mode Toggle + Intensity Toggle + Grid Toggle */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Mode Toggle: Ataque vs Defesa */}
           <div className="obsidian-well inline-flex self-start rounded-2xl p-1 sm:self-auto">
@@ -266,6 +268,20 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
             </button>
           </div>
 
+          {/* Intensity Toggle */}
+          <button
+            onClick={() => setIntensityMode(intensityMode === "high" ? "normal" : "high")}
+            className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+              intensityMode === "high"
+                ? "border-amber-500/50 bg-amber-950/40 text-amber-300 shadow-[0_2px_8px_rgba(245,158,11,0.25)]"
+                : "border-white/10 bg-black/30 text-zinc-400 hover:text-white"
+            }`}
+            title="Alternar intensidade do brilho térmico das manchas"
+          >
+            <Flame className="h-3.5 w-3.5 text-amber-400" />
+            Manchas: {intensityMode === "high" ? "Intensas (Vivas)" : "Moderadas"}
+          </button>
+
           {/* Grid lines toggle */}
           <button
             onClick={() => setShowGridLines(!showGridLines)}
@@ -284,7 +300,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
 
       {/* Main Pitch + Side Breakdown Grid */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-        {/* Left: 2D Tactical Football Pitch (SVG with Organic Heat Blobs) */}
+        {/* Left: 2D Tactical Football Pitch (SVG with Organic High-Intensity Heat Blobs) */}
         <div className="space-y-3 xl:col-span-8">
           <div className="relative overflow-hidden rounded-3xl border border-emerald-500/30 bg-[#072415] p-3 sm:p-5 shadow-[0_16px_48px_rgba(0,0,0,0.65)]">
             {/* Direction Indicator */}
@@ -326,72 +342,82 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                     <stop offset="100%" stopColor="#000000" stopOpacity="0.32" />
                   </radialGradient>
 
-                  {/* Gaussian Blur Filter for Organic Heatmap Stains */}
-                  <filter id="heat-blur" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="28" result="blur" />
+                  {/* Gaussian Blur Filters: Dual Layer (Outer Bloom + Razor Core) */}
+                  <filter id="heat-bloom" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation={intensityMode === "high" ? "22" : "28"} result="blur" />
                   </filter>
-                  <filter id="heat-blur-dense" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="20" result="blur" />
+                  <filter id="heat-core" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation={intensityMode === "high" ? "12" : "18"} result="blur" />
+                  </filter>
+                  <filter id="heat-nucleus" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="6" result="blur" />
                   </filter>
 
                   {/* ========================================================
-                      ORGANIC THERMAL RADIAL GRADIENTS (MANCHAS DE CALOR)
+                      ULTRA-STRONG THERMAL GRADIENTS (VIVAS & INCANDESCENTES)
                      ======================================================== */}
-                  {/* Blazing Red Core Hotspot (Foco Máximo de Ataque) */}
-                  <radialGradient id="mancha-blazing" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#ef4444" stopOpacity="0.95" />
-                    <stop offset="30%" stopColor="#f97316" stopOpacity="0.80" />
-                    <stop offset="60%" stopColor="#f59e0b" stopOpacity="0.55" />
-                    <stop offset="85%" stopColor="#10b981" stopOpacity="0.18" />
+                  {/* White-Hot Nuclear Core (Epicentro Máximo) */}
+                  <radialGradient id="mancha-blazing-core" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                    <stop offset="18%" stopColor="#fff275" stopOpacity="1" />
+                    <stop offset="42%" stopColor="#ff4500" stopOpacity="1" />
+                    <stop offset="70%" stopColor="#e50914" stopOpacity="0.90" />
+                    <stop offset="90%" stopColor="#990000" stopOpacity="0.45" />
                     <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
                   </radialGradient>
 
-                  {/* Hot Attack Stain (Frequência Alta) */}
-                  <radialGradient id="mancha-hot" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#f97316" stopOpacity="0.88" />
-                    <stop offset="35%" stopColor="#f59e0b" stopOpacity="0.68" />
-                    <stop offset="70%" stopColor="#10b981" stopOpacity="0.25" />
+                  {/* Intense Hot Attack Stain (Frequência Alta - Vermelho/Laranja Forte) */}
+                  <radialGradient id="mancha-hot-vivid" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fff066" stopOpacity="1" />
+                    <stop offset="28%" stopColor="#ff5500" stopOpacity="1" />
+                    <stop offset="60%" stopColor="#e50914" stopOpacity="0.92" />
+                    <stop offset="85%" stopColor="#b20710" stopOpacity="0.45" />
                     <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
                   </radialGradient>
 
-                  {/* Warm Attack Stain (Frequência Média) */}
-                  <radialGradient id="mancha-warm" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.82" />
-                    <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.58" />
-                    <stop offset="75%" stopColor="#10b981" stopOpacity="0.20" />
+                  {/* Intense Warm Attack Stain (Frequência Média - Âmbar Dourado Vivo) */}
+                  <radialGradient id="mancha-warm-vivid" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fff8b3" stopOpacity="1" />
+                    <stop offset="30%" stopColor="#ffaa00" stopOpacity="1" />
+                    <stop offset="65%" stopColor="#ff7700" stopOpacity="0.88" />
+                    <stop offset="88%" stopColor="#cc5500" stopOpacity="0.40" />
                     <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
                   </radialGradient>
 
-                  {/* Cold / Mild Attack Stain (Menor Frequência) */}
-                  <radialGradient id="mancha-cold" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.75" />
-                    <stop offset="45%" stopColor="#0284c7" stopOpacity="0.45" />
-                    <stop offset="80%" stopColor="#0f3d24" stopOpacity="0.15" />
+                  {/* Intense Cold / Mild Stain (Menor Frequência - Ciano / Azul Elétrico Vivo) */}
+                  <radialGradient id="mancha-cold-vivid" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#e0ffff" stopOpacity="1" />
+                    <stop offset="25%" stopColor="#00e5ff" stopOpacity="1" />
+                    <stop offset="60%" stopColor="#0091ea" stopOpacity="0.88" />
+                    <stop offset="85%" stopColor="#01579b" stopOpacity="0.40" />
                     <stop offset="100%" stopColor="#0f3d24" stopOpacity="0" />
                   </radialGradient>
 
-                  {/* Defense Critical Vulnerability Stain (Gols Sofridos / Perigo Máximo) */}
-                  <radialGradient id="mancha-def-critical" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.95" />
-                    <stop offset="30%" stopColor="#e11d48" stopOpacity="0.82" />
-                    <stop offset="60%" stopColor="#be123c" stopOpacity="0.55" />
-                    <stop offset="85%" stopColor="#881337" stopOpacity="0.22" />
+                  {/* Ultra-Strong Defense Critical Vulnerability Stain (Carmesim Alerta Puro) */}
+                  <radialGradient id="mancha-def-critical-vivid" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                    <stop offset="18%" stopColor="#ff0055" stopOpacity="1" />
+                    <stop offset="48%" stopColor="#d50032" stopOpacity="1" />
+                    <stop offset="75%" stopColor="#990022" stopOpacity="0.85" />
+                    <stop offset="92%" stopColor="#660011" stopOpacity="0.40" />
                     <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
                   </radialGradient>
 
-                  {/* Defense Medium Warning Stain */}
-                  <radialGradient id="mancha-def-warning" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#f97316" stopOpacity="0.85" />
-                    <stop offset="40%" stopColor="#ea580c" stopOpacity="0.60" />
-                    <stop offset="75%" stopColor="#9a3412" stopOpacity="0.25" />
+                  {/* Defense Medium Warning Stain (Laranja Alerta) */}
+                  <radialGradient id="mancha-def-warning-vivid" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fff080" stopOpacity="1" />
+                    <stop offset="32%" stopColor="#ff6600" stopOpacity="1" />
+                    <stop offset="65%" stopColor="#ea580c" stopOpacity="0.85" />
+                    <stop offset="88%" stopColor="#9a3412" stopOpacity="0.40" />
                     <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
                   </radialGradient>
 
                   {/* Defense Safe / Low Pressure Stain */}
-                  <radialGradient id="mancha-def-safe" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.65" />
-                    <stop offset="50%" stopColor="#0284c7" stopOpacity="0.35" />
-                    <stop offset="80%" stopColor="#0f3d24" stopOpacity="0.15" />
+                  <radialGradient id="mancha-def-safe-vivid" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.95" />
+                    <stop offset="35%" stopColor="#38bdf8" stopOpacity="0.85" />
+                    <stop offset="70%" stopColor="#0284c7" stopOpacity="0.55" />
+                    <stop offset="90%" stopColor="#0369a1" stopOpacity="0.25" />
                     <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
                   </radialGradient>
                 </defs>
@@ -413,162 +439,245 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                 />
 
                 {/* ========================================================
-                    ORGANIC HEATMAP LAYER: MANCHAS DE CALOR TÉRMICAS
+                    HIGH-INTENSITY ORGANIC HEATMAP LAYER: MANCHAS FORTES
                    ======================================================== */}
                 {mode === "attack" && (
-                  <g filter="url(#heat-blur)" className="transition-opacity duration-300">
-                    {/* --- CORREDOR ESQUERDO: MANCHAS --- */}
-                    {attackRanking.left === "hot" && (
-                      <>
-                        {/* Linha de fundo esquerda & escanteio ofensivo (Foco ultra quente) */}
-                        <ellipse cx="880" cy="100" rx="130" ry="75" fill="url(#mancha-blazing)" />
-                        <ellipse cx="940" cy="90" rx="90" ry="60" fill="url(#mancha-blazing)" />
-                        {/* Infiltração em diagonal cortando para a área */}
-                        <ellipse cx="840" cy="180" rx="100" ry="65" fill="url(#mancha-hot)" />
-                        {/* Meio-campo lateral esquerdo (arrancada) */}
-                        <ellipse cx="680" cy="120" rx="120" ry="68" fill="url(#mancha-hot)" />
-                        <ellipse cx="580" cy="140" rx="90" ry="55" fill="url(#mancha-warm)" />
-                      </>
-                    )}
-                    {attackRanking.left === "warm" && (
-                      <>
-                        <ellipse cx="860" cy="110" rx="110" ry="65" fill="url(#mancha-warm)" />
-                        <ellipse cx="920" cy="95" rx="80" ry="50" fill="url(#mancha-warm)" />
-                        <ellipse cx="710" cy="130" rx="95" ry="60" fill="url(#mancha-warm)" />
-                      </>
-                    )}
-                    {attackRanking.left === "cold" && (
-                      <>
-                        <ellipse cx="820" cy="120" rx="85" ry="50" fill="url(#mancha-cold)" />
-                        <ellipse cx="680" cy="140" rx="75" ry="45" fill="url(#mancha-cold)" />
-                      </>
-                    )}
+                  <g className="transition-opacity duration-300">
+                    {/* PASS 1: AMBIENT HEAT BLOOM (Halo suave ao redor) */}
+                    <g filter="url(#heat-bloom)" opacity={intensityMode === "high" ? "0.95" : "0.75"}>
+                      {/* Corredor Esquerdo */}
+                      {attackRanking.left === "hot" && (
+                        <>
+                          <ellipse cx="880" cy="100" rx="145" ry="85" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="940" cy="90" rx="100" ry="68" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="840" cy="180" rx="115" ry="75" fill="url(#mancha-hot-vivid)" />
+                          <ellipse cx="680" cy="120" rx="135" ry="78" fill="url(#mancha-hot-vivid)" />
+                          <ellipse cx="580" cy="140" rx="105" ry="62" fill="url(#mancha-warm-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.left === "warm" && (
+                        <>
+                          <ellipse cx="860" cy="110" rx="125" ry="75" fill="url(#mancha-warm-vivid)" />
+                          <ellipse cx="920" cy="95" rx="90" ry="58" fill="url(#mancha-warm-vivid)" />
+                          <ellipse cx="710" cy="130" rx="110" ry="68" fill="url(#mancha-warm-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.left === "cold" && (
+                        <>
+                          <ellipse cx="820" cy="120" rx="95" ry="58" fill="url(#mancha-cold-vivid)" />
+                          <ellipse cx="680" cy="140" rx="85" ry="52" fill="url(#mancha-cold-vivid)" />
+                        </>
+                      )}
 
-                    {/* --- CORREDOR CENTRAL: MANCHAS --- */}
-                    {attackRanking.center === "hot" && (
-                      <>
-                        {/* Entrada da área / Meia-lua central */}
-                        <ellipse cx="800" cy="340" rx="120" ry="85" fill="url(#mancha-blazing)" />
-                        <ellipse cx="710" cy="340" rx="110" ry="75" fill="url(#mancha-hot)" />
-                        <ellipse cx="600" cy="340" rx="95" ry="60" fill="url(#mancha-warm)" />
-                      </>
-                    )}
-                    {attackRanking.center === "warm" && (
-                      <>
-                        <ellipse cx="780" cy="340" rx="95" ry="65" fill="url(#mancha-warm)" />
-                        <ellipse cx="660" cy="340" rx="85" ry="55" fill="url(#mancha-warm)" />
-                      </>
-                    )}
-                    {attackRanking.center === "cold" && (
-                      <>
-                        <ellipse cx="740" cy="340" rx="80" ry="50" fill="url(#mancha-cold)" />
-                        <ellipse cx="630" cy="340" rx="70" ry="45" fill="url(#mancha-cold)" />
-                      </>
-                    )}
+                      {/* Corredor Central */}
+                      {attackRanking.center === "hot" && (
+                        <>
+                          <ellipse cx="800" cy="340" rx="135" ry="95" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="710" cy="340" rx="125" ry="85" fill="url(#mancha-hot-vivid)" />
+                          <ellipse cx="600" cy="340" rx="110" ry="70" fill="url(#mancha-warm-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.center === "warm" && (
+                        <>
+                          <ellipse cx="780" cy="340" rx="110" ry="75" fill="url(#mancha-warm-vivid)" />
+                          <ellipse cx="660" cy="340" rx="95" ry="65" fill="url(#mancha-warm-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.center === "cold" && (
+                        <>
+                          <ellipse cx="740" cy="340" rx="90" ry="58" fill="url(#mancha-cold-vivid)" />
+                          <ellipse cx="630" cy="340" rx="80" ry="52" fill="url(#mancha-cold-vivid)" />
+                        </>
+                      )}
 
-                    {/* --- CORREDOR DIREITO: MANCHAS --- */}
-                    {attackRanking.right === "hot" && (
-                      <>
-                        {/* Linha de fundo direita & escanteio ofensivo */}
-                        <ellipse cx="880" cy="580" rx="130" ry="75" fill="url(#mancha-blazing)" />
-                        <ellipse cx="940" cy="590" rx="90" ry="60" fill="url(#mancha-blazing)" />
-                        {/* Infiltração em diagonal cortando para a área */}
-                        <ellipse cx="840" cy="500" rx="100" ry="65" fill="url(#mancha-hot)" />
-                        {/* Meio-campo lateral direito (arrancada) */}
-                        <ellipse cx="680" cy="560" rx="120" ry="68" fill="url(#mancha-hot)" />
-                        <ellipse cx="580" cy="540" rx="90" ry="55" fill="url(#mancha-warm)" />
-                      </>
-                    )}
-                    {attackRanking.right === "warm" && (
-                      <>
-                        <ellipse cx="860" cy="570" rx="110" ry="65" fill="url(#mancha-warm)" />
-                        <ellipse cx="920" cy="585" rx="80" ry="50" fill="url(#mancha-warm)" />
-                        <ellipse cx="710" cy="550" rx="95" ry="60" fill="url(#mancha-warm)" />
-                      </>
-                    )}
-                    {attackRanking.right === "cold" && (
-                      <>
-                        <ellipse cx="820" cy="560" rx="85" ry="50" fill="url(#mancha-cold)" />
-                        <ellipse cx="680" cy="540" rx="75" ry="45" fill="url(#mancha-cold)" />
-                      </>
-                    )}
+                      {/* Corredor Direito */}
+                      {attackRanking.right === "hot" && (
+                        <>
+                          <ellipse cx="880" cy="580" rx="145" ry="85" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="940" cy="590" rx="100" ry="68" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="840" cy="500" rx="115" ry="75" fill="url(#mancha-hot-vivid)" />
+                          <ellipse cx="680" cy="560" rx="135" ry="78" fill="url(#mancha-hot-vivid)" />
+                          <ellipse cx="580" cy="540" rx="105" ry="62" fill="url(#mancha-warm-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.right === "warm" && (
+                        <>
+                          <ellipse cx="860" cy="570" rx="125" ry="75" fill="url(#mancha-warm-vivid)" />
+                          <ellipse cx="920" cy="585" rx="90" ry="58" fill="url(#mancha-warm-vivid)" />
+                          <ellipse cx="710" cy="550" rx="110" ry="68" fill="url(#mancha-warm-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.right === "cold" && (
+                        <>
+                          <ellipse cx="820" cy="560" rx="95" ry="58" fill="url(#mancha-cold-vivid)" />
+                          <ellipse cx="680" cy="540" rx="85" ry="52" fill="url(#mancha-cold-vivid)" />
+                        </>
+                      )}
 
-                    {/* --- GRANDE ÁREA: HOTSPOT DE FINALIZAÇÕES --- */}
-                    <ellipse cx="925" cy="340" rx="95" ry="75" fill="url(#mancha-blazing)" />
-                    <ellipse cx="965" cy="310" rx="65" ry="48" fill="url(#mancha-hot)" />
-                    <ellipse cx="965" cy="370" rx="65" ry="48" fill="url(#mancha-hot)" />
-                    {atk?.six_yard_pct && atk.six_yard_pct > 15 && (
-                      <ellipse cx="995" cy="340" rx="45" ry="35" fill="url(#mancha-blazing)" />
+                      {/* Hotspot de Finalizações na Grande Área */}
+                      <ellipse cx="925" cy="340" rx="110" ry="85" fill="url(#mancha-blazing-core)" />
+                      <ellipse cx="965" cy="310" rx="75" ry="55" fill="url(#mancha-hot-vivid)" />
+                      <ellipse cx="965" cy="370" rx="75" ry="55" fill="url(#mancha-hot-vivid)" />
+                    </g>
+
+                    {/* PASS 2: RAZOR-SHARP INCANDESCENT CORE (Núcleo denso, forte e vívido) */}
+                    <g filter="url(#heat-core)" opacity={intensityMode === "high" ? "1" : "0.85"}>
+                      {attackRanking.left === "hot" && (
+                        <>
+                          <ellipse cx="880" cy="100" rx="95" ry="55" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="940" cy="90" rx="65" ry="40" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="840" cy="180" rx="75" ry="45" fill="url(#mancha-hot-vivid)" />
+                          <ellipse cx="680" cy="120" rx="85" ry="48" fill="url(#mancha-hot-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.right === "hot" && (
+                        <>
+                          <ellipse cx="880" cy="580" rx="95" ry="55" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="940" cy="590" rx="65" ry="40" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="840" cy="500" rx="75" ry="45" fill="url(#mancha-hot-vivid)" />
+                          <ellipse cx="680" cy="560" rx="85" ry="48" fill="url(#mancha-hot-vivid)" />
+                        </>
+                      )}
+                      {attackRanking.center === "hot" && (
+                        <>
+                          <ellipse cx="800" cy="340" rx="90" ry="60" fill="url(#mancha-blazing-core)" />
+                          <ellipse cx="710" cy="340" rx="80" ry="50" fill="url(#mancha-hot-vivid)" />
+                        </>
+                      )}
+
+                      {/* Núcleo Incandescente na Área */}
+                      <ellipse cx="925" cy="340" rx="70" ry="50" fill="url(#mancha-blazing-core)" />
+                      <ellipse cx="975" cy="340" rx="45" ry="32" fill="url(#mancha-blazing-core)" />
+                    </g>
+
+                    {/* PASS 3: WHITE-HOT INTENSE NUCLEI (Pontos de fusão térmica máxima) */}
+                    {intensityMode === "high" && (
+                      <g filter="url(#heat-nucleus)" opacity="0.95">
+                        {attackRanking.left === "hot" && (
+                          <ellipse cx="885" cy="100" rx="35" ry="18" fill="#ffffff" opacity="0.85" />
+                        )}
+                        {attackRanking.right === "hot" && (
+                          <ellipse cx="885" cy="580" rx="35" ry="18" fill="#ffffff" opacity="0.85" />
+                        )}
+                        {attackRanking.center === "hot" && (
+                          <ellipse cx="800" cy="340" rx="35" ry="22" fill="#ffffff" opacity="0.85" />
+                        )}
+                        <ellipse cx="925" cy="340" rx="28" ry="18" fill="#ffffff" opacity="0.90" />
+                      </g>
                     )}
                   </g>
                 )}
 
                 {mode === "defense" && (
-                  <g filter="url(#heat-blur)" className="transition-opacity duration-300">
-                    {/* --- DEFESA: FLANCO ESQUERDO (ZONA CONCEDIDA) --- */}
-                    {defenseRanking.left === "hot" && (
-                      <>
-                        <ellipse cx="140" cy="110" rx="120" ry="75" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="80" cy="100" rx="85" ry="60" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="180" cy="180" rx="100" ry="65" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="280" cy="130" rx="110" ry="65" fill="url(#mancha-def-warning)" />
-                      </>
-                    )}
-                    {defenseRanking.left === "warm" && (
-                      <>
-                        <ellipse cx="150" cy="120" rx="105" ry="65" fill="url(#mancha-def-warning)" />
-                        <ellipse cx="260" cy="140" rx="90" ry="55" fill="url(#mancha-def-warning)" />
-                      </>
-                    )}
-                    {defenseRanking.left === "cold" && (
-                      <>
-                        <ellipse cx="180" cy="130" rx="85" ry="50" fill="url(#mancha-def-safe)" />
-                      </>
-                    )}
+                  <g className="transition-opacity duration-300">
+                    {/* PASS 1: DEFENSE AMBIENT HEAT BLOOM */}
+                    <g filter="url(#heat-bloom)" opacity={intensityMode === "high" ? "0.95" : "0.75"}>
+                      {/* Defesa: Flanco Esquerdo */}
+                      {defenseRanking.left === "hot" && (
+                        <>
+                          <ellipse cx="140" cy="110" rx="140" ry="85" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="80" cy="100" rx="100" ry="68" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="180" cy="180" rx="115" ry="75" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="280" cy="130" rx="125" ry="75" fill="url(#mancha-def-warning-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.left === "warm" && (
+                        <>
+                          <ellipse cx="150" cy="120" rx="115" ry="75" fill="url(#mancha-def-warning-vivid)" />
+                          <ellipse cx="260" cy="140" rx="100" ry="62" fill="url(#mancha-def-warning-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.left === "cold" && (
+                        <>
+                          <ellipse cx="180" cy="130" rx="95" ry="58" fill="url(#mancha-def-safe-vivid)" />
+                        </>
+                      )}
 
-                    {/* --- DEFESA: MIOLO DA ZAGA & PEQUENA ÁREA --- */}
-                    {defenseRanking.center === "hot" && (
-                      <>
-                        <ellipse cx="120" cy="340" rx="115" ry="85" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="75" cy="340" rx="80" ry="60" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="220" cy="340" rx="105" ry="70" fill="url(#mancha-def-critical)" />
-                      </>
-                    )}
-                    {defenseRanking.center === "warm" && (
-                      <>
-                        <ellipse cx="130" cy="340" rx="95" ry="70" fill="url(#mancha-def-warning)" />
-                        <ellipse cx="210" cy="340" rx="85" ry="60" fill="url(#mancha-def-warning)" />
-                      </>
-                    )}
-                    {defenseRanking.center === "cold" && (
-                      <>
-                        <ellipse cx="140" cy="340" rx="80" ry="55" fill="url(#mancha-def-safe)" />
-                      </>
-                    )}
+                      {/* Defesa: Miolo da Zaga & Gol Sofrido */}
+                      {defenseRanking.center === "hot" && (
+                        <>
+                          <ellipse cx="120" cy="340" rx="135" ry="95" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="75" cy="340" rx="95" ry="68" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="220" cy="340" rx="120" ry="80" fill="url(#mancha-def-critical-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.center === "warm" && (
+                        <>
+                          <ellipse cx="130" cy="340" rx="110" ry="78" fill="url(#mancha-def-warning-vivid)" />
+                          <ellipse cx="210" cy="340" rx="95" ry="68" fill="url(#mancha-def-warning-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.center === "cold" && (
+                        <>
+                          <ellipse cx="140" cy="340" rx="90" ry="60" fill="url(#mancha-def-safe-vivid)" />
+                        </>
+                      )}
 
-                    {/* --- DEFESA: FLANCO DIREITO (ZONA CONCEDIDA) --- */}
-                    {defenseRanking.right === "hot" && (
-                      <>
-                        <ellipse cx="140" cy="570" rx="120" ry="75" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="80" cy="580" rx="85" ry="60" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="180" cy="500" rx="100" ry="65" fill="url(#mancha-def-critical)" />
-                        <ellipse cx="280" cy="550" rx="110" ry="65" fill="url(#mancha-def-warning)" />
-                      </>
-                    )}
-                    {defenseRanking.right === "warm" && (
-                      <>
-                        <ellipse cx="150" cy="560" rx="105" ry="65" fill="url(#mancha-def-warning)" />
-                        <ellipse cx="260" cy="540" rx="90" ry="55" fill="url(#mancha-def-warning)" />
-                      </>
-                    )}
-                    {defenseRanking.right === "cold" && (
-                      <>
-                        <ellipse cx="180" cy="550" rx="85" ry="50" fill="url(#mancha-def-safe)" />
-                      </>
-                    )}
+                      {/* Defesa: Flanco Direito */}
+                      {defenseRanking.right === "hot" && (
+                        <>
+                          <ellipse cx="140" cy="570" rx="140" ry="85" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="80" cy="580" rx="100" ry="68" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="180" cy="500" rx="115" ry="75" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="280" cy="550" rx="125" ry="75" fill="url(#mancha-def-warning-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.right === "warm" && (
+                        <>
+                          <ellipse cx="150" cy="560" rx="115" ry="75" fill="url(#mancha-def-warning-vivid)" />
+                          <ellipse cx="260" cy="540" rx="100" ry="62" fill="url(#mancha-def-warning-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.right === "cold" && (
+                        <>
+                          <ellipse cx="180" cy="550" rx="95" ry="58" fill="url(#mancha-def-safe-vivid)" />
+                        </>
+                      )}
 
-                    {/* Defesa: Foco Crítico na Marca do Pênalti */}
-                    <ellipse cx="135" cy="340" rx="75" ry="60" fill="url(#mancha-def-critical)" />
+                      {/* Marca do Pênalti Defensivo */}
+                      <ellipse cx="135" cy="340" rx="90" ry="70" fill="url(#mancha-def-critical-vivid)" />
+                    </g>
+
+                    {/* PASS 2: DEFENSE RAZOR CORE */}
+                    <g filter="url(#heat-core)" opacity={intensityMode === "high" ? "1" : "0.85"}>
+                      {defenseRanking.left === "hot" && (
+                        <>
+                          <ellipse cx="140" cy="110" rx="90" ry="55" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="80" cy="100" rx="60" ry="40" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="180" cy="180" rx="75" ry="48" fill="url(#mancha-def-critical-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.right === "hot" && (
+                        <>
+                          <ellipse cx="140" cy="570" rx="90" ry="55" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="80" cy="580" rx="60" ry="40" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="180" cy="500" rx="75" ry="48" fill="url(#mancha-def-critical-vivid)" />
+                        </>
+                      )}
+                      {defenseRanking.center === "hot" && (
+                        <>
+                          <ellipse cx="120" cy="340" rx="90" ry="60" fill="url(#mancha-def-critical-vivid)" />
+                          <ellipse cx="75" cy="340" rx="60" ry="42" fill="url(#mancha-def-critical-vivid)" />
+                        </>
+                      )}
+                      <ellipse cx="135" cy="340" rx="60" ry="45" fill="url(#mancha-def-critical-vivid)" />
+                    </g>
+
+                    {/* PASS 3: DEFENSE WHITE-HOT DANGER NUCLEUS */}
+                    {intensityMode === "high" && (
+                      <g filter="url(#heat-nucleus)" opacity="0.95">
+                        {defenseRanking.left === "hot" && (
+                          <ellipse cx="140" cy="110" rx="30" ry="18" fill="#ffffff" opacity="0.85" />
+                        )}
+                        {defenseRanking.right === "hot" && (
+                          <ellipse cx="140" cy="570" rx="30" ry="18" fill="#ffffff" opacity="0.85" />
+                        )}
+                        {defenseRanking.center === "hot" && (
+                          <ellipse cx="120" cy="340" rx="32" ry="20" fill="#ffffff" opacity="0.85" />
+                        )}
+                        <ellipse cx="135" cy="340" rx="25" ry="16" fill="#ffffff" opacity="0.90" />
+                      </g>
+                    )}
                   </g>
                 )}
 
@@ -643,7 +752,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                         height="36"
                         rx="12"
                         fill="#05140b"
-                        fillOpacity="0.90"
+                        fillOpacity="0.92"
                         stroke={attackRanking.left === "hot" ? "#ef4444" : attackRanking.left === "warm" ? "#f59e0b" : "#0284c7"}
                         strokeWidth="1.5"
                       />
@@ -676,7 +785,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                         height="36"
                         rx="12"
                         fill="#05140b"
-                        fillOpacity="0.90"
+                        fillOpacity="0.92"
                         stroke={attackRanking.center === "hot" ? "#ef4444" : attackRanking.center === "warm" ? "#f59e0b" : "#0284c7"}
                         strokeWidth="1.5"
                       />
@@ -709,7 +818,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                         height="36"
                         rx="12"
                         fill="#05140b"
-                        fillOpacity="0.90"
+                        fillOpacity="0.92"
                         stroke={attackRanking.right === "hot" ? "#ef4444" : attackRanking.right === "warm" ? "#f59e0b" : "#0284c7"}
                         strokeWidth="1.5"
                       />
@@ -742,7 +851,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                         height="36"
                         rx="12"
                         fill="#140608"
-                        fillOpacity="0.92"
+                        fillOpacity="0.94"
                         stroke="#f43f5e"
                         strokeWidth="1.5"
                       />
@@ -768,7 +877,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                         height="36"
                         rx="12"
                         fill="#18070a"
-                        fillOpacity="0.92"
+                        fillOpacity="0.94"
                         stroke={defenseRanking.left === "hot" ? "#f43f5e" : defenseRanking.left === "warm" ? "#f59e0b" : "#0284c7"}
                         strokeWidth="1.5"
                       />
@@ -801,7 +910,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                         height="36"
                         rx="12"
                         fill="#18070a"
-                        fillOpacity="0.92"
+                        fillOpacity="0.94"
                         stroke={defenseRanking.center === "hot" ? "#f43f5e" : defenseRanking.center === "warm" ? "#f59e0b" : "#0284c7"}
                         strokeWidth="1.5"
                       />
@@ -834,7 +943,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                         height="36"
                         rx="12"
                         fill="#18070a"
-                        fillOpacity="0.92"
+                        fillOpacity="0.94"
                         stroke={defenseRanking.right === "hot" ? "#f43f5e" : defenseRanking.right === "warm" ? "#f59e0b" : "#0284c7"}
                         strokeWidth="1.5"
                       />
@@ -860,7 +969,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
 
                     {/* Defensive Box Vulnerability Callout */}
                     <g transform="translate(118, 340)">
-                      <circle cx="0" cy="0" r="28" fill="#e11d48" fillOpacity="0.92" stroke="#ffffff" strokeWidth="2" />
+                      <circle cx="0" cy="0" r="28" fill="#e11d48" fillOpacity="0.94" stroke="#ffffff" strokeWidth="2" />
                       <text x="0" y="-3" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="900">
                         ALERTA
                       </text>
