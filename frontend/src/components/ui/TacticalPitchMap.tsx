@@ -10,8 +10,10 @@ import {
   Snowflake,
   Zap,
   Thermometer,
-  TrendingUp,
+  Eye,
+  Layers,
   Activity,
+  Target,
 } from "lucide-react";
 import { StandingTeam } from "@/lib/api";
 import { ClubCrest } from "@/components/ui/ClubCrest";
@@ -23,21 +25,18 @@ interface TacticalPitchMapProps {
 
 type ThermalTier = "hot" | "warm" | "cold";
 
-interface CorridorItem {
-  id: "left" | "center" | "right";
+interface TacticalSector {
+  id: string;
   name: string;
-  shortName: string;
+  category: "flank_left" | "center" | "flank_right" | "penalty_box";
   pct: number;
-  goals: number;
+  secondaryStat: string;
   tier: ThermalTier;
   tierLabel: string;
   tierColor: string;
   tierBorder: string;
   tierBg: string;
-  gradientId: string;
-  glowColor: string;
-  y: number;
-  h: number;
+  description: string;
 }
 
 export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapProps) {
@@ -45,6 +44,8 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
     favoriteClubSlug || teams[0]?.club.slug || ""
   );
   const [mode, setMode] = useState<"attack" | "defense">("attack");
+  const [showGridLines, setShowGridLines] = useState<boolean>(true);
+  const [hoveredSector, setHoveredSector] = useState<string | null>(null);
 
   const currentTeam =
     teams.find((t) => t.club.slug === selectedSlug) || teams[0];
@@ -53,111 +54,155 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
   const atk = tactics?.attack;
   const def = tactics?.defense;
 
-  // Compute thermal classification dynamically for Attack corridors
-  const attackCorridors = useMemo<CorridorItem[]>(() => {
-    if (!atk) return [];
+  // Determine which corridor is dominant (Hot), secondary (Warm), or minor (Cold)
+  const attackRanking = useMemo(() => {
+    if (!atk) return { left: "cold", center: "cold", right: "cold" };
+    const items = [
+      { id: "left", pct: atk.left_pct },
+      { id: "center", pct: atk.center_pct },
+      { id: "right", pct: atk.right_pct },
+    ].sort((a, b) => b.pct - a.pct);
 
-    const raw = [
-      { id: "left" as const, name: "Corredor Esquerdo", shortName: "Esquerdo", pct: atk.left_pct, goals: atk.goals_left, y: 40, h: 195 },
-      { id: "center" as const, name: "Corredor Central", shortName: "Centro", pct: atk.center_pct, goals: atk.goals_center, y: 242, h: 196 },
-      { id: "right" as const, name: "Corredor Direito", shortName: "Direito", pct: atk.right_pct, goals: atk.goals_right, y: 445, h: 195 },
-    ];
-
-    // Rank descending
-    const sorted = [...raw].sort((a, b) => b.pct - a.pct);
-    const hotId = sorted[0]?.id;
-    const warmId = sorted[1]?.id;
-
-    return raw.map((c) => {
-      if (c.id === hotId) {
-        return {
-          ...c,
-          tier: "hot" as ThermalTier,
-          tierLabel: "ZONA QUENTE • FLUXO PRINCIPAL",
-          tierColor: "#f87171",
-          tierBorder: "rgba(239, 68, 68, 0.85)",
-          tierBg: "rgba(239, 68, 68, 0.25)",
-          gradientId: "thermalGradHot",
-          glowColor: "#ef4444",
-        };
-      }
-      if (c.id === warmId) {
-        return {
-          ...c,
-          tier: "warm" as ThermalTier,
-          tierLabel: "ZONA MORNA • FLUXO REGULAR",
-          tierColor: "#fcd34d",
-          tierBorder: "rgba(245, 158, 11, 0.85)",
-          tierBg: "rgba(245, 158, 11, 0.20)",
-          gradientId: "thermalGradWarm",
-          glowColor: "#f59e0b",
-        };
-      }
-      return {
-        ...c,
-        tier: "cold" as ThermalTier,
-        tierLabel: "ZONA FRIA • SUB-EXPLORADA",
-        tierColor: "#7dd3fc",
-        tierBorder: "rgba(56, 189, 248, 0.8)",
-        tierBg: "rgba(56, 189, 248, 0.16)",
-        gradientId: "thermalGradCold",
-        glowColor: "#0284c7",
-      };
-    });
+    return {
+      [items[0].id]: "hot" as ThermalTier,
+      [items[1].id]: "warm" as ThermalTier,
+      [items[2].id]: "cold" as ThermalTier,
+    };
   }, [atk]);
 
-  // Compute thermal classification dynamically for Defense corridors
-  const defenseCorridors = useMemo<CorridorItem[]>(() => {
-    if (!def) return [];
+  // Determine defense vulnerability ranking
+  const defenseRanking = useMemo(() => {
+    if (!def) return { left: "cold", center: "cold", right: "cold" };
+    const items = [
+      { id: "left", pct: def.left_conceded_pct },
+      { id: "center", pct: def.center_conceded_pct },
+      { id: "right", pct: def.right_conceded_pct },
+    ].sort((a, b) => b.pct - a.pct);
 
-    const raw = [
-      { id: "left" as const, name: "Flanco Esquerdo Def.", shortName: "Flanco Esq.", pct: def.left_conceded_pct, goals: Math.round((currentTeam.goals_against * def.left_conceded_pct) / 100), y: 40, h: 195 },
-      { id: "center" as const, name: "Miolo / Zaga Central", shortName: "Zaga Central", pct: def.center_conceded_pct, goals: Math.round((currentTeam.goals_against * def.center_conceded_pct) / 100), y: 242, h: 196 },
-      { id: "right" as const, name: "Flanco Direito Def.", shortName: "Flanco Dir.", pct: def.right_conceded_pct, goals: Math.round((currentTeam.goals_against * def.right_conceded_pct) / 100), y: 445, h: 195 },
+    return {
+      [items[0].id]: "hot" as ThermalTier,
+      [items[1].id]: "warm" as ThermalTier,
+      [items[2].id]: "cold" as ThermalTier,
+    };
+  }, [def]);
+
+  // Detailed Sector Cards for Attack
+  const attackSectors: TacticalSector[] = useMemo(() => {
+    if (!atk) return [];
+    return [
+      {
+        id: "flank_left",
+        name: "Asa Esquerda & Linha de Fundo",
+        category: "flank_left",
+        pct: atk.left_pct,
+        secondaryStat: `${atk.goals_left} Gols Marcados`,
+        tier: attackRanking.left as ThermalTier,
+        tierLabel: attackRanking.left === "hot" ? "Foco Primário (Mancha Intensa)" : attackRanking.left === "warm" ? "Fluxo Regular" : "Sub-explorado",
+        tierColor: attackRanking.left === "hot" ? "#f87171" : attackRanking.left === "warm" ? "#fcd34d" : "#7dd3fc",
+        tierBorder: attackRanking.left === "hot" ? "border-rose-500/50" : attackRanking.left === "warm" ? "border-amber-500/50" : "border-sky-500/40",
+        tierBg: attackRanking.left === "hot" ? "bg-rose-950/40" : attackRanking.left === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        description: "Descidas rápidas de ponta, dribles de linha de fundo e cruzamentos rasteiros para trás.",
+      },
+      {
+        id: "box_finishing",
+        name: "Miolo da Grande Área (Finalizações)",
+        category: "penalty_box",
+        pct: atk.inside_box_pct,
+        secondaryStat: `${Math.round((currentTeam.goals_for * atk.inside_box_pct) / 100)} Gols na Área`,
+        tier: "hot",
+        tierLabel: "Hotspot Letal de Chutes",
+        tierColor: "#f87171",
+        tierBorder: "border-rose-500/50",
+        tierBg: "bg-rose-950/40",
+        description: "Concentração máxima de arremates no ponto do pênalti e pequena área.",
+      },
+      {
+        id: "channel_center",
+        name: "Faixa Central & Entrada da Área",
+        category: "center",
+        pct: atk.center_pct,
+        secondaryStat: `${atk.goals_center} Gols • ${atk.outside_box_pct}% Chutes de Fora`,
+        tier: attackRanking.center as ThermalTier,
+        tierLabel: attackRanking.center === "hot" ? "Foco Primário (Mancha Intensa)" : attackRanking.center === "warm" ? "Fluxo Regular" : "Sub-explorado",
+        tierColor: attackRanking.center === "hot" ? "#f87171" : attackRanking.center === "warm" ? "#fcd34d" : "#7dd3fc",
+        tierBorder: attackRanking.center === "hot" ? "border-rose-500/50" : attackRanking.center === "warm" ? "border-amber-500/50" : "border-sky-500/40",
+        tierBg: attackRanking.center === "hot" ? "bg-rose-950/40" : attackRanking.center === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        description: "Articulação por passes verticais entrelinhas e chutes perigosos de média distância.",
+      },
+      {
+        id: "flank_right",
+        name: "Asa Direita & Cruzamentos",
+        category: "flank_right",
+        pct: atk.right_pct,
+        secondaryStat: `${atk.goals_right} Gols Marcados`,
+        tier: attackRanking.right as ThermalTier,
+        tierLabel: attackRanking.right === "hot" ? "Foco Primário (Mancha Intensa)" : attackRanking.right === "warm" ? "Fluxo Regular" : "Sub-explorado",
+        tierColor: attackRanking.right === "hot" ? "#f87171" : attackRanking.right === "warm" ? "#fcd34d" : "#7dd3fc",
+        tierBorder: attackRanking.right === "hot" ? "border-rose-500/50" : attackRanking.right === "warm" ? "border-amber-500/50" : "border-sky-500/40",
+        tierBg: attackRanking.right === "hot" ? "bg-rose-950/40" : attackRanking.right === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        description: "Construção com apoio lateral, ultrapassagens e bolas alçadas em direção ao segundo pau.",
+      },
     ];
+  }, [atk, attackRanking, currentTeam]);
 
-    // Rank descending: highest conceded % is critical alert (hot), lowest is safe (cold)
-    const sorted = [...raw].sort((a, b) => b.pct - a.pct);
-    const hotId = sorted[0]?.id;
-    const warmId = sorted[1]?.id;
-
-    return raw.map((c) => {
-      if (c.id === hotId) {
-        return {
-          ...c,
-          tier: "hot" as ThermalTier,
-          tierLabel: "CRÍTICO • MAIOR VULNERABILIDADE",
-          tierColor: "#fda4af",
-          tierBorder: "rgba(244, 63, 94, 0.9)",
-          tierBg: "rgba(244, 63, 94, 0.28)",
-          gradientId: "defDangerHot",
-          glowColor: "#f43f5e",
-        };
-      }
-      if (c.id === warmId) {
-        return {
-          ...c,
-          tier: "warm" as ThermalTier,
-          tierLabel: "ATENÇÃO • RISCO MÉDIO",
-          tierColor: "#fde047",
-          tierBorder: "rgba(245, 158, 11, 0.85)",
-          tierBg: "rgba(245, 158, 11, 0.20)",
-          gradientId: "defDangerWarm",
-          glowColor: "#f59e0b",
-        };
-      }
-      return {
-        ...c,
-        tier: "cold" as ThermalTier,
-        tierLabel: "SEGURO • MENOR PRESSÃO",
-        tierColor: "#7dd3fc",
-        tierBorder: "rgba(56, 189, 248, 0.8)",
-        tierBg: "rgba(56, 189, 248, 0.16)",
-        gradientId: "defDangerCold",
-        glowColor: "#0284c7",
-      };
-    });
-  }, [def, currentTeam]);
+  // Detailed Sector Cards for Defense
+  const defenseSectors: TacticalSector[] = useMemo(() => {
+    if (!def) return [];
+    return [
+      {
+        id: "def_left",
+        name: "Flanco Esquerdo Defensivo (Lateral)",
+        category: "flank_left",
+        pct: def.left_conceded_pct,
+        secondaryStat: `${Math.round((currentTeam.goals_against * def.left_conceded_pct) / 100)} Gols Sofridos`,
+        tier: defenseRanking.left as ThermalTier,
+        tierLabel: defenseRanking.left === "hot" ? "Setor Crítico (Vulnerável)" : defenseRanking.left === "warm" ? "Pressão Média" : "Setor Seguro",
+        tierColor: defenseRanking.left === "hot" ? "#f87171" : defenseRanking.left === "warm" ? "#fcd34d" : "#7dd3fc",
+        tierBorder: defenseRanking.left === "hot" ? "border-rose-500/50" : defenseRanking.left === "warm" ? "border-amber-500/50" : "border-sky-500/40",
+        tierBg: defenseRanking.left === "hot" ? "bg-rose-950/40" : defenseRanking.left === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        description: "Espaço explorado nas costas do lateral com infiltrações em velocidade adversárias.",
+      },
+      {
+        id: "def_center",
+        name: "Miolo de Zaga & Pequena Área",
+        category: "center",
+        pct: def.center_conceded_pct,
+        secondaryStat: `${Math.round((currentTeam.goals_against * def.center_conceded_pct) / 100)} Gols Sofridos`,
+        tier: defenseRanking.center as ThermalTier,
+        tierLabel: defenseRanking.center === "hot" ? "Setor Crítico (Vulnerável)" : defenseRanking.center === "warm" ? "Pressão Média" : "Setor Seguro",
+        tierColor: defenseRanking.center === "hot" ? "#f87171" : defenseRanking.center === "warm" ? "#fcd34d" : "#7dd3fc",
+        tierBorder: defenseRanking.center === "hot" ? "border-rose-500/50" : defenseRanking.center === "warm" ? "border-amber-500/50" : "border-sky-500/40",
+        tierBg: defenseRanking.center === "hot" ? "bg-rose-950/40" : defenseRanking.center === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        description: "Fragilidade no combate frontal e disputas de primeira bola no coração da área.",
+      },
+      {
+        id: "def_right",
+        name: "Flanco Direito Defensivo (Lateral)",
+        category: "flank_right",
+        pct: def.right_conceded_pct,
+        secondaryStat: `${Math.round((currentTeam.goals_against * def.right_conceded_pct) / 100)} Gols Sofridos`,
+        tier: defenseRanking.right as ThermalTier,
+        tierLabel: defenseRanking.right === "hot" ? "Setor Crítico (Vulnerável)" : defenseRanking.right === "warm" ? "Pressão Média" : "Setor Seguro",
+        tierColor: defenseRanking.right === "hot" ? "#f87171" : defenseRanking.right === "warm" ? "#fcd34d" : "#7dd3fc",
+        tierBorder: defenseRanking.right === "hot" ? "border-rose-500/50" : defenseRanking.right === "warm" ? "border-amber-500/50" : "border-sky-500/40",
+        tierBg: defenseRanking.right === "hot" ? "bg-rose-950/40" : defenseRanking.right === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        description: "Vulnerabilidade em bolas alçadas em diagonal e cruzamentos do ponta adversário.",
+      },
+      {
+        id: "def_types",
+        name: "Padrão de Origem dos Gols Sofridos",
+        category: "penalty_box",
+        pct: Math.round(((def.open_play_conceded + def.crosses_aerial_conceded) / (currentTeam.goals_against || 1)) * 100),
+        secondaryStat: `${def.open_play_conceded} Bola Rolando • ${def.crosses_aerial_conceded} Aéreos`,
+        tier: "warm",
+        tierLabel: "Perfil de Finalizações Sofridas",
+        tierColor: "#fcd34d",
+        tierBorder: "border-amber-500/50",
+        tierBg: "bg-amber-950/40",
+        description: `${def.open_play_conceded} gols de bola rolando, ${def.crosses_aerial_conceded} bolas cruzadas e ${def.set_pieces_conceded} de bola parada.`,
+      },
+    ];
+  }, [def, defenseRanking, currentTeam]);
 
   if (!currentTeam || !tactics) return null;
 
@@ -187,42 +232,59 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
             </div>
             <p className="text-[11px] text-zinc-400">
               {mode === "attack"
-                ? `Análise espacial de construção: fluxo pelos corredores e zonas de finalização`
-                : `Mapeamento de vulnerabilidade defensiva: por onde mais sofrem ataques e tomam gol`}
+                ? `Manchas de calor orgânicas: distribuição da densidade de criação e finalizações`
+                : `Manchas térmicas de vulnerabilidade: zonas com maior incidência de gols sofridos`}
             </p>
           </div>
         </div>
 
-        {/* Mode Toggle: Ataque vs Defesa */}
-        <div className="obsidian-well inline-flex self-start rounded-2xl p-1 sm:self-auto">
+        {/* Controls: Mode Toggle + Grid Toggle */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Mode Toggle: Ataque vs Defesa */}
+          <div className="obsidian-well inline-flex self-start rounded-2xl p-1 sm:self-auto">
+            <button
+              onClick={() => setMode("attack")}
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
+                mode === "attack"
+                  ? "bg-gradient-to-b from-emerald-400 to-emerald-500 text-zinc-950 shadow-[0_2px_12px_rgba(16,185,129,0.4)]"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              <Crosshair className="h-3.5 w-3.5" />
+              Por Onde Mais Atacam
+            </button>
+            <button
+              onClick={() => setMode("defense")}
+              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
+                mode === "defense"
+                  ? "bg-gradient-to-b from-rose-400 to-rose-500 text-zinc-950 shadow-[0_2px_12px_rgba(244,63,94,0.4)]"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              <ShieldAlert className="h-3.5 w-3.5" />
+              Por Onde Mais Tomam Gol
+            </button>
+          </div>
+
+          {/* Grid lines toggle */}
           <button
-            onClick={() => setMode("attack")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
-              mode === "attack"
-                ? "bg-gradient-to-b from-emerald-400 to-emerald-500 text-zinc-950 shadow-[0_2px_12px_rgba(16,185,129,0.4)]"
-                : "text-zinc-400 hover:text-white"
+            onClick={() => setShowGridLines(!showGridLines)}
+            className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+              showGridLines
+                ? "border-emerald-500/40 bg-emerald-950/40 text-emerald-300"
+                : "border-white/10 bg-black/30 text-zinc-400 hover:text-white"
             }`}
+            title="Alternar linhas demarcatórias de setores táticos"
           >
-            <Crosshair className="h-3.5 w-3.5" />
-            Por Onde Mais Atacam
-          </button>
-          <button
-            onClick={() => setMode("defense")}
-            className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-black transition-all ${
-              mode === "defense"
-                ? "bg-gradient-to-b from-rose-400 to-rose-500 text-zinc-950 shadow-[0_2px_12px_rgba(244,63,94,0.4)]"
-                : "text-zinc-400 hover:text-white"
-            }`}
-          >
-            <ShieldAlert className="h-3.5 w-3.5" />
-            Por Onde Mais Tomam Gol
+            <Layers className="h-3.5 w-3.5" />
+            Setores Táticos
           </button>
         </div>
       </div>
 
       {/* Main Pitch + Side Breakdown Grid */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-        {/* Left: 2D Tactical Football Pitch (SVG) */}
+        {/* Left: 2D Tactical Football Pitch (SVG with Organic Heat Blobs) */}
         <div className="space-y-3 xl:col-span-8">
           <div className="relative overflow-hidden rounded-3xl border border-emerald-500/30 bg-[#072415] p-3 sm:p-5 shadow-[0_16px_48px_rgba(0,0,0,0.65)]">
             {/* Direction Indicator */}
@@ -264,50 +326,74 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                     <stop offset="100%" stopColor="#000000" stopOpacity="0.32" />
                   </radialGradient>
 
-                  {/* Obsidian Glass Gradient Base */}
-                  <linearGradient id="obsidianGlassShine" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.22" />
-                    <stop offset="25%" stopColor="#ffffff" stopOpacity="0.05" />
-                    <stop offset="100%" stopColor="#000000" stopOpacity="0.45" />
-                  </linearGradient>
+                  {/* Gaussian Blur Filter for Organic Heatmap Stains */}
+                  <filter id="heat-blur" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="28" result="blur" />
+                  </filter>
+                  <filter id="heat-blur-dense" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="20" result="blur" />
+                  </filter>
 
-                  {/* Attack Thermal Gradients (Quente, Morno, Frio) */}
-                  <linearGradient id="thermalGradHot" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#f97316" stopOpacity="0.08" />
-                    <stop offset="50%" stopColor="#ef4444" stopOpacity="0.32" />
-                    <stop offset="100%" stopColor="#dc2626" stopOpacity="0.62" />
-                  </linearGradient>
+                  {/* ========================================================
+                      ORGANIC THERMAL RADIAL GRADIENTS (MANCHAS DE CALOR)
+                     ======================================================== */}
+                  {/* Blazing Red Core Hotspot (Foco Máximo de Ataque) */}
+                  <radialGradient id="mancha-blazing" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#ef4444" stopOpacity="0.95" />
+                    <stop offset="30%" stopColor="#f97316" stopOpacity="0.80" />
+                    <stop offset="60%" stopColor="#f59e0b" stopOpacity="0.55" />
+                    <stop offset="85%" stopColor="#10b981" stopOpacity="0.18" />
+                    <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
+                  </radialGradient>
 
-                  <linearGradient id="thermalGradWarm" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#eab308" stopOpacity="0.06" />
-                    <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#d97706" stopOpacity="0.52" />
-                  </linearGradient>
+                  {/* Hot Attack Stain (Frequência Alta) */}
+                  <radialGradient id="mancha-hot" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#f97316" stopOpacity="0.88" />
+                    <stop offset="35%" stopColor="#f59e0b" stopOpacity="0.68" />
+                    <stop offset="70%" stopColor="#10b981" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
+                  </radialGradient>
 
-                  <linearGradient id="thermalGradCold" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.06" />
-                    <stop offset="50%" stopColor="#0284c7" stopOpacity="0.22" />
-                    <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.45" />
-                  </linearGradient>
+                  {/* Warm Attack Stain (Frequência Média) */}
+                  <radialGradient id="mancha-warm" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.82" />
+                    <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.58" />
+                    <stop offset="75%" stopColor="#10b981" stopOpacity="0.20" />
+                    <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
+                  </radialGradient>
 
-                  {/* Defense Danger Gradients */}
-                  <linearGradient id="defDangerHot" x1="1" y1="0" x2="0" y2="0">
-                    <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.08" />
-                    <stop offset="50%" stopColor="#e11d48" stopOpacity="0.35" />
-                    <stop offset="100%" stopColor="#be123c" stopOpacity="0.68" />
-                  </linearGradient>
+                  {/* Cold / Mild Attack Stain (Menor Frequência) */}
+                  <radialGradient id="mancha-cold" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.75" />
+                    <stop offset="45%" stopColor="#0284c7" stopOpacity="0.45" />
+                    <stop offset="80%" stopColor="#0f3d24" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="#0f3d24" stopOpacity="0" />
+                  </radialGradient>
 
-                  <linearGradient id="defDangerWarm" x1="1" y1="0" x2="0" y2="0">
-                    <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.06" />
-                    <stop offset="50%" stopColor="#ea580c" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#c2410c" stopOpacity="0.52" />
-                  </linearGradient>
+                  {/* Defense Critical Vulnerability Stain (Gols Sofridos / Perigo Máximo) */}
+                  <radialGradient id="mancha-def-critical" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.95" />
+                    <stop offset="30%" stopColor="#e11d48" stopOpacity="0.82" />
+                    <stop offset="60%" stopColor="#be123c" stopOpacity="0.55" />
+                    <stop offset="85%" stopColor="#881337" stopOpacity="0.22" />
+                    <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
+                  </radialGradient>
 
-                  <linearGradient id="defDangerCold" x1="1" y1="0" x2="0" y2="0">
-                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.06" />
-                    <stop offset="50%" stopColor="#0284c7" stopOpacity="0.20" />
-                    <stop offset="100%" stopColor="#0369a1" stopOpacity="0.45" />
-                  </linearGradient>
+                  {/* Defense Medium Warning Stain */}
+                  <radialGradient id="mancha-def-warning" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#f97316" stopOpacity="0.85" />
+                    <stop offset="40%" stopColor="#ea580c" stopOpacity="0.60" />
+                    <stop offset="75%" stopColor="#9a3412" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
+                  </radialGradient>
+
+                  {/* Defense Safe / Low Pressure Stain */}
+                  <radialGradient id="mancha-def-safe" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.65" />
+                    <stop offset="50%" stopColor="#0284c7" stopOpacity="0.35" />
+                    <stop offset="80%" stopColor="#0f3d24" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="#135c32" stopOpacity="0" />
+                  </radialGradient>
                 </defs>
 
                 {/* Pitch Background Turf with Rich Green Stripes */}
@@ -327,183 +413,189 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                 />
 
                 {/* ========================================================
-                    OBSIDIAN-GLASS DEMARCATED ZONES (Rendered on grass)
+                    ORGANIC HEATMAP LAYER: MANCHAS DE CALOR TÉRMICAS
                    ======================================================== */}
                 {mode === "attack" && (
-                  <g className="transition-opacity duration-300">
-                    {/* Render each corridor as an Obsidian Glass thermal card */}
-                    {attackCorridors.map((c) => (
-                      <g key={c.id}>
-                        {/* Obsidian dark tint for frosted glass depth */}
-                        <rect
-                          x="475"
-                          y={c.y}
-                          width="535"
-                          height={c.h}
-                          rx="14"
-                          fill="#05140d"
-                          fillOpacity="0.45"
-                        />
-                        {/* Thermal heat gradient overlay */}
-                        <rect
-                          x="475"
-                          y={c.y}
-                          width="535"
-                          height={c.h}
-                          rx="14"
-                          fill={`url(#${c.gradientId})`}
-                        />
-                        {/* Obsidian glass border */}
-                        <rect
-                          x="475"
-                          y={c.y}
-                          width="535"
-                          height={c.h}
-                          rx="14"
-                          fill="none"
-                          stroke={c.tierBorder}
-                          strokeWidth="1.8"
-                        />
-                        {/* Top specular glass reflection line */}
-                        <line
-                          x1="490"
-                          y1={c.y + 2}
-                          x2="995"
-                          y2={c.y + 2}
-                          stroke="rgba(255,255,255,0.45)"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
+                  <g filter="url(#heat-blur)" className="transition-opacity duration-300">
+                    {/* --- CORREDOR ESQUERDO: MANCHAS --- */}
+                    {attackRanking.left === "hot" && (
+                      <>
+                        {/* Linha de fundo esquerda & escanteio ofensivo (Foco ultra quente) */}
+                        <ellipse cx="880" cy="100" rx="130" ry="75" fill="url(#mancha-blazing)" />
+                        <ellipse cx="940" cy="90" rx="90" ry="60" fill="url(#mancha-blazing)" />
+                        {/* Infiltração em diagonal cortando para a área */}
+                        <ellipse cx="840" cy="180" rx="100" ry="65" fill="url(#mancha-hot)" />
+                        {/* Meio-campo lateral esquerdo (arrancada) */}
+                        <ellipse cx="680" cy="120" rx="120" ry="68" fill="url(#mancha-hot)" />
+                        <ellipse cx="580" cy="140" rx="90" ry="55" fill="url(#mancha-warm)" />
+                      </>
+                    )}
+                    {attackRanking.left === "warm" && (
+                      <>
+                        <ellipse cx="860" cy="110" rx="110" ry="65" fill="url(#mancha-warm)" />
+                        <ellipse cx="920" cy="95" rx="80" ry="50" fill="url(#mancha-warm)" />
+                        <ellipse cx="710" cy="130" rx="95" ry="60" fill="url(#mancha-warm)" />
+                      </>
+                    )}
+                    {attackRanking.left === "cold" && (
+                      <>
+                        <ellipse cx="820" cy="120" rx="85" ry="50" fill="url(#mancha-cold)" />
+                        <ellipse cx="680" cy="140" rx="75" ry="45" fill="url(#mancha-cold)" />
+                      </>
+                    )}
 
-                        {/* Subtle corridor flow arrow indicators */}
-                        <path
-                          d={`M 530 ${c.y + c.h / 2} L 555 ${c.y + c.h / 2} M 545 ${c.y + c.h / 2 - 8} L 555 ${c.y + c.h / 2} L 545 ${c.y + c.h / 2 + 8}`}
-                          stroke={c.tierColor}
-                          strokeWidth="2"
-                          strokeOpacity="0.45"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </g>
-                    ))}
+                    {/* --- CORREDOR CENTRAL: MANCHAS --- */}
+                    {attackRanking.center === "hot" && (
+                      <>
+                        {/* Entrada da área / Meia-lua central */}
+                        <ellipse cx="800" cy="340" rx="120" ry="85" fill="url(#mancha-blazing)" />
+                        <ellipse cx="710" cy="340" rx="110" ry="75" fill="url(#mancha-hot)" />
+                        <ellipse cx="600" cy="340" rx="95" ry="60" fill="url(#mancha-warm)" />
+                      </>
+                    )}
+                    {attackRanking.center === "warm" && (
+                      <>
+                        <ellipse cx="780" cy="340" rx="95" ry="65" fill="url(#mancha-warm)" />
+                        <ellipse cx="660" cy="340" rx="85" ry="55" fill="url(#mancha-warm)" />
+                      </>
+                    )}
+                    {attackRanking.center === "cold" && (
+                      <>
+                        <ellipse cx="740" cy="340" rx="80" ry="50" fill="url(#mancha-cold)" />
+                        <ellipse cx="630" cy="340" rx="70" ry="45" fill="url(#mancha-cold)" />
+                      </>
+                    )}
 
-                    {/* Inside Penalty Box Shot Heat Hotspot */}
-                    <g>
-                      <rect
-                        x="850"
-                        y="148"
-                        width="165"
-                        height="384"
-                        rx="12"
-                        fill="#f59e0b"
-                        fillOpacity="0.16"
-                        stroke="#f59e0b"
-                        strokeWidth="2"
-                        strokeDasharray="6 4"
-                      />
-                      {/* Box top glass sheen */}
-                      <line
-                        x1="860"
-                        y1="150"
-                        x2="1005"
-                        y2="150"
-                        stroke="rgba(255,255,255,0.5)"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </g>
+                    {/* --- CORREDOR DIREITO: MANCHAS --- */}
+                    {attackRanking.right === "hot" && (
+                      <>
+                        {/* Linha de fundo direita & escanteio ofensivo */}
+                        <ellipse cx="880" cy="580" rx="130" ry="75" fill="url(#mancha-blazing)" />
+                        <ellipse cx="940" cy="590" rx="90" ry="60" fill="url(#mancha-blazing)" />
+                        {/* Infiltração em diagonal cortando para a área */}
+                        <ellipse cx="840" cy="500" rx="100" ry="65" fill="url(#mancha-hot)" />
+                        {/* Meio-campo lateral direito (arrancada) */}
+                        <ellipse cx="680" cy="560" rx="120" ry="68" fill="url(#mancha-hot)" />
+                        <ellipse cx="580" cy="540" rx="90" ry="55" fill="url(#mancha-warm)" />
+                      </>
+                    )}
+                    {attackRanking.right === "warm" && (
+                      <>
+                        <ellipse cx="860" cy="570" rx="110" ry="65" fill="url(#mancha-warm)" />
+                        <ellipse cx="920" cy="585" rx="80" ry="50" fill="url(#mancha-warm)" />
+                        <ellipse cx="710" cy="550" rx="95" ry="60" fill="url(#mancha-warm)" />
+                      </>
+                    )}
+                    {attackRanking.right === "cold" && (
+                      <>
+                        <ellipse cx="820" cy="560" rx="85" ry="50" fill="url(#mancha-cold)" />
+                        <ellipse cx="680" cy="540" rx="75" ry="45" fill="url(#mancha-cold)" />
+                      </>
+                    )}
+
+                    {/* --- GRANDE ÁREA: HOTSPOT DE FINALIZAÇÕES --- */}
+                    <ellipse cx="925" cy="340" rx="95" ry="75" fill="url(#mancha-blazing)" />
+                    <ellipse cx="965" cy="310" rx="65" ry="48" fill="url(#mancha-hot)" />
+                    <ellipse cx="965" cy="370" rx="65" ry="48" fill="url(#mancha-hot)" />
+                    {atk?.six_yard_pct && atk.six_yard_pct > 15 && (
+                      <ellipse cx="995" cy="340" rx="45" ry="35" fill="url(#mancha-blazing)" />
+                    )}
                   </g>
                 )}
 
                 {mode === "defense" && (
-                  <g className="transition-opacity duration-300">
-                    {/* Render each defensive corridor as an Obsidian Glass danger card */}
-                    {defenseCorridors.map((c) => (
-                      <g key={c.id}>
-                        {/* Obsidian dark tint for frosted glass depth */}
-                        <rect
-                          x="40"
-                          y={c.y}
-                          width="480"
-                          height={c.h}
-                          rx="14"
-                          fill="#140608"
-                          fillOpacity="0.45"
-                        />
-                        {/* Thermal heat gradient overlay */}
-                        <rect
-                          x="40"
-                          y={c.y}
-                          width="480"
-                          height={c.h}
-                          rx="14"
-                          fill={`url(#${c.gradientId})`}
-                        />
-                        {/* Obsidian glass border */}
-                        <rect
-                          x="40"
-                          y={c.y}
-                          width="480"
-                          height={c.h}
-                          rx="14"
-                          fill="none"
-                          stroke={c.tierBorder}
-                          strokeWidth="1.8"
-                        />
-                        {/* Top specular glass reflection line */}
-                        <line
-                          x1="55"
-                          y1={c.y + 2}
-                          x2="505"
-                          y2={c.y + 2}
-                          stroke="rgba(255,255,255,0.45)"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
+                  <g filter="url(#heat-blur)" className="transition-opacity duration-300">
+                    {/* --- DEFESA: FLANCO ESQUERDO (ZONA CONCEDIDA) --- */}
+                    {defenseRanking.left === "hot" && (
+                      <>
+                        <ellipse cx="140" cy="110" rx="120" ry="75" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="80" cy="100" rx="85" ry="60" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="180" cy="180" rx="100" ry="65" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="280" cy="130" rx="110" ry="65" fill="url(#mancha-def-warning)" />
+                      </>
+                    )}
+                    {defenseRanking.left === "warm" && (
+                      <>
+                        <ellipse cx="150" cy="120" rx="105" ry="65" fill="url(#mancha-def-warning)" />
+                        <ellipse cx="260" cy="140" rx="90" ry="55" fill="url(#mancha-def-warning)" />
+                      </>
+                    )}
+                    {defenseRanking.left === "cold" && (
+                      <>
+                        <ellipse cx="180" cy="130" rx="85" ry="50" fill="url(#mancha-def-safe)" />
+                      </>
+                    )}
 
-                        {/* Pressure arrow pointing towards goal */}
-                        <path
-                          d={`M 480 ${c.y + c.h / 2} L 455 ${c.y + c.h / 2} M 465 ${c.y + c.h / 2 - 8} L 455 ${c.y + c.h / 2} L 465 ${c.y + c.h / 2 + 8}`}
-                          stroke={c.tierColor}
-                          strokeWidth="2"
-                          strokeOpacity="0.45"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </g>
-                    ))}
+                    {/* --- DEFESA: MIOLO DA ZAGA & PEQUENA ÁREA --- */}
+                    {defenseRanking.center === "hot" && (
+                      <>
+                        <ellipse cx="120" cy="340" rx="115" ry="85" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="75" cy="340" rx="80" ry="60" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="220" cy="340" rx="105" ry="70" fill="url(#mancha-def-critical)" />
+                      </>
+                    )}
+                    {defenseRanking.center === "warm" && (
+                      <>
+                        <ellipse cx="130" cy="340" rx="95" ry="70" fill="url(#mancha-def-warning)" />
+                        <ellipse cx="210" cy="340" rx="85" ry="60" fill="url(#mancha-def-warning)" />
+                      </>
+                    )}
+                    {defenseRanking.center === "cold" && (
+                      <>
+                        <ellipse cx="140" cy="340" rx="80" ry="55" fill="url(#mancha-def-safe)" />
+                      </>
+                    )}
 
-                    {/* Defensive Box Vulnerability Zone */}
-                    <g>
-                      <rect
-                        x="35"
-                        y="148"
-                        width="165"
-                        height="384"
-                        rx="12"
-                        fill="#f43f5e"
-                        fillOpacity="0.22"
-                        stroke="#f43f5e"
-                        strokeWidth="2"
-                        strokeDasharray="6 4"
-                      />
-                      <line
-                        x1="45"
-                        y1="150"
-                        x2="190"
-                        y2="150"
-                        stroke="rgba(255,255,255,0.5)"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </g>
+                    {/* --- DEFESA: FLANCO DIREITO (ZONA CONCEDIDA) --- */}
+                    {defenseRanking.right === "hot" && (
+                      <>
+                        <ellipse cx="140" cy="570" rx="120" ry="75" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="80" cy="580" rx="85" ry="60" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="180" cy="500" rx="100" ry="65" fill="url(#mancha-def-critical)" />
+                        <ellipse cx="280" cy="550" rx="110" ry="65" fill="url(#mancha-def-warning)" />
+                      </>
+                    )}
+                    {defenseRanking.right === "warm" && (
+                      <>
+                        <ellipse cx="150" cy="560" rx="105" ry="65" fill="url(#mancha-def-warning)" />
+                        <ellipse cx="260" cy="540" rx="90" ry="55" fill="url(#mancha-def-warning)" />
+                      </>
+                    )}
+                    {defenseRanking.right === "cold" && (
+                      <>
+                        <ellipse cx="180" cy="550" rx="85" ry="50" fill="url(#mancha-def-safe)" />
+                      </>
+                    )}
+
+                    {/* Defesa: Foco Crítico na Marca do Pênalti */}
+                    <ellipse cx="135" cy="340" rx="75" ry="60" fill="url(#mancha-def-critical)" />
+                  </g>
+                )}
+
+                {/* ========================================================
+                    SUBTLE OBSIDIAN-GLASS TACTICAL SECTOR GRID (TOGGLEABLE)
+                   ======================================================== */}
+                {showGridLines && (
+                  <g stroke="rgba(255,255,255,0.22)" strokeDasharray="5 7" strokeWidth="1.2" fill="none">
+                    {/* Attacking Half Sub-corridors */}
+                    <line x1="525" y1="210" x2="1015" y2="210" />
+                    <line x1="525" y1="470" x2="1015" y2="470" />
+                    {/* Vertical Sector Lines (Intermediária / Linha de Entrada da Área) */}
+                    <line x1="720" y1="35" x2="720" y2="645" />
+                    <line x1="850" y1="35" x2="850" y2="148" />
+                    <line x1="850" y1="532" x2="850" y2="645" />
+
+                    {/* Defensive Half Sub-corridors */}
+                    <line x1="35" y1="210" x2="525" y2="210" />
+                    <line x1="35" y1="470" x2="525" y2="470" />
+                    <line x1="330" y1="35" x2="330" y2="645" />
                   </g>
                 )}
 
                 {/* ========================================================
                     OFFICIAL PITCH LINES (White with crisp neon glow)
                    ======================================================== */}
-                <g stroke="#ffffff" strokeWidth="2.5" strokeOpacity="0.85" fill="none">
+                <g stroke="#ffffff" strokeWidth="2.5" strokeOpacity="0.88" fill="none">
                   {/* Outer boundary */}
                   <rect x="35" y="35" width="980" height="610" rx="6" />
 
@@ -537,225 +629,243 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                   <path d="M 1015 625 A 20 20 0 0 0 995 645" />
                 </g>
 
-                {/* Corridor Separator Dashed Guides */}
-                <g stroke="#ffffff" strokeWidth="1.2" strokeDasharray="6 8" strokeOpacity="0.30">
-                  <line x1="35" y1="242" x2="1015" y2="242" />
-                  <line x1="35" y1="445" x2="1015" y2="445" />
-                </g>
-
                 {/* ========================================================
-                    OBSIDIAN-GLASS HUD PILLS (Dynamic Thermal Badges)
+                    OBSIDIAN-GLASS FLOATING PINS (Clean, No Collisions)
                    ======================================================== */}
                 {mode === "attack" && (
-                  <g className="font-sans font-bold select-none">
-                    {/* Render HUD Pill for each Attack Corridor */}
-                    {attackCorridors.map((c) => {
-                      const badgeY = c.y + c.h / 2;
-                      return (
-                        <g key={c.id} transform={`translate(740, ${badgeY})`}>
-                          {/* Frosted Obsidian Glass Container */}
-                          <rect
-                            x="-115"
-                            y="-30"
-                            width="230"
-                            height="60"
-                            rx="14"
-                            fill="#041109"
-                            fillOpacity="0.90"
-                            stroke={c.tierBorder}
-                            strokeWidth="1.8"
-                          />
-                          {/* Gloss top highlight */}
-                          <line
-                            x1="-105"
-                            y1="-28"
-                            x2="105"
-                            y2="-28"
-                            stroke="rgba(255,255,255,0.4)"
-                            strokeWidth="1.2"
-                            strokeLinecap="round"
-                          />
-
-                          {/* Tier Badge / Thermal Status */}
-                          <circle cx="-95" cy="-12" r="4.5" fill={c.glowColor} />
-                          <text
-                            x="-85"
-                            y="-8"
-                            textAnchor="start"
-                            fill={c.tierColor}
-                            fontSize="10"
-                            fontWeight="800"
-                            letterSpacing="0.05em"
-                          >
-                            {c.tierLabel}
-                          </text>
-
-                          {/* Corridor Name + Big Value */}
-                          <text
-                            x="-95"
-                            y="14"
-                            textAnchor="start"
-                            fill="#ffffff"
-                            fontSize="14"
-                            fontWeight="900"
-                          >
-                            {c.name.toUpperCase()}
-                          </text>
-
-                          <text
-                            x="95"
-                            y="14"
-                            textAnchor="end"
-                            fill={c.tierColor}
-                            fontSize="16"
-                            fontWeight="900"
-                          >
-                            {c.pct}%
-                          </text>
-
-                          <text
-                            x="95"
-                            y="-8"
-                            textAnchor="end"
-                            fill="#d1d5db"
-                            fontSize="11"
-                            fontWeight="700"
-                          >
-                            {c.goals} Gols
-                          </text>
-                        </g>
-                      );
-                    })}
-
-                    {/* Inside Box Shot Tag */}
-                    <g transform="translate(932, 340)">
+                  <g className="font-sans select-none">
+                    {/* Left Flank Floating Pin */}
+                    <g transform="translate(680, 58)">
                       <rect
-                        x="-55"
-                        y="-26"
-                        width="110"
-                        height="52"
+                        x="-85"
+                        y="-18"
+                        width="170"
+                        height="36"
                         rx="12"
-                        fill="#062817"
-                        fillOpacity="0.92"
-                        stroke="#34d399"
-                        strokeWidth="1.8"
+                        fill="#05140b"
+                        fillOpacity="0.90"
+                        stroke={attackRanking.left === "hot" ? "#ef4444" : attackRanking.left === "warm" ? "#f59e0b" : "#0284c7"}
+                        strokeWidth="1.5"
                       />
-                      <line
-                        x1="-45"
-                        y1="-24"
-                        x2="45"
-                        y2="-24"
-                        stroke="rgba(255,255,255,0.4)"
-                        strokeWidth="1"
-                        strokeLinecap="round"
+                      <circle
+                        cx="-68"
+                        cy="0"
+                        r="4"
+                        fill={attackRanking.left === "hot" ? "#ef4444" : attackRanking.left === "warm" ? "#f59e0b" : "#38bdf8"}
                       />
-                      <text x="0" y="-8" textAnchor="middle" fill="#6ee7b7" fontSize="10" fontWeight="900">
-                        NA GRANDE ÁREA
+                      <text x="-56" y="-2" fill="#ffffff" fontSize="10" fontWeight="900" letterSpacing="0.05em">
+                        CORREDOR ESQ.
                       </text>
-                      <text x="0" y="14" textAnchor="middle" fill="#ffffff" fontSize="15" fontWeight="900">
-                        {atk?.inside_box_pct}% Chutes
+                      <text
+                        x="-56"
+                        y="10"
+                        fill={attackRanking.left === "hot" ? "#fca5a5" : attackRanking.left === "warm" ? "#fde047" : "#7dd3fc"}
+                        fontSize="11"
+                        fontWeight="900"
+                      >
+                        {atk?.left_pct}% • {atk?.goals_left} Gols
+                      </text>
+                    </g>
+
+                    {/* Center Channel Floating Pin */}
+                    <g transform="translate(640, 340)">
+                      <rect
+                        x="-85"
+                        y="-18"
+                        width="170"
+                        height="36"
+                        rx="12"
+                        fill="#05140b"
+                        fillOpacity="0.90"
+                        stroke={attackRanking.center === "hot" ? "#ef4444" : attackRanking.center === "warm" ? "#f59e0b" : "#0284c7"}
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx="-68"
+                        cy="0"
+                        r="4"
+                        fill={attackRanking.center === "hot" ? "#ef4444" : attackRanking.center === "warm" ? "#f59e0b" : "#38bdf8"}
+                      />
+                      <text x="-56" y="-2" fill="#ffffff" fontSize="10" fontWeight="900" letterSpacing="0.05em">
+                        FAIXA CENTRAL
+                      </text>
+                      <text
+                        x="-56"
+                        y="10"
+                        fill={attackRanking.center === "hot" ? "#fca5a5" : attackRanking.center === "warm" ? "#fde047" : "#7dd3fc"}
+                        fontSize="11"
+                        fontWeight="900"
+                      >
+                        {atk?.center_pct}% • {atk?.goals_center} Gols
+                      </text>
+                    </g>
+
+                    {/* Right Flank Floating Pin */}
+                    <g transform="translate(680, 622)">
+                      <rect
+                        x="-85"
+                        y="-18"
+                        width="170"
+                        height="36"
+                        rx="12"
+                        fill="#05140b"
+                        fillOpacity="0.90"
+                        stroke={attackRanking.right === "hot" ? "#ef4444" : attackRanking.right === "warm" ? "#f59e0b" : "#0284c7"}
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx="-68"
+                        cy="0"
+                        r="4"
+                        fill={attackRanking.right === "hot" ? "#ef4444" : attackRanking.right === "warm" ? "#f59e0b" : "#38bdf8"}
+                      />
+                      <text x="-56" y="-2" fill="#ffffff" fontSize="10" fontWeight="900" letterSpacing="0.05em">
+                        CORREDOR DIR.
+                      </text>
+                      <text
+                        x="-56"
+                        y="10"
+                        fill={attackRanking.right === "hot" ? "#fca5a5" : attackRanking.right === "warm" ? "#fde047" : "#7dd3fc"}
+                        fontSize="11"
+                        fontWeight="900"
+                      >
+                        {atk?.right_pct}% • {atk?.goals_right} Gols
+                      </text>
+                    </g>
+
+                    {/* Inside Box Shot Finishing Hotspot Pin */}
+                    <g transform="translate(935, 175)">
+                      <rect
+                        x="-65"
+                        y="-18"
+                        width="130"
+                        height="36"
+                        rx="12"
+                        fill="#140608"
+                        fillOpacity="0.92"
+                        stroke="#f43f5e"
+                        strokeWidth="1.5"
+                      />
+                      <circle cx="-50" cy="0" r="4" fill="#f43f5e" />
+                      <text x="-40" y="-2" fill="#fda4af" fontSize="9" fontWeight="900" letterSpacing="0.05em">
+                        FINALIZAÇÕES
+                      </text>
+                      <text x="-40" y="10" fill="#ffffff" fontSize="11" fontWeight="900">
+                        {atk?.inside_box_pct}% na Área
                       </text>
                     </g>
                   </g>
                 )}
 
                 {mode === "defense" && (
-                  <g className="font-sans font-bold select-none">
-                    {/* Render HUD Pill for each Defensive Corridor */}
-                    {defenseCorridors.map((c) => {
-                      const badgeY = c.y + c.h / 2;
-                      return (
-                        <g key={c.id} transform={`translate(280, ${badgeY})`}>
-                          {/* Frosted Obsidian Glass Container */}
-                          <rect
-                            x="-125"
-                            y="-30"
-                            width="250"
-                            height="60"
-                            rx="14"
-                            fill="#170609"
-                            fillOpacity="0.92"
-                            stroke={c.tierBorder}
-                            strokeWidth="1.8"
-                          />
-                          {/* Gloss top highlight */}
-                          <line
-                            x1="-115"
-                            y1="-28"
-                            x2="115"
-                            y2="-28"
-                            stroke="rgba(255,255,255,0.4)"
-                            strokeWidth="1.2"
-                            strokeLinecap="round"
-                          />
-
-                          {/* Tier Badge / Thermal Status */}
-                          <circle cx="-105" cy="-12" r="4.5" fill={c.glowColor} />
-                          <text
-                            x="-95"
-                            y="-8"
-                            textAnchor="start"
-                            fill={c.tierColor}
-                            fontSize="10"
-                            fontWeight="800"
-                            letterSpacing="0.05em"
-                          >
-                            {c.tierLabel}
-                          </text>
-
-                          {/* Corridor Name + Big Value */}
-                          <text
-                            x="-105"
-                            y="14"
-                            textAnchor="start"
-                            fill="#ffffff"
-                            fontSize="13"
-                            fontWeight="900"
-                          >
-                            {c.name.toUpperCase()}
-                          </text>
-
-                          <text
-                            x="105"
-                            y="14"
-                            textAnchor="end"
-                            fill={c.tierColor}
-                            fontSize="16"
-                            fontWeight="900"
-                          >
-                            {c.pct}%
-                          </text>
-
-                          <text
-                            x="105"
-                            y="-8"
-                            textAnchor="end"
-                            fill="#fca5a5"
-                            fontSize="11"
-                            fontWeight="700"
-                          >
-                            ~{c.goals} Gols Sofridos
-                          </text>
-                        </g>
-                      );
-                    })}
-
-                    {/* Def Box Vulnerability Tag */}
-                    <g transform="translate(118, 340)">
-                      <circle
-                        cx="0"
-                        cy="0"
-                        r="30"
-                        fill="#e11d48"
+                  <g className="font-sans select-none">
+                    {/* Left Defensive Flank Pin */}
+                    <g transform="translate(240, 58)">
+                      <rect
+                        x="-85"
+                        y="-18"
+                        width="170"
+                        height="36"
+                        rx="12"
+                        fill="#18070a"
                         fillOpacity="0.92"
-                        stroke="#ffffff"
-                        strokeWidth="2.5"
+                        stroke={defenseRanking.left === "hot" ? "#f43f5e" : defenseRanking.left === "warm" ? "#f59e0b" : "#0284c7"}
+                        strokeWidth="1.5"
                       />
-                      <text x="0" y="-4" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="900">
+                      <circle
+                        cx="-68"
+                        cy="0"
+                        r="4"
+                        fill={defenseRanking.left === "hot" ? "#f43f5e" : defenseRanking.left === "warm" ? "#f59e0b" : "#38bdf8"}
+                      />
+                      <text x="-56" y="-2" fill="#ffffff" fontSize="10" fontWeight="900" letterSpacing="0.05em">
+                        FLANCO ESQ. DEF.
+                      </text>
+                      <text
+                        x="-56"
+                        y="10"
+                        fill={defenseRanking.left === "hot" ? "#fda4af" : defenseRanking.left === "warm" ? "#fde047" : "#7dd3fc"}
+                        fontSize="11"
+                        fontWeight="900"
+                      >
+                        {def?.left_conceded_pct}% Gols Sofridos
+                      </text>
+                    </g>
+
+                    {/* Center Defensive Box Pin */}
+                    <g transform="translate(260, 340)">
+                      <rect
+                        x="-85"
+                        y="-18"
+                        width="170"
+                        height="36"
+                        rx="12"
+                        fill="#18070a"
+                        fillOpacity="0.92"
+                        stroke={defenseRanking.center === "hot" ? "#f43f5e" : defenseRanking.center === "warm" ? "#f59e0b" : "#0284c7"}
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx="-68"
+                        cy="0"
+                        r="4"
+                        fill={defenseRanking.center === "hot" ? "#f43f5e" : defenseRanking.center === "warm" ? "#f59e0b" : "#38bdf8"}
+                      />
+                      <text x="-56" y="-2" fill="#ffffff" fontSize="10" fontWeight="900" letterSpacing="0.05em">
+                        MIOLO DA ZAGA
+                      </text>
+                      <text
+                        x="-56"
+                        y="10"
+                        fill={defenseRanking.center === "hot" ? "#fda4af" : defenseRanking.center === "warm" ? "#fde047" : "#7dd3fc"}
+                        fontSize="11"
+                        fontWeight="900"
+                      >
+                        {def?.center_conceded_pct}% Gols Sofridos
+                      </text>
+                    </g>
+
+                    {/* Right Defensive Flank Pin */}
+                    <g transform="translate(240, 622)">
+                      <rect
+                        x="-85"
+                        y="-18"
+                        width="170"
+                        height="36"
+                        rx="12"
+                        fill="#18070a"
+                        fillOpacity="0.92"
+                        stroke={defenseRanking.right === "hot" ? "#f43f5e" : defenseRanking.right === "warm" ? "#f59e0b" : "#0284c7"}
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx="-68"
+                        cy="0"
+                        r="4"
+                        fill={defenseRanking.right === "hot" ? "#f43f5e" : defenseRanking.right === "warm" ? "#f59e0b" : "#38bdf8"}
+                      />
+                      <text x="-56" y="-2" fill="#ffffff" fontSize="10" fontWeight="900" letterSpacing="0.05em">
+                        FLANCO DIR. DEF.
+                      </text>
+                      <text
+                        x="-56"
+                        y="10"
+                        fill={defenseRanking.right === "hot" ? "#fda4af" : defenseRanking.right === "warm" ? "#fde047" : "#7dd3fc"}
+                        fontSize="11"
+                        fontWeight="900"
+                      >
+                        {def?.right_conceded_pct}% Gols Sofridos
+                      </text>
+                    </g>
+
+                    {/* Defensive Box Vulnerability Callout */}
+                    <g transform="translate(118, 340)">
+                      <circle cx="0" cy="0" r="28" fill="#e11d48" fillOpacity="0.92" stroke="#ffffff" strokeWidth="2" />
+                      <text x="0" y="-3" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="900">
                         ALERTA
                       </text>
-                      <text x="0" y="12" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="900">
-                        DEFESA
+                      <text x="0" y="11" textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="900">
+                        ZAGA
                       </text>
                     </g>
                   </g>
@@ -764,33 +874,84 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
             </div>
           </div>
 
-          {/* Thermal Scale Legend (Obsidian Glass Bar) */}
+          {/* Thermal Scale Legend (Organic Manchas Indicator) */}
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-xs shadow-inner">
             <div className="flex items-center gap-2">
               <Thermometer className="h-4 w-4 text-emerald-400" />
               <span className="font-extrabold uppercase tracking-wider text-zinc-300">
-                Gradiente Térmico Espacial:
+                Densidade Térmica das Manchas:
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-3 font-semibold">
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-sky-500/40 bg-sky-950/60 px-2.5 py-1 text-[11px] text-sky-300">
                 <Snowflake className="h-3 w-3 text-sky-400" />
-                Zona Fria (Baixo Fluxo)
+                Mancha Ciano (Frequência Suave / Segura)
               </span>
               <span className="h-2.5 w-16 rounded-full bg-gradient-to-r from-sky-400 via-amber-400 to-rose-500 shadow-sm" />
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-950/60 px-2.5 py-1 text-[11px] text-amber-300">
                 <Zap className="h-3 w-3 text-amber-400" />
-                Zona Morna (Regular)
+                Mancha Dourada (Fluxo Regular)
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-rose-500/40 bg-rose-950/60 px-2.5 py-1 text-[11px] text-rose-300">
                 <Flame className="h-3 w-3 text-rose-400" />
-                Zona Quente (Foco Crítico)
+                Mancha Vermelha (Foco Incandescente / Crítico)
               </span>
+            </div>
+          </div>
+
+          {/* Detailed Granular Sector Breakdown Cards (Direct User Request) */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-zinc-300">
+                Detalhamento dos Setores no Gramado
+              </span>
+              <span className="text-[11px] text-zinc-400 font-mono">
+                {mode === "attack" ? "Distribuição de Criação e Finalizações" : "Vulnerabilidade por Setor"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {(mode === "attack" ? attackSectors : defenseSectors).map((s) => (
+                <div
+                  key={s.id}
+                  onMouseEnter={() => setHoveredSector(s.id)}
+                  onMouseLeave={() => setHoveredSector(null)}
+                  className={`rounded-2xl border p-3.5 transition-all cursor-default ${
+                    hoveredSector === s.id
+                      ? "border-emerald-400 bg-black/60 shadow-[0_4px_20px_rgba(16,185,129,0.2)]"
+                      : "border-white/10 bg-black/35 hover:border-white/20"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black text-white">{s.name}</span>
+                    <span
+                      className="font-mono text-sm font-black"
+                      style={{ color: s.tierColor }}
+                    >
+                      {s.pct}%
+                    </span>
+                  </div>
+
+                  <div className="mt-1 flex items-center justify-between text-[11px]">
+                    <span className="text-zinc-400">{s.secondaryStat}</span>
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-black uppercase tracking-wide border ${s.tierBorder} ${s.tierBg}`}
+                      style={{ color: s.tierColor }}
+                    >
+                      {s.tierLabel}
+                    </span>
+                  </div>
+
+                  <p className="mt-2 text-[11px] leading-relaxed text-zinc-400">
+                    {s.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Right: Detailed Tactical Breakdown Cards */}
+        {/* Right: Tactical Breakdown Cards */}
         <div className="space-y-4 xl:col-span-4">
           {mode === "attack" && atk && (
             <>
