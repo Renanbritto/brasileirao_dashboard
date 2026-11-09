@@ -18,7 +18,7 @@ export default function BrasileiraoDashboardPage() {
   const [division, setDivision] = useState<"A" | "B">("A");
   const [year, setYear] = useState<number>(2026);
   const [activeModule, setActiveModule] = useState<ModuleKey>("live");
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(true);
   const [favoriteClubSlug, setFavoriteClubSlug] = useState<string>("");
   const [overview, setOverview] = useState<SeasonOverview | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
