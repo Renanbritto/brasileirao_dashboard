@@ -41,6 +41,37 @@ export interface RemainingScheduleItem {
   is_six_pointer: boolean;
 }
 
+export interface SpatialTactics {
+  attack: {
+    left_pct: number;
+    center_pct: number;
+    right_pct: number;
+    goals_left: number;
+    goals_center: number;
+    goals_right: number;
+    inside_box_pct: number;
+    outside_box_pct: number;
+    six_yard_pct: number;
+    header_goals: number;
+    right_foot_goals: number;
+    left_foot_goals: number;
+    outside_box_goals: number;
+    primary_channel: string;
+  };
+  defense: {
+    left_conceded_pct: number;
+    center_conceded_pct: number;
+    right_conceded_pct: number;
+    open_play_conceded: number;
+    crosses_aerial_conceded: number;
+    set_pieces_conceded: number;
+    counter_attacks_conceded: number;
+    vuln_zone: string;
+    vuln_desc: string;
+    danger_channel: string;
+  };
+}
+
 export interface StandingTeam {
   id: number;
   club: Club;
@@ -151,6 +182,7 @@ export interface StandingTeam {
   round_progression: RoundProgressionPoint[];
   remaining_schedule: RemainingScheduleItem[];
   time_slots: Record<string, number>;
+  spatial_tactics?: SpatialTactics;
 }
 
 export interface RoundMatch {

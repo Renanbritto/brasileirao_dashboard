@@ -15,7 +15,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
-import { Target, Clock, Shield, Flame, RefreshCw } from "lucide-react";
+import { Target, Clock, Shield, Flame, RefreshCw, Compass } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ClubCrest } from "@/components/ui/ClubCrest";
+import { TacticalPitchMap } from "@/components/ui/TacticalPitchMap";
 import { SeasonOverview } from "@/lib/api";
 
 interface TacticsEfficiencyModuleProps {
@@ -196,6 +197,27 @@ export function TacticsEfficiencyModule({
           </CardContent>
         </Card>
       </div>
+
+      {/* Mapa Tático no Gramado: Por Onde Atacam & Por Onde Mais Tomam Gol */}
+      <Card className="obsidian-glass border border-white/10">
+        <CardHeader className="pb-2">
+          <div className="flex items-center gap-2">
+            <Compass className="h-5 w-5 text-emerald-400" />
+            <CardTitle className="text-base sm:text-lg">
+              Mapa Tático no Gramado — Por Onde Mais Atacam & Por Onde Tomam Gol
+            </CardTitle>
+          </div>
+          <CardDescription>
+            Visualização geoespacial das vias de construção ofensiva, zonas de finalização na área e setores de fragilidade defensiva
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-2">
+          <TacticalPitchMap
+            teams={data.standings}
+            favoriteClubSlug={favoriteClubSlug}
+          />
+        </CardContent>
+      </Card>
 
       {/* Main Row: Quadrante Tático (xG vs xGA) + Overperformance xG */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
