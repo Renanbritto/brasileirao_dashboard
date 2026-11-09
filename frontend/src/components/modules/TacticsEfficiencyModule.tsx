@@ -110,7 +110,7 @@ export function TacticsEfficiencyModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
-                🎯 Ataque Mais Cirúrgico
+                Ataque Mais Cirúrgico
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
                 <Target className="h-4 w-4" />
@@ -133,7 +133,7 @@ export function TacticsEfficiencyModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-sky-400">
-                🧱 Muralha Defensiva (Clean Sheets)
+                Muralha Defensiva (Clean Sheets)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-sky-400">
                 <Shield className="h-4 w-4" />
@@ -156,7 +156,7 @@ export function TacticsEfficiencyModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
-                ⏱️ Rei dos Acréscimos (85&apos;+)
+                Rei dos Acréscimos (85&apos;+)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
                 <Clock className="h-4 w-4" />
@@ -179,7 +179,7 @@ export function TacticsEfficiencyModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-purple-400">
-                🔥 Poder de Reação (Viradas)
+                Poder de Reação (Viradas)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-purple-400">
                 <Flame className="h-4 w-4" />
@@ -379,7 +379,7 @@ export function TacticsEfficiencyModule({
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <CardTitle className="text-base sm:text-lg">
-                  ⏱️ Relógio do Gol — Heatmap de Minutagem (0&apos; a 90+&apos;)
+                  Relógio do Gol — Heatmap de Minutagem (0&apos; a 90+&apos;)
                 </CardTitle>
                 <CardDescription>
                   Distribuição de gols por janela de 15 minutos + coluna especial do &ldquo;Apagar das Luzes&rdquo; (85&apos;+)
@@ -395,7 +395,7 @@ export function TacticsEfficiencyModule({
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  ⚽ Gols Marcados (Pró)
+                  Gols Marcados (Pró)
                 </button>
                 <button
                   onClick={() => setTimingMode("conceded")}
@@ -405,7 +405,7 @@ export function TacticsEfficiencyModule({
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  🥅 Gols Sofridos (Contra)
+                  Gols Sofridos (Contra)
                 </button>
               </div>
             </div>
@@ -420,7 +420,7 @@ export function TacticsEfficiencyModule({
               <div>46-60&apos;</div>
               <div>61-75&apos;</div>
               <div>76-90+&apos;</div>
-              <div className="text-amber-400">🔥 85&apos;+</div>
+              <div className="text-amber-400">85&apos;+</div>
             </div>
 
             <div className="mt-2 space-y-1.5">

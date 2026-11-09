@@ -118,7 +118,7 @@ export function RoundsTurnsModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-emerald-400">
-                🚀 Rei do Returno (Maior Arrancada)
+                Rei do Returno (Maior Arrancada)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
                 <TrendingUp className="h-4 w-4" />
@@ -141,7 +141,7 @@ export function RoundsTurnsModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-rose-400">
-                📉 Índice &ldquo;Cavalo Paraguaio&rdquo; (Maior Queda)
+                Índice &ldquo;Cavalo Paraguaio&rdquo; (Maior Queda)
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-rose-400">
                 <TrendingDown className="h-4 w-4" />
@@ -164,7 +164,7 @@ export function RoundsTurnsModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
-                🏹 Clube &ldquo;Robin Hood&rdquo; da Edição
+                Clube &ldquo;Robin Hood&rdquo; da Edição
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
                 <Award className="h-4 w-4" />
@@ -187,7 +187,7 @@ export function RoundsTurnsModule({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <CardTitle className="text-base sm:text-lg">
-                🏇 Corrida por Rodada (Bump Chart — 1ª à {data.season.current_round}ª Rodada)
+                Corrida por Rodada (Bump Chart — 1ª à {data.season.current_round}ª Rodada)
               </CardTitle>
               <CardDescription>
                 Trajetória de posição rodada a rodada (1º no topo, 20º na base). A linha tracejada marca a virada do 1º para o 2º turno (Rodada 19).
@@ -196,9 +196,9 @@ export function RoundsTurnsModule({
 
             <div className="inline-flex flex-wrap rounded-lg border border-slate-800 bg-slate-950 p-1">
               {[
-                { key: "top6", label: "🏆 Pelotão de Elite (Top 6)" },
-                { key: "z6", label: "🚨 Drama do Z4 (15º–20º)" },
-                { key: "swings", label: "🎢 Maiores Oscilações (Turnos)" },
+                { key: "top6", label: "Pelotão de Elite (Top 6)" },
+                { key: "z6", label: "Drama do Z4 (15º–20º)" },
+                { key: "swings", label: "Maiores Oscilações (Turnos)" },
               ].map((b) => (
                 <button
                   key={b.key}
@@ -423,7 +423,7 @@ export function RoundsTurnsModule({
             <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3 text-xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">
-                  🛡️ Fuga Segura do Z4 (Série {division}):
+                  Fuga Segura do Z4 (Série {division}):
                 </span>
                 <Badge variant="default">
                   {data.season.magic_escape_z4_pts} pontos (98,2% salvos)
@@ -431,7 +431,7 @@ export function RoundsTurnsModule({
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">
-                  🚀 {division === "A" ? "Libertadores G4:" : "Acesso Garantido Série A:"}
+                  {division === "A" ? "Libertadores G4:" : "Acesso Garantido Série A:"}
                 </span>
                 <Badge variant="info">
                   {data.season.magic_g4_pts} pontos (95,8% garantidos)

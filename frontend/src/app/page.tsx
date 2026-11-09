@@ -145,7 +145,7 @@ export default function BrasileiraoDashboardPage() {
         <footer className="border-t border-white/[0.06] bg-[#05070d]/80 backdrop-blur-xl py-4 text-center text-xs text-zinc-500">
           <div className="mx-auto max-w-[1640px] px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
             <span>
-              🇧🇷 <strong className="text-zinc-300">Brasileirão Analytics (Série A & B)</strong> — Obsidian Glass Design System • Next.js 15 + shadcn/ui + FastAPI
+              <strong className="text-zinc-300">Brasileirão Analytics (Série A & B)</strong> — Obsidian Glass Design System • Next.js 15 + shadcn/ui + FastAPI
             </span>
             <span className="font-mono text-[11px]">
               Monte Carlo (10k cenários) • Modelo de Poisson • Distância Aérea Haversine

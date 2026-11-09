@@ -143,7 +143,7 @@ export function DashboardHeader({
                     : "text-zinc-400 hover:text-white"
                 }`}
               >
-                <span>🏆</span> SÉRIE A
+                SÉRIE A
               </button>
               <button
                 onClick={() => setDivision("B")}
@@ -153,7 +153,7 @@ export function DashboardHeader({
                     : "text-zinc-400 hover:text-white"
                 }`}
               >
-                <span>🔥</span> SÉRIE B
+                SÉRIE B
               </button>
             </div>
 
@@ -169,7 +169,7 @@ export function DashboardHeader({
                 className="cursor-pointer bg-transparent text-xs font-bold text-white focus:outline-none"
               >
                 <option value={2026} className="bg-[#090c14] text-emerald-400">
-                  🔴 2026 — Temporada Atual (R32/38 Ao Vivo)
+                  2026 — Temporada Atual (R32/38 Ao Vivo)
                 </option>
                 <option value={2025} className="bg-[#090c14] text-zinc-200">
                   2025 — Temporada Completa (38/38)
@@ -227,13 +227,13 @@ export function DashboardHeader({
           {/* Right: Quick Context Reference Pills */}
           <div className="hidden xl:flex items-center gap-2 text-[11px] text-zinc-400">
             <span className="obsidian-subcard rounded-lg px-2.5 py-1">
-              🎯 Corte G4:{" "}
+              Corte G4:{" "}
               <strong className="text-emerald-400">
                 {division === "A" ? "62 pts" : "64 pts"}
               </strong>
             </span>
             <span className="obsidian-subcard rounded-lg px-2.5 py-1">
-              🛡️ Fuga Z4:{" "}
+              Fuga Z4:{" "}
               <strong className="text-rose-400">
                 {division === "A" ? "45 pts" : "44 pts"}
               </strong>

@@ -391,9 +391,9 @@ export function LiveSeasonModule({
                 {(
                   [
                     { key: "overall", label: "Geral" },
-                    { key: "form5", label: "🔥 Últimos 5J" },
-                    { key: "home", label: "🏠 Casa" },
-                    { key: "away", label: "✈️ Fora" },
+                    { key: "form5", label: "Últimos 5J" },
+                    { key: "home", label: "Casa" },
+                    { key: "away", label: "Fora" },
                   ] as { key: TableFilterMode; label: string }[]
                 ).map((tab) => (
                   <button
@@ -605,7 +605,7 @@ export function LiveSeasonModule({
                           </div>
                           {team.prob_title >= 1.0 && (
                             <span className="text-[10px] font-semibold text-amber-300">
-                              🏆 {team.prob_title}% tít.
+                              {team.prob_title}% tít.
                             </span>
                           )}
                         </div>
@@ -770,11 +770,11 @@ export function LiveSeasonModule({
                 >
                   <div className="mb-2.5 flex items-center justify-between text-[10px] text-zinc-400">
                     <span className="font-medium">
-                      📅 {match.kickoff_slot} • 🏟️ {match.stadium}
+                      {match.kickoff_slot} • {match.stadium}
                     </span>
                     {match.is_six_pointer && (
                       <span className="rounded-full bg-rose-500/20 px-2 py-0.5 text-[9px] font-extrabold text-rose-300 border border-rose-400/30">
-                        🔥 {match.six_pointer_label}
+                        {match.six_pointer_label}
                       </span>
                     )}
                   </div>
@@ -933,26 +933,26 @@ export function LiveSeasonModule({
                 >
                   <option value="Z4" className="bg-[#090c14]">
                     {division === "A"
-                      ? "🛡️ Escapar do Z4 (45 pts)"
-                      : "🛡️ Permanência Série B (44 pts)"}
+                      ? "Escapar do Z4 (45 pts)"
+                      : "Permanência Série B (44 pts)"}
                   </option>
                   <option value="SULA" className="bg-[#090c14]">
                     {division === "A"
-                      ? "🌎 Sul-Americana (47 pts)"
-                      : "📈 Metade Superior (50 pts)"}
+                      ? "Sul-Americana (47 pts)"
+                      : "Metade Superior (50 pts)"}
                   </option>
                   <option value="G6" className="bg-[#090c14]">
                     {division === "A"
-                      ? "⚡ Pré-Libertadores G6 (57 pts)"
-                      : "🔥 Briga pelo Acesso Top 6 (60 pts)"}
+                      ? "Pré-Libertadores G6 (57 pts)"
+                      : "Briga pelo Acesso Top 6 (60 pts)"}
                   </option>
                   <option value="G4" className="bg-[#090c14]">
                     {division === "A"
-                      ? "🏆 Libertadores Direta G4 (62 pts)"
-                      : "🚀 Acesso à Série A G4 (64 pts)"}
+                      ? "Libertadores Direta G4 (62 pts)"
+                      : "Acesso à Série A G4 (64 pts)"}
                   </option>
                   <option value="TITULO" className="bg-[#090c14]">
-                    👑 Título ({division === "A" ? "77 pts" : "72 pts"})
+                    Título ({division === "A" ? "77 pts" : "72 pts"})
                   </option>
                 </select>
               </div>
@@ -1064,7 +1064,7 @@ export function LiveSeasonModule({
                 </div>
 
                 <p className="text-xs text-zinc-300 leading-relaxed border-t border-white/[0.06] pt-3">
-                  💡 {calcResult.explanation} ({calcResult.remaining_home} jogos em
+                  {calcResult.explanation} ({calcResult.remaining_home} jogos em
                   Casa e {calcResult.remaining_away} Fora).
                 </p>
               </div>
@@ -1089,7 +1089,7 @@ export function LiveSeasonModule({
               </Badge>
             </div>
             <CardDescription>
-              Quem enfrenta um &ldquo;corredor polonês&rdquo; e quem tem a tabela mais acessível nas 6 rodadas finais (C = Casa, F = Fora, 🔥 = Jogo de 6 Pontos)
+              Quem enfrenta um &ldquo;corredor polonês&rdquo; e quem tem a tabela mais acessível nas 6 rodadas finais (C = Casa, F = Fora, 6P = Jogo de 6 Pontos)
             </CardDescription>
           </CardHeader>
 
@@ -1156,7 +1156,7 @@ export function LiveSeasonModule({
                             </span>
                             <span className="opacity-75">({rem.venue})</span>
                             {rem.is_six_pointer && (
-                              <span title="Jogo de 6 Pontos">🔥</span>
+                              <span title="Jogo de 6 Pontos" className="text-amber-300 font-black">6P</span>
                             )}
                           </div>
                         ))}
