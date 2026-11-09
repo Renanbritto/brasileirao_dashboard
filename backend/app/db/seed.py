@@ -1,7 +1,7 @@
 import json
 import math
 import random
-from sqlalchemy.orm import Session
+from app.db.session import Session
 from app.db.models import Club, Season, SeasonTeam, Match, DivisionHistory
 
 
