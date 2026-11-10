@@ -92,15 +92,15 @@ export function TacticsEfficiencyModule({
 
   function getHeatCellStyle(val: number, isScored: boolean) {
     if (isScored) {
-      if (val >= 11) return "bg-emerald-500/40 text-emerald-100 font-extrabold border-emerald-400/50";
-      if (val >= 8) return "bg-emerald-500/20 text-emerald-200 font-bold border-emerald-500/30";
-      if (val >= 5) return "bg-slate-800/80 text-slate-200 border-slate-700";
-      return "bg-slate-900/50 text-slate-400 border-slate-800";
+      if (val >= 11) return "bg-emerald-100 text-emerald-900 border-emerald-300 font-extrabold dark:bg-emerald-500/40 dark:text-emerald-100 dark:border-emerald-400/50";
+      if (val >= 8) return "bg-emerald-50 text-emerald-800 border-emerald-200 font-bold dark:bg-emerald-500/20 dark:text-emerald-200 dark:border-emerald-500/30";
+      if (val >= 5) return "bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-800/80 dark:text-slate-200 dark:border-slate-700";
+      return "bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-900/50 dark:text-slate-400 dark:border-slate-800";
     } else {
-      if (val >= 11) return "bg-rose-500/40 text-rose-100 font-extrabold border-rose-400/50";
-      if (val >= 8) return "bg-rose-500/20 text-rose-200 font-bold border-rose-500/30";
-      if (val >= 5) return "bg-slate-800/80 text-slate-200 border-slate-700";
-      return "bg-slate-900/50 text-slate-400 border-slate-800";
+      if (val >= 11) return "bg-rose-100 text-rose-900 border-rose-300 font-extrabold dark:bg-rose-500/40 dark:text-rose-100 dark:border-rose-400/50";
+      if (val >= 8) return "bg-rose-50 text-rose-800 border-rose-200 font-bold dark:bg-rose-500/20 dark:text-rose-200 dark:border-rose-500/30";
+      if (val >= 5) return "bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-800/80 dark:text-slate-200 dark:border-slate-700";
+      return "bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-900/50 dark:text-slate-400 dark:border-slate-800";
     }
   }
 
@@ -409,13 +409,13 @@ export function TacticsEfficiencyModule({
                 </CardDescription>
               </div>
 
-              <div className="inline-flex rounded-lg border border-slate-800 bg-slate-950 p-1">
+              <div className="inline-flex rounded-lg border border-slate-300 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-950">
                 <button
                   onClick={() => setTimingMode("scored")}
                   className={`rounded-md px-3 py-1 text-xs font-semibold ${
                     timingMode === "scored"
-                      ? "bg-emerald-500 text-slate-950"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-emerald-600 text-white shadow-sm dark:bg-emerald-500 dark:text-slate-950"
+                      : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                   }`}
                 >
                   Gols Marcados (Pró)
@@ -424,8 +424,8 @@ export function TacticsEfficiencyModule({
                   onClick={() => setTimingMode("conceded")}
                   className={`rounded-md px-3 py-1 text-xs font-semibold ${
                     timingMode === "conceded"
-                      ? "bg-rose-500 text-white"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-rose-600 text-white shadow-sm dark:bg-rose-500 dark:text-white"
+                      : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                   }`}
                 >
                   Gols Sofridos (Contra)
@@ -527,12 +527,12 @@ export function TacticsEfficiencyModule({
                 return (
                   <div
                     key={t.club.slug}
-                    className="rounded-xl border border-slate-800 bg-slate-950/60 p-3"
+                    className="rounded-xl border border-slate-200 bg-white shadow-sm p-3 dark:border-slate-800 dark:bg-slate-950/60"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <ClubCrest club={t.club} size="sm" />
-                        <span className="text-xs font-bold text-white">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white">
                           {t.club.name}
                         </span>
                       </div>
@@ -540,7 +540,7 @@ export function TacticsEfficiencyModule({
                         {diff > 0 ? `+${diff}%` : `${diff}%`} pós-troca
                       </Badge>
                     </div>
-                    <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+                    <div className="mt-2 flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400">
                       <span>Antes: {t.aprov_before_coach}%</span>
                       <span>→</span>
                       <span className="font-semibold text-emerald-300">

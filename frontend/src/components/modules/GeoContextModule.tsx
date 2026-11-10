@@ -198,13 +198,13 @@ export function GeoContextModule({
                 >
                   <div className="flex w-36 shrink-0 items-center gap-2">
                     <ClubCrest club={t.club} size="xs" />
-                    <span className="truncate text-xs font-semibold text-slate-200">
+                    <span className="truncate text-xs font-semibold text-slate-800 dark:text-slate-200">
                       {t.club.name}
                     </span>
                   </div>
 
                   {/* Dumbbell Track (0% to 100%) */}
-                  <div className="relative flex-1 h-6 rounded-full bg-slate-900 border border-slate-800">
+                  <div className="relative flex-1 h-6 rounded-full bg-slate-200 border border-slate-300 dark:bg-slate-900 dark:border-slate-800">
                     {/* Connecting Bar */}
                     <div
                       className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gradient-to-r from-sky-500/70 to-emerald-500/70"
@@ -231,7 +231,7 @@ export function GeoContextModule({
                     </div>
                   </div>
 
-                  <div className="w-16 text-right text-[11px] font-bold text-slate-400">
+                  <div className="w-16 text-right text-[11px] font-bold text-slate-600 dark:text-slate-400">
                     Δ {t.home_away_gap > 0 ? `+${t.home_away_gap}%` : `${t.home_away_gap}%`}
                   </div>
                 </div>
@@ -264,31 +264,31 @@ export function GeoContextModule({
               return (
                 <div
                   key={t.club.slug}
-                  className="rounded-xl border border-slate-800/80 bg-slate-950/60 p-2.5"
+                  className="rounded-xl border border-slate-200 bg-white shadow-sm p-2.5 dark:border-slate-800/80 dark:bg-slate-950/60"
                 >
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
                       <span className="text-slate-500 font-bold">#{idx + 1}</span>
                       <ClubCrest club={t.club} size="xs" />
-                      <span className="font-bold text-white">{t.club.name}</span>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="font-bold text-slate-900 dark:text-white">{t.club.name}</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
                         ({t.club.city}-{t.club.state_uf})
                       </span>
                     </div>
-                    <span className="font-extrabold text-amber-400">
+                    <span className="font-extrabold text-amber-700 dark:text-amber-400">
                       {t.travel_km.toLocaleString("pt-BR")} km
                     </span>
                   </div>
 
                   <div className="mt-1.5 flex items-center gap-3">
-                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-800">
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-slate-800 dark:border-transparent">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-amber-500 to-rose-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="text-[10px] text-slate-400">
-                      Fora: <strong className="text-sky-300">{t.aprov_away}%</strong>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                      Fora: <strong className="text-sky-700 dark:text-sky-300">{t.aprov_away}%</strong>
                     </span>
                   </div>
                 </div>
@@ -374,10 +374,10 @@ export function GeoContextModule({
               <select
                 value={slotClubObj?.club.slug || ""}
                 onChange={(e) => setSelectedSlotClub(e.target.value)}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1 text-xs font-bold text-white"
+                className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-bold text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
               >
                 {data.standings.map((t) => (
-                  <option key={t.club.slug} value={t.club.slug}>
+                  <option key={t.club.slug} value={t.club.slug} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
                     {t.club.name}
                   </option>
                 ))}
@@ -393,23 +393,23 @@ export function GeoContextModule({
               Object.entries(slotClubObj.time_slots).map(([slot, pct]) => (
                 <div
                   key={slot}
-                  className="rounded-xl border border-slate-800 bg-slate-950/70 p-3"
+                  className="rounded-xl border border-slate-200 bg-white shadow-sm p-3 dark:border-slate-800 dark:bg-slate-950/70"
                 >
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-200">{slot}</span>
+                    <span className="font-bold text-slate-900 dark:text-slate-200">{slot}</span>
                     <span
                       className={`font-extrabold ${
                         pct >= 55
-                          ? "text-emerald-400"
+                          ? "text-emerald-700 dark:text-emerald-400"
                           : pct >= 42
-                          ? "text-amber-300"
-                          : "text-rose-400"
+                          ? "text-amber-700 dark:text-amber-300"
+                          : "text-rose-700 dark:text-rose-400"
                       }`}
                     >
                       {pct}% de aproveitamento
                     </span>
                   </div>
-                  <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-800">
+                  <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-slate-800 dark:border-transparent">
                     <div
                       className={`h-full rounded-full ${
                         pct >= 55

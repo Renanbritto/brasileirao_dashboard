@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { StandingTeam } from "@/lib/api";
 import { ClubCrest } from "@/components/ui/ClubCrest";
+import { useTheme } from "@/context/ThemeContext";
 
 interface TacticalPitchMapProps {
   teams: StandingTeam[];
@@ -41,6 +42,9 @@ interface TacticalSector {
 }
 
 export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapProps) {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+
   const [selectedSlug, setSelectedSlug] = useState<string>(
     favoriteClubSlug || teams[0]?.club.slug || ""
   );
@@ -55,6 +59,22 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
   const tactics = currentTeam?.spatial_tactics;
   const atk = tactics?.attack;
   const def = tactics?.defense;
+
+  const tierColors = {
+    hot: isLight ? "#be123c" : "#f87171",
+    warm: isLight ? "#b45309" : "#fcd34d",
+    cold: isLight ? "#0369a1" : "#7dd3fc",
+  };
+  const tierBorders = {
+    hot: isLight ? "border-rose-300" : "border-rose-500/50",
+    warm: isLight ? "border-amber-300" : "border-amber-500/50",
+    cold: isLight ? "border-sky-300" : "border-sky-500/40",
+  };
+  const tierBgs = {
+    hot: isLight ? "bg-rose-50" : "bg-rose-950/40",
+    warm: isLight ? "bg-amber-50" : "bg-amber-950/40",
+    cold: isLight ? "bg-sky-50" : "bg-sky-950/40",
+  };
 
   // Determine which corridor is dominant (Hot), secondary (Warm), or minor (Cold)
   const attackRanking = useMemo(() => {
@@ -100,9 +120,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${atk.goals_left} Gols Marcados`,
         tier: attackRanking.left as ThermalTier,
         tierLabel: attackRanking.left === "hot" ? "Foco Primário (Mancha Incandescente)" : attackRanking.left === "warm" ? "Fluxo Regular" : "Sub-explorado",
-        tierColor: attackRanking.left === "hot" ? "#f87171" : attackRanking.left === "warm" ? "#fcd34d" : "#7dd3fc",
-        tierBorder: attackRanking.left === "hot" ? "border-rose-500/50" : attackRanking.left === "warm" ? "border-amber-500/50" : "border-sky-500/40",
-        tierBg: attackRanking.left === "hot" ? "bg-rose-950/40" : attackRanking.left === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        tierColor: tierColors[attackRanking.left as ThermalTier],
+        tierBorder: tierBorders[attackRanking.left as ThermalTier],
+        tierBg: tierBgs[attackRanking.left as ThermalTier],
         description: "Descidas rápidas de ponta, dribles de linha de fundo e cruzamentos rasteiros para trás.",
       },
       {
@@ -113,9 +133,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${Math.round((currentTeam.goals_for * atk.inside_box_pct) / 100)} Gols na Área`,
         tier: "hot",
         tierLabel: "Hotspot Letal de Chutes",
-        tierColor: "#f87171",
-        tierBorder: "border-rose-500/50",
-        tierBg: "bg-rose-950/40",
+        tierColor: tierColors.hot,
+        tierBorder: tierBorders.hot,
+        tierBg: tierBgs.hot,
         description: "Concentração máxima de arremates no ponto do pênalti e pequena área.",
       },
       {
@@ -126,9 +146,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${atk.goals_center} Gols • ${atk.outside_box_pct}% Chutes de Fora`,
         tier: attackRanking.center as ThermalTier,
         tierLabel: attackRanking.center === "hot" ? "Foco Primário (Mancha Incandescente)" : attackRanking.center === "warm" ? "Fluxo Regular" : "Sub-explorado",
-        tierColor: attackRanking.center === "hot" ? "#f87171" : attackRanking.center === "warm" ? "#fcd34d" : "#7dd3fc",
-        tierBorder: attackRanking.center === "hot" ? "border-rose-500/50" : attackRanking.center === "warm" ? "border-amber-500/50" : "border-sky-500/40",
-        tierBg: attackRanking.center === "hot" ? "bg-rose-950/40" : attackRanking.center === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        tierColor: tierColors[attackRanking.center as ThermalTier],
+        tierBorder: tierBorders[attackRanking.center as ThermalTier],
+        tierBg: tierBgs[attackRanking.center as ThermalTier],
         description: "Articulação por passes verticais entrelinhas e chutes perigosos de média distância.",
       },
       {
@@ -139,13 +159,13 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${atk.goals_right} Gols Marcados`,
         tier: attackRanking.right as ThermalTier,
         tierLabel: attackRanking.right === "hot" ? "Foco Primário (Mancha Incandescente)" : attackRanking.right === "warm" ? "Fluxo Regular" : "Sub-explorado",
-        tierColor: attackRanking.right === "hot" ? "#f87171" : attackRanking.right === "warm" ? "#fcd34d" : "#7dd3fc",
-        tierBorder: attackRanking.right === "hot" ? "border-rose-500/50" : attackRanking.right === "warm" ? "border-amber-500/50" : "border-sky-500/40",
-        tierBg: attackRanking.right === "hot" ? "bg-rose-950/40" : attackRanking.right === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        tierColor: tierColors[attackRanking.right as ThermalTier],
+        tierBorder: tierBorders[attackRanking.right as ThermalTier],
+        tierBg: tierBgs[attackRanking.right as ThermalTier],
         description: "Construção com apoio lateral, ultrapassagens e bolas alçadas em direção ao segundo pau.",
       },
     ];
-  }, [atk, attackRanking, currentTeam]);
+  }, [atk, attackRanking, currentTeam, isLight]);
 
   // Detailed Sector Cards for Defense
   const defenseSectors: TacticalSector[] = useMemo(() => {
@@ -159,9 +179,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${Math.round((currentTeam.goals_against * def.left_conceded_pct) / 100)} Gols Sofridos`,
         tier: defenseRanking.left as ThermalTier,
         tierLabel: defenseRanking.left === "hot" ? "Setor Crítico (Vulnerável)" : defenseRanking.left === "warm" ? "Pressão Média" : "Setor Seguro",
-        tierColor: defenseRanking.left === "hot" ? "#f87171" : defenseRanking.left === "warm" ? "#fcd34d" : "#7dd3fc",
-        tierBorder: defenseRanking.left === "hot" ? "border-rose-500/50" : defenseRanking.left === "warm" ? "border-amber-500/50" : "border-sky-500/40",
-        tierBg: defenseRanking.left === "hot" ? "bg-rose-950/40" : defenseRanking.left === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        tierColor: tierColors[defenseRanking.left as ThermalTier],
+        tierBorder: tierBorders[defenseRanking.left as ThermalTier],
+        tierBg: tierBgs[defenseRanking.left as ThermalTier],
         description: "Espaço explorado nas costas do lateral com infiltrações em velocidade adversárias.",
       },
       {
@@ -172,9 +192,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${Math.round((currentTeam.goals_against * def.center_conceded_pct) / 100)} Gols Sofridos`,
         tier: defenseRanking.center as ThermalTier,
         tierLabel: defenseRanking.center === "hot" ? "Setor Crítico (Vulnerável)" : defenseRanking.center === "warm" ? "Pressão Média" : "Setor Seguro",
-        tierColor: defenseRanking.center === "hot" ? "#f87171" : defenseRanking.center === "warm" ? "#fcd34d" : "#7dd3fc",
-        tierBorder: defenseRanking.center === "hot" ? "border-rose-500/50" : defenseRanking.center === "warm" ? "border-amber-500/50" : "border-sky-500/40",
-        tierBg: defenseRanking.center === "hot" ? "bg-rose-950/40" : defenseRanking.center === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        tierColor: tierColors[defenseRanking.center as ThermalTier],
+        tierBorder: tierBorders[defenseRanking.center as ThermalTier],
+        tierBg: tierBgs[defenseRanking.center as ThermalTier],
         description: "Fragilidade no combate frontal e disputas de primeira bola no coração da área.",
       },
       {
@@ -185,9 +205,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${Math.round((currentTeam.goals_against * def.right_conceded_pct) / 100)} Gols Sofridos`,
         tier: defenseRanking.right as ThermalTier,
         tierLabel: defenseRanking.right === "hot" ? "Setor Crítico (Vulnerável)" : defenseRanking.right === "warm" ? "Pressão Média" : "Setor Seguro",
-        tierColor: defenseRanking.right === "hot" ? "#f87171" : defenseRanking.right === "warm" ? "#fcd34d" : "#7dd3fc",
-        tierBorder: defenseRanking.right === "hot" ? "border-rose-500/50" : defenseRanking.right === "warm" ? "border-amber-500/50" : "border-sky-500/40",
-        tierBg: defenseRanking.right === "hot" ? "bg-rose-950/40" : defenseRanking.right === "warm" ? "bg-amber-950/40" : "bg-sky-950/40",
+        tierColor: tierColors[defenseRanking.right as ThermalTier],
+        tierBorder: tierBorders[defenseRanking.right as ThermalTier],
+        tierBg: tierBgs[defenseRanking.right as ThermalTier],
         description: "Vulnerabilidade em bolas alçadas em diagonal e cruzamentos do ponta adversário.",
       },
       {
@@ -198,13 +218,13 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
         secondaryStat: `${def.open_play_conceded} Bola Rolando • ${def.crosses_aerial_conceded} Aéreos`,
         tier: "warm",
         tierLabel: "Perfil de Finalizações Sofridas",
-        tierColor: "#fcd34d",
-        tierBorder: "border-amber-500/50",
-        tierBg: "bg-amber-950/40",
+        tierColor: tierColors.warm,
+        tierBorder: tierBorders.warm,
+        tierBg: tierBgs.warm,
         description: `${def.open_play_conceded} gols de bola rolando, ${def.crosses_aerial_conceded} bolas cruzadas e ${def.set_pieces_conceded} de bola parada.`,
       },
     ];
-  }, [def, defenseRanking, currentTeam]);
+  }, [def, defenseRanking, currentTeam, isLight]);
 
   if (!currentTeam || !tactics) return null;
 
@@ -273,12 +293,12 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
             onClick={() => setIntensityMode(intensityMode === "high" ? "normal" : "high")}
             className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
               intensityMode === "high"
-                ? "border-amber-500/50 bg-amber-950/40 text-amber-300 shadow-[0_2px_8px_rgba(245,158,11,0.25)]"
-                : "border-white/10 bg-black/30 text-zinc-400 hover:text-white"
+                ? "border-amber-300 bg-amber-50 text-amber-900 shadow-sm dark:border-amber-500/50 dark:bg-amber-950/40 dark:text-amber-300 dark:shadow-[0_2px_8px_rgba(245,158,11,0.25)]"
+                : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:bg-black/30 dark:text-zinc-400 dark:hover:text-white"
             }`}
             title="Alternar intensidade do brilho térmico das manchas"
           >
-            <Flame className="h-3.5 w-3.5 text-amber-400" />
+            <Flame className="h-3.5 w-3.5 text-amber-500 dark:text-amber-400" />
             Manchas: {intensityMode === "high" ? "Intensas (Vivas)" : "Moderadas"}
           </button>
 
@@ -287,8 +307,8 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
             onClick={() => setShowGridLines(!showGridLines)}
             className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
               showGridLines
-                ? "border-emerald-500/40 bg-emerald-950/40 text-emerald-300"
-                : "border-white/10 bg-black/30 text-zinc-400 hover:text-white"
+                ? "border-emerald-300 bg-emerald-50 text-emerald-900 shadow-sm dark:border-emerald-500/40 dark:bg-emerald-950/40 dark:text-emerald-300"
+                : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:bg-black/30 dark:text-zinc-400 dark:hover:text-white"
             }`}
             title="Alternar linhas demarcatórias de setores táticos"
           >
@@ -984,25 +1004,25 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
           </div>
 
           {/* Thermal Scale Legend (Organic Manchas Indicator) */}
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-xs shadow-inner">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs shadow-sm dark:border-white/10 dark:bg-black/40">
             <div className="flex items-center gap-2">
-              <Thermometer className="h-4 w-4 text-emerald-400" />
-              <span className="font-extrabold uppercase tracking-wider text-zinc-300">
+              <Thermometer className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <span className="font-extrabold uppercase tracking-wider text-slate-800 dark:text-zinc-300">
                 Densidade Térmica das Manchas:
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-3 font-semibold">
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-sky-500/40 bg-sky-950/60 px-2.5 py-1 text-[11px] text-sky-300">
-                <Snowflake className="h-3 w-3 text-sky-400" />
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-sky-300 bg-sky-50 px-2.5 py-1 text-[11px] text-sky-800 dark:border-sky-500/40 dark:bg-sky-950/60 dark:text-sky-300">
+                <Snowflake className="h-3 w-3 text-sky-600 dark:text-sky-400" />
                 Mancha Ciano (Frequência Suave / Segura)
               </span>
               <span className="h-2.5 w-16 rounded-full bg-gradient-to-r from-sky-400 via-amber-400 to-rose-500 shadow-sm" />
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-950/60 px-2.5 py-1 text-[11px] text-amber-300">
-                <Zap className="h-3 w-3 text-amber-400" />
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-1 text-[11px] text-amber-800 dark:border-amber-500/40 dark:bg-amber-950/60 dark:text-amber-300">
+                <Zap className="h-3 w-3 text-amber-600 dark:text-amber-400" />
                 Mancha Dourada (Fluxo Regular)
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-rose-500/40 bg-rose-950/60 px-2.5 py-1 text-[11px] text-rose-300">
-                <Flame className="h-3 w-3 text-rose-400" />
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-rose-300 bg-rose-50 px-2.5 py-1 text-[11px] text-rose-800 dark:border-rose-500/40 dark:bg-rose-950/60 dark:text-rose-300">
+                <Flame className="h-3 w-3 text-rose-600 dark:text-rose-400" />
                 Mancha Vermelha (Foco Incandescente / Crítico)
               </span>
             </div>
@@ -1011,10 +1031,10 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
           {/* Detailed Granular Sector Breakdown Cards (Direct User Request) */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-zinc-300">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-zinc-300">
                 Detalhamento dos Setores no Gramado
               </span>
-              <span className="text-[11px] text-zinc-400 font-mono">
+              <span className="text-[11px] text-slate-500 dark:text-zinc-400 font-mono">
                 {mode === "attack" ? "Distribuição de Criação e Finalizações" : "Vulnerabilidade por Setor"}
               </span>
             </div>
@@ -1027,12 +1047,12 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                   onMouseLeave={() => setHoveredSector(null)}
                   className={`rounded-2xl border p-3.5 transition-all cursor-default ${
                     hoveredSector === s.id
-                      ? "border-emerald-400 bg-black/60 shadow-[0_4px_20px_rgba(16,185,129,0.2)]"
-                      : "border-white/10 bg-black/35 hover:border-white/20"
+                      ? "border-emerald-500 bg-emerald-50/50 shadow-md dark:border-emerald-400 dark:bg-black/60 dark:shadow-[0_4px_20px_rgba(16,185,129,0.2)]"
+                      : "border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-black/35 hover:border-slate-300 dark:hover:border-white/20"
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-white">{s.name}</span>
+                    <span className="text-xs font-black text-slate-900 dark:text-white">{s.name}</span>
                     <span
                       className="font-mono text-sm font-black"
                       style={{ color: s.tierColor }}
@@ -1042,7 +1062,7 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                   </div>
 
                   <div className="mt-1 flex items-center justify-between text-[11px]">
-                    <span className="text-zinc-400">{s.secondaryStat}</span>
+                    <span className="text-slate-500 dark:text-zinc-400">{s.secondaryStat}</span>
                     <span
                       className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-black uppercase tracking-wide border ${s.tierBorder} ${s.tierBg}`}
                       style={{ color: s.tierColor }}
@@ -1091,9 +1111,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                       <span>Grande Área (Chutes no Miolo)</span>
                       <strong className="text-emerald-400 font-mono">{atk.inside_box_pct}%</strong>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-black/60 overflow-hidden">
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-transparent overflow-hidden">
                       <div
-                        className="h-full bg-emerald-400 rounded-full"
+                        className="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full"
                         style={{ width: `${atk.inside_box_pct}%` }}
                       />
                     </div>
@@ -1104,9 +1124,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                       <span>Fora da Área (Longa Distância)</span>
                       <strong className="text-sky-400 font-mono">{atk.outside_box_pct}%</strong>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-black/60 overflow-hidden">
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-transparent overflow-hidden">
                       <div
-                        className="h-full bg-sky-400 rounded-full"
+                        className="h-full bg-sky-500 dark:bg-sky-400 rounded-full"
                         style={{ width: `${atk.outside_box_pct}%` }}
                       />
                     </div>
@@ -1117,9 +1137,9 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                       <span>Pequena Área (Dentro dos 5m)</span>
                       <strong className="text-amber-400 font-mono">{atk.six_yard_pct}%</strong>
                     </div>
-                    <div className="h-1.5 w-full rounded-full bg-black/60 overflow-hidden">
+                    <div className="h-1.5 w-full rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-transparent overflow-hidden">
                       <div
-                        className="h-full bg-amber-400 rounded-full"
+                        className="h-full bg-amber-500 dark:bg-amber-400 rounded-full"
                         style={{ width: `${atk.six_yard_pct}%` }}
                       />
                     </div>
@@ -1133,26 +1153,26 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
                   Tipos de Gol Marcados ({currentTeam.goals_for} Gols)
                 </p>
                 <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                  <div className="rounded-xl border border-white/5 bg-black/30 p-2">
-                    <span className="font-mono text-base font-black text-emerald-400">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-2 dark:border-white/5 dark:bg-black/30">
+                    <span className="font-mono text-base font-black text-emerald-600 dark:text-emerald-400">
                       {atk.right_foot_goals}
                     </span>
                     <p className="text-[10px] text-zinc-400">Pé Direito</p>
                   </div>
-                  <div className="rounded-xl border border-white/5 bg-black/30 p-2">
-                    <span className="font-mono text-base font-black text-sky-400">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-2 dark:border-white/5 dark:bg-black/30">
+                    <span className="font-mono text-base font-black text-sky-600 dark:text-sky-400">
                       {atk.left_foot_goals}
                     </span>
                     <p className="text-[10px] text-zinc-400">Pé Esquerdo</p>
                   </div>
-                  <div className="rounded-xl border border-white/5 bg-black/30 p-2">
-                    <span className="font-mono text-base font-black text-amber-300">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-2 dark:border-white/5 dark:bg-black/30">
+                    <span className="font-mono text-base font-black text-amber-600 dark:text-amber-300">
                       {atk.header_goals}
                     </span>
                     <p className="text-[10px] text-zinc-400">Cabeceios</p>
                   </div>
-                  <div className="rounded-xl border border-white/5 bg-black/30 p-2">
-                    <span className="font-mono text-base font-black text-indigo-400">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-2 dark:border-white/5 dark:bg-black/30">
+                    <span className="font-mono text-base font-black text-indigo-600 dark:text-indigo-400">
                       {atk.outside_box_goals}
                     </span>
                     <p className="text-[10px] text-zinc-400">De Fora</p>

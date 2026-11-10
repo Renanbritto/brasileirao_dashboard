@@ -328,7 +328,7 @@ html.light .text-zinc-300 {
 }
 
 html.light .text-zinc-400 {
-  color: #64748b !important;
+  color: #475569 !important;
 }
 
 html.light .text-zinc-500 {
@@ -339,21 +339,65 @@ html.light .text-zinc-600 {
   color: #94a3b8 !important;
 }
 
-/* Protect text on primary theme accents and badges */
+/* Slate text adaptation */
+html.light .text-slate-100,
+html.light .text-slate-200 {
+  color: #0f172a !important;
+}
+
+html.light .text-slate-300 {
+  color: #1e293b !important;
+}
+
+html.light .text-slate-400 {
+  color: #475569 !important;
+}
+
+html.light .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* High contrast colored text in Light Mode */
+html.light .text-emerald-200,
+html.light .text-emerald-300 {
+  color: #047857 !important;
+}
+
 html.light .text-emerald-400 {
   color: #059669 !important;
+}
+
+html.light .text-sky-100,
+html.light .text-sky-200,
+html.light .text-sky-300 {
+  color: #0369a1 !important;
 }
 
 html.light .text-sky-400 {
   color: #0284c7 !important;
 }
 
+html.light .text-rose-200,
+html.light .text-rose-300 {
+  color: #be123c !important;
+}
+
 html.light .text-rose-400 {
   color: #e11d48 !important;
 }
 
+html.light .text-amber-200,
+html.light .text-amber-300 {
+  color: #b45309 !important;
+}
+
 html.light .text-amber-400 {
   color: #d97706 !important;
+}
+
+html.light .text-indigo-200,
+html.light .text-indigo-300 {
+  color: #4338ca !important;
 }
 
 html.light .text-indigo-400 {
@@ -365,15 +409,98 @@ html.light [class*="border-white"] {
   border-color: rgba(226, 232, 240, 0.9) !important;
 }
 
-html.light [class*="bg-black\/"] {
-  background-color: rgba(241, 245, 249, 0.95) !important;
+html.light .border-slate-800,
+html.light .border-slate-800\/80,
+html.light .border-slate-700 {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .border-zinc-800,
+html.light .border-zinc-700 {
+  border-color: #cbd5e1 !important;
+}
+
+/* Dark Slate & Zinc Background Overrides in Light Mode */
+html.light .bg-slate-950,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/70,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-900,
+html.light .bg-slate-900\/50 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light .bg-slate-800,
+html.light .bg-slate-800\/80 {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+
+html.light .bg-zinc-800 {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light .bg-zinc-900 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* All black-translucent layers */
+html.light [class*="bg-black\/"],
+html.light .bg-black\/60,
+html.light .bg-black\/50,
+html.light .bg-black\/40,
+html.light .bg-black\/35,
+html.light .bg-black\/30,
+html.light .bg-black\/20,
+html.light .bg-black {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Clean track bars behind progress and dumbbells */
+html.light .h-1\.5.bg-black\/60,
+html.light .h-2.bg-black\/60,
+html.light .h-2.bg-slate-800,
+html.light .h-4.bg-slate-800,
+html.light .h-6.bg-slate-900 {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
 }
 
 html.light .bg-\[\#04060a\],
 html.light .bg-\[\#06080f\],
 html.light .bg-\[\#05070d\],
-html.light .bg-\[\#090c14\] {
+html.light .bg-\[\#090c14\],
+html.light .bg-\[\#10141e\] {
   background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Button variant secondary & outline in Light Mode */
+html.light button.bg-\[\#111622\]\/90,
+html.light .bg-\[\#111622\]\/90 {
+  background-color: #fffbeb !important;
+  border: 1px solid #fde68a !important;
+  color: #92400e !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light button.bg-\[\#111622\]\/90:hover,
+html.light .bg-\[\#111622\]\/90:hover {
+  background-color: #fef3c7 !important;
+  border-color: #f59e0b !important;
+}
+
+/* Inputs & Select dropdowns */
+html.light select,
+html.light select.bg-slate-900 {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
 html.light select option {
@@ -381,14 +508,52 @@ html.light select option {
   color: #0f172a !important;
 }
 
+html.light input,
+html.light input.obsidian-well {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Tactical & Heatmap Badge Overrides */
+html.light .bg-rose-950\/40,
+html.light .bg-rose-950\/60 {
+  background-color: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #be123c !important;
+}
+
+html.light .bg-amber-950\/40,
+html.light .bg-amber-950\/60 {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #b45309 !important;
+}
+
+html.light .bg-sky-950\/40,
+html.light .bg-sky-950\/60 {
+  background-color: #f0f9ff !important;
+  border-color: #bae6fd !important;
+  color: #0369a1 !important;
+}
+
+html.light .bg-emerald-950\/40,
+html.light .bg-emerald-950\/60 {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #047857 !important;
+}
+
 /* Light mode Table styles */
 html.light thead {
   background-color: rgba(241, 245, 249, 0.95) !important;
-  border-bottom: 1px solid #e2e8f0 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
 }
 
 html.light thead th {
-  color: #475569 !important;
+  color: #334155 !important;
+  font-weight: 800 !important;
 }
 
 html.light tbody tr {
@@ -401,6 +566,37 @@ html.light tbody tr:hover {
 
 html.light td {
   color: #1e293b !important;
+  font-weight: 600 !important;
+}
+
+/* Form pills (Últimos 5J) high contrast */
+html.light .border-white\/10 {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .bg-white\/\[0\.06\] {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+}
+
+/* Recharts SVG Light Mode Overrides */
+html.light .recharts-cartesian-grid line {
+  stroke: #e2e8f0 !important;
+}
+
+html.light .recharts-text {
+  fill: #475569 !important;
+}
+
+html.light .recharts-legend-item-text {
+  color: #334155 !important;
+}
+
+html.light .recharts-default-tooltip {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.1) !important;
 }
 
 /* Sidebar in light mode */

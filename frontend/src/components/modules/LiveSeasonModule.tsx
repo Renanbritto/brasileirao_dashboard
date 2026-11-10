@@ -442,8 +442,8 @@ export function LiveSeasonModule({
                       onClick={() => setTableMode(tab.key)}
                       className={`rounded-xl px-3 py-1 text-xs font-extrabold transition-all ${
                         tableMode === tab.key
-                          ? "bg-zinc-800 text-emerald-300 shadow-sm ring-1 ring-emerald-400/40"
-                          : "text-zinc-400 hover:text-white"
+                          ? "bg-white text-emerald-700 shadow-sm ring-1 ring-emerald-500/40 dark:bg-zinc-800 dark:text-emerald-300 dark:ring-emerald-400/40"
+                          : "text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
                       }`}
                     >
                       {tab.label}
@@ -698,10 +698,10 @@ export function LiveSeasonModule({
                                     key={i}
                                     className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
                                       res === "V"
-                                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.2)]"
+                                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-400/40 dark:shadow-[0_0_8px_rgba(16,185,129,0.2)]"
                                         : res === "E"
-                                        ? "bg-white/[0.06] text-zinc-300 border border-white/10"
-                                        : "bg-rose-500/20 text-rose-300 border border-rose-400/40"
+                                        ? "bg-slate-200 text-slate-700 border border-slate-300 dark:bg-white/[0.06] dark:text-zinc-300 dark:border-white/10"
+                                        : "bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/40"
                                     }`}
                                   >
                                     {res}
@@ -941,7 +941,7 @@ export function LiveSeasonModule({
                       {match.kickoff_slot} • {match.stadium}
                     </span>
                     {match.is_six_pointer && (
-                      <span className="rounded-full bg-rose-500/20 px-2 py-0.5 text-[9px] font-extrabold text-rose-300 border border-rose-400/30">
+                      <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[9px] font-extrabold text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/30">
                         {match.six_pointer_label}
                       </span>
                     )}
@@ -973,7 +973,7 @@ export function LiveSeasonModule({
                         onChange={(e) =>
                           handleScoreChange(match.id, "home", e.target.value)
                         }
-                        className="obsidian-well h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
+                        className="h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold border border-slate-300 bg-white text-slate-900 shadow-inner focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
                       />
                       <span className="text-xs font-bold text-zinc-500">×</span>
                       <input
@@ -985,7 +985,7 @@ export function LiveSeasonModule({
                         onChange={(e) =>
                           handleScoreChange(match.id, "away", e.target.value)
                         }
-                        className="obsidian-well h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
+                        className="h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold border border-slate-300 bg-white text-slate-900 shadow-inner focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
                       />
                     </div>
 
@@ -1005,26 +1005,26 @@ export function LiveSeasonModule({
 
                   {/* Pre-match Probabilities Bar */}
                   <div className="mt-3">
-                    <div className="flex justify-between font-mono text-[10px] text-zinc-400">
-                      <span className="text-emerald-400">
+                    <div className="flex justify-between font-mono text-[10px]">
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400">
                         Casa {match.pred_home_win}%
                       </span>
-                      <span>Empate {match.pred_draw}%</span>
-                      <span className="text-sky-400">
+                      <span className="font-bold text-slate-600 dark:text-zinc-400">Empate {match.pred_draw}%</span>
+                      <span className="font-bold text-sky-700 dark:text-sky-400">
                         Fora {match.pred_away_win}%
                       </span>
                     </div>
-                    <div className="mt-1 flex h-1.5 w-full overflow-hidden rounded-full bg-black/60 border border-white/[0.05]">
+                    <div className="mt-1 flex h-1.5 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-white/[0.05]">
                       <div
-                        className="bg-emerald-400"
+                        className="bg-emerald-500 dark:bg-emerald-400"
                         style={{ width: `${match.pred_home_win}%` }}
                       />
                       <div
-                        className="bg-zinc-600"
+                        className="bg-slate-400 dark:bg-zinc-600"
                         style={{ width: `${match.pred_draw}%` }}
                       />
                       <div
-                        className="bg-sky-400"
+                        className="bg-sky-500 dark:bg-sky-400"
                         style={{ width: `${match.pred_away_win}%` }}
                       />
                     </div>
@@ -1063,13 +1063,13 @@ export function LiveSeasonModule({
                 <select
                   value={calcClubSlug}
                   onChange={(e) => setCalcClubSlug(e.target.value)}
-                  className="obsidian-well w-full rounded-xl px-3 py-2 text-xs font-bold text-white focus:border-emerald-400 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
                 >
                   {data.standings.map((t) => (
                     <option
                       key={t.club.slug}
                       value={t.club.slug}
-                      className="bg-[#090c14]"
+                      className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100"
                     >
                       {t.position}º {t.club.name} ({t.points} pts)
                     </option>
@@ -1087,29 +1087,29 @@ export function LiveSeasonModule({
                     setCalcTarget(e.target.value);
                     setCalcCustomPts(undefined);
                   }}
-                  className="obsidian-well w-full rounded-xl px-3 py-2 text-xs font-bold text-white focus:border-emerald-400 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
                 >
-                  <option value="Z4" className="bg-[#090c14]">
+                  <option value="Z4" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
                       ? "Escapar do Z4 (45 pts)"
                       : "Permanência Série B (44 pts)"}
                   </option>
-                  <option value="SULA" className="bg-[#090c14]">
+                  <option value="SULA" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
                       ? "Sul-Americana (47 pts)"
                       : "Metade Superior (50 pts)"}
                   </option>
-                  <option value="G6" className="bg-[#090c14]">
+                  <option value="G6" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
                       ? "Pré-Libertadores G6 (57 pts)"
                       : "Briga pelo Acesso Top 6 (60 pts)"}
                   </option>
-                  <option value="G4" className="bg-[#090c14]">
+                  <option value="G4" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
                       ? "Libertadores Direta G4 (62 pts)"
                       : "Acesso à Série A G4 (64 pts)"}
                   </option>
-                  <option value="TITULO" className="bg-[#090c14]">
+                  <option value="TITULO" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     Título ({division === "A" ? "77 pts" : "72 pts"})
                   </option>
                 </select>
@@ -1187,7 +1187,7 @@ export function LiveSeasonModule({
                         {calcResult.required_aproveitamento}%
                       </strong>
                     </div>
-                    <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-black/60 border border-white/[0.05]">
+                    <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-white/[0.05]">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-500"
                         style={{
@@ -1207,7 +1207,7 @@ export function LiveSeasonModule({
                         {calcResult.current_aproveitamento}%
                       </strong>
                     </div>
-                    <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-black/60 border border-white/[0.05]">
+                    <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-white/[0.05]">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-400"
                         style={{
@@ -1295,10 +1295,10 @@ export function LiveSeasonModule({
                             key={rem.round}
                             className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-[10px] font-bold ${
                               rem.difficulty === "PEDREIRA"
-                                ? "border-rose-400/30 bg-rose-500/15 text-rose-200"
+                                ? "border-rose-300 bg-rose-50 text-rose-800 dark:border-rose-400/30 dark:bg-rose-500/15 dark:text-rose-200"
                                 : rem.difficulty === "EQUILIBRADO"
-                                ? "border-amber-400/30 bg-amber-500/15 text-amber-200"
-                                : "border-emerald-400/30 bg-emerald-500/15 text-emerald-200"
+                                ? "border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-400/30 dark:bg-amber-500/15 dark:text-amber-200"
+                                : "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-500/15 dark:text-emerald-200"
                             }`}
                           >
                             <span className="font-mono text-zinc-400">
