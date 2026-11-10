@@ -162,7 +162,7 @@ export function HistoryBridgeModule({
 
         <CardContent className="overflow-x-auto">
           <div className="min-w-[920px]">
-            <div className="grid grid-cols-14 gap-1.5 pb-2 border-b border-slate-800 text-[11px] font-bold text-slate-400 text-center">
+            <div className="grid grid-cols-14 gap-1.5 pb-2 border-b border-slate-300 text-[11px] font-black text-slate-700 text-center dark:border-slate-800 dark:text-slate-400">
               <div className="col-span-2 text-left pl-2">Clube (Ioiô)</div>
               {years.map((yr) => (
                 <div key={yr}>{yr}</div>
@@ -182,11 +182,11 @@ export function HistoryBridgeModule({
                     <div className="col-span-2 flex items-center justify-between pr-2 text-left pl-1">
                       <div className="flex items-center gap-1.5 truncate">
                         <ClubCrest club={row.club} size="xs" />
-                        <span className="truncate font-bold text-white">
+                        <span className="truncate font-bold text-slate-900 dark:text-white">
                           {row.club.name}
                         </span>
                       </div>
-                      <span className="text-[10px] font-semibold text-amber-400">
+                      <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400">
                         {row.club.yo_yo_index}x
                       </span>
                     </div>
@@ -197,7 +197,7 @@ export function HistoryBridgeModule({
                         return (
                           <div
                             key={yr}
-                            className="rounded border border-slate-800 bg-slate-900 py-1.5 text-[10px] text-slate-500"
+                            className="rounded border border-slate-200 bg-slate-50 py-1.5 text-[10px] text-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-500"
                           >
                             -
                           </div>
@@ -206,15 +206,15 @@ export function HistoryBridgeModule({
                       const badgeStyle =
                         cell.division === "A"
                           ? cell.outcome === "CAMPEAO"
-                            ? "border-emerald-400 bg-emerald-500/35 text-white font-black"
+                            ? "border-emerald-600 bg-emerald-600 text-white font-black shadow-sm"
                             : cell.outcome === "REBAIXADO"
-                            ? "border-rose-500/50 bg-rose-500/20 text-rose-200 font-bold"
-                            : "border-emerald-500/30 bg-emerald-500/15 text-emerald-200"
+                            ? "border-rose-300 bg-rose-50 text-rose-800 font-bold dark:border-rose-500/50 dark:bg-rose-500/20 dark:text-rose-200"
+                            : "border-emerald-300 bg-emerald-50 text-emerald-800 font-bold dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-200"
                           : cell.division === "B"
                           ? cell.outcome === "ACESSO"
-                            ? "border-sky-400 bg-sky-500/30 text-sky-100 font-extrabold"
-                            : "border-amber-500/30 bg-amber-500/15 text-amber-200"
-                          : "border-rose-500/40 bg-rose-950/60 text-rose-300";
+                            ? "border-sky-300 bg-sky-50 text-sky-800 font-extrabold dark:border-sky-400 dark:bg-sky-500/30 dark:text-sky-100"
+                            : "border-amber-300 bg-amber-50 text-amber-800 font-bold dark:border-amber-500/30 dark:bg-amber-500/15 dark:text-amber-200"
+                          : "border-rose-300 bg-rose-50 text-rose-900 font-bold dark:border-rose-500/40 dark:bg-rose-950/60 dark:text-rose-300";
 
                       return (
                         <div
@@ -295,15 +295,15 @@ export function HistoryBridgeModule({
               {bridge.promoted_survival_by_seed.map((s) => (
                 <div
                   key={s.promoted_position}
-                  className="rounded-lg border border-slate-800 bg-slate-950/70 p-2.5 text-xs"
+                  className="rounded-lg border border-slate-200 bg-white shadow-sm p-2.5 text-xs dark:border-slate-800 dark:bg-slate-950/70"
                 >
-                  <div className="flex justify-between font-bold text-white">
+                  <div className="flex justify-between font-bold text-slate-900 dark:text-white">
                     <span>{s.seed_label}</span>
-                    <span className="text-emerald-400">
+                    <span className="text-emerald-700 dark:text-emerald-400">
                       Média: {s.avg_points_in_a} pts ({s.avg_finish_in_a}º)
                     </span>
                   </div>
-                  <p className="mt-1 text-[11px] text-slate-400">
+                  <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                     Exemplos: {s.notable_examples}
                   </p>
                 </div>
@@ -327,10 +327,10 @@ export function HistoryBridgeModule({
               {bridge.relegated_destiny.map((d) => (
                 <div
                   key={d.category}
-                  className="rounded-xl border border-slate-800 bg-slate-950/70 p-3"
+                  className="rounded-xl border border-slate-200 bg-white shadow-sm p-3 dark:border-slate-800 dark:bg-slate-950/70"
                 >
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-200">
+                    <span className="font-bold text-slate-900 dark:text-slate-200">
                       {d.category}
                     </span>
                     <span
@@ -340,7 +340,7 @@ export function HistoryBridgeModule({
                       {d.percentage}% ({d.count} clubes)
                     </span>
                   </div>
-                  <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-800">
+                  <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-slate-800 dark:border-transparent">
                     <div
                       className="h-full rounded-full"
                       style={{

@@ -74,13 +74,13 @@ export function DashboardHeader({
         {/* Right: Clean, Unified Global Controls */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Division Switcher (Série A / Série B) */}
-          <div className="flex items-center rounded-xl bg-black/40 border border-white/[0.08] p-0.5 shadow-inner">
+          <div className="flex items-center rounded-xl bg-slate-200 border border-slate-300 p-0.5 shadow-inner dark:bg-black/40 dark:border-white/[0.08]">
             <button
               onClick={() => setDivision("A")}
               className={`rounded-lg px-2.5 sm:px-3.5 py-1 text-xs font-black transition-all ${
                 division === "A"
                   ? "bg-gradient-to-b from-emerald-400 to-emerald-500 text-zinc-950 shadow-sm"
-                  : "text-zinc-400 hover:text-white"
+                  : "text-slate-700 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
               }`}
             >
               Série A
@@ -90,7 +90,7 @@ export function DashboardHeader({
               className={`rounded-lg px-2.5 sm:px-3.5 py-1 text-xs font-black transition-all ${
                 division === "B"
                   ? "bg-gradient-to-b from-amber-300 to-amber-500 text-zinc-950 shadow-sm"
-                  : "text-zinc-400 hover:text-white"
+                  : "text-slate-700 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
               }`}
             >
               Série B
@@ -98,20 +98,20 @@ export function DashboardHeader({
           </div>
 
           {/* Edition / Year Dropdown */}
-          <div className="flex items-center gap-1.5 rounded-xl bg-black/40 border border-white/[0.08] px-2.5 py-1 text-xs text-zinc-300 hover:border-white/20 transition-colors">
-            <Calendar className="h-3.5 w-3.5 text-zinc-400 shrink-0" />
+          <div className="flex items-center gap-1.5 rounded-xl bg-white border border-slate-300 px-2.5 py-1 text-xs text-slate-800 shadow-sm transition-colors dark:bg-black/40 dark:border-white/[0.08] dark:text-zinc-300 dark:hover:border-white/20">
+            <Calendar className="h-3.5 w-3.5 text-slate-500 dark:text-zinc-400 shrink-0" />
             <select
               value={year}
               onChange={(e) => setYear(Number(e.target.value))}
-              className="cursor-pointer bg-transparent font-bold text-zinc-200 focus:outline-none"
+              className="cursor-pointer bg-transparent font-bold text-slate-800 focus:outline-none dark:text-zinc-200"
             >
-              <option value={2026} className="bg-[#090c14] text-emerald-400">
+              <option value={2026} className="bg-white text-emerald-700 dark:bg-[#090c14] dark:text-emerald-400">
                 2026 (Ao Vivo)
               </option>
-              <option value={2025} className="bg-[#090c14] text-zinc-200">
+              <option value={2025} className="bg-white text-slate-800 dark:bg-[#090c14] dark:text-zinc-200">
                 2025
               </option>
-              <option value={2024} className="bg-[#090c14] text-zinc-200">
+              <option value={2024} className="bg-white text-slate-800 dark:bg-[#090c14] dark:text-zinc-200">
                 2024
               </option>
             </select>
@@ -119,30 +119,30 @@ export function DashboardHeader({
 
           {/* Highlight "Meu Clube" Selector */}
           <div
-            className={`flex items-center gap-2 rounded-xl bg-black/40 border px-2.5 py-1 text-xs transition-colors ${
+            className={`flex items-center gap-2 rounded-xl border px-2.5 py-1 text-xs transition-colors shadow-sm ${
               favClub
-                ? "border-amber-400/40 bg-amber-500/10 text-amber-300"
-                : "border-white/[0.08] text-zinc-300 hover:border-white/20"
+                ? "border-amber-400/60 bg-amber-50 text-amber-900 dark:bg-amber-500/10 dark:text-amber-300"
+                : "border-slate-300 bg-white text-slate-800 dark:border-white/[0.08] dark:bg-black/40 dark:text-zinc-300 dark:hover:border-white/20"
             }`}
           >
             {favClub ? (
               <ClubCrest club={favClub} size="xs" />
             ) : (
-              <Shield className="h-3.5 w-3.5 text-zinc-500 shrink-0" />
+              <Shield className="h-3.5 w-3.5 text-slate-500 dark:text-zinc-500 shrink-0" />
             )}
             <select
               value={favoriteClubSlug}
               onChange={(e) => setFavoriteClubSlug(e.target.value)}
-              className="cursor-pointer bg-transparent font-bold text-zinc-200 focus:outline-none max-w-[120px] sm:max-w-[160px] truncate"
+              className="cursor-pointer bg-transparent font-bold text-slate-800 focus:outline-none max-w-[120px] sm:max-w-[160px] truncate dark:text-zinc-200"
             >
-              <option value="" className="bg-[#090c14] text-zinc-400">
+              <option value="" className="bg-white text-slate-500 dark:bg-[#090c14] dark:text-zinc-400">
                 Meu Clube
               </option>
               {clubs.map((c) => (
                 <option
                   key={c.slug}
                   value={c.slug}
-                  className="bg-[#090c14] text-zinc-100"
+                  className="bg-white text-slate-800 dark:bg-[#090c14] dark:text-zinc-100"
                 >
                   {c.name}
                 </option>

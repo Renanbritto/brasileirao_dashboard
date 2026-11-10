@@ -194,7 +194,7 @@ export function RoundsTurnsModule({
               </CardDescription>
             </div>
 
-            <div className="inline-flex flex-wrap rounded-lg border border-slate-800 bg-slate-950 p-1">
+            <div className="inline-flex flex-wrap rounded-lg border border-slate-300 bg-slate-100 p-1 dark:border-slate-800 dark:bg-slate-950">
               {[
                 { key: "top6", label: "Pelotão de Elite (Top 6)" },
                 { key: "z6", label: "Drama do Z4 (15º–20º)" },
@@ -205,8 +205,8 @@ export function RoundsTurnsModule({
                   onClick={() => setBumpFilter(b.key as BumpFilter)}
                   className={`rounded-md px-3 py-1 text-xs font-semibold transition-all ${
                     bumpFilter === b.key
-                      ? "bg-emerald-500 text-slate-950"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-white text-emerald-700 shadow-sm ring-1 ring-emerald-500/30 dark:bg-emerald-500 dark:text-slate-950"
+                      : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
                   }`}
                 >
                   {b.label}
@@ -420,9 +420,9 @@ export function RoundsTurnsModule({
               </ResponsiveContainer>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3 text-xs space-y-2">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs space-y-2 dark:border-slate-800 dark:bg-slate-950/70">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">
+                <span className="font-semibold text-slate-700 dark:text-slate-400">
                   Fuga Segura do Z4 (Série {division}):
                 </span>
                 <Badge variant="default">
@@ -430,14 +430,14 @@ export function RoundsTurnsModule({
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">
+                <span className="font-semibold text-slate-700 dark:text-slate-400">
                   {division === "A" ? "Libertadores G4:" : "Acesso Garantido Série A:"}
                 </span>
                 <Badge variant="info">
                   {data.season.magic_g4_pts} pontos (95,8% garantidos)
                 </Badge>
               </div>
-              <p className="text-[11px] text-slate-400 pt-1">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 pt-1">
                 Na era dos pontos corridos com 20 clubes, apenas 2 clubes caíram na Série A somando 45 pontos (Coritiba 2009 e Internacional 2016/Goiás).
               </p>
             </div>

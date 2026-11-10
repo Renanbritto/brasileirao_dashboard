@@ -12,10 +12,10 @@ const buttonVariants = cva(
         destructive:
           "bg-gradient-to-b from-rose-500 to-rose-600 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_4px_18px_rgba(244,63,94,0.3)] hover:from-rose-400 hover:to-rose-500",
         outline:
-          "border border-white/10 bg-white/[0.03] text-zinc-200 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-white/20 hover:bg-white/[0.08] hover:text-white",
+          "border border-slate-300 bg-white text-slate-800 shadow-sm hover:bg-slate-100 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-200 dark:backdrop-blur-md dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] dark:hover:border-white/20 dark:hover:bg-white/[0.08] dark:hover:text-white",
         secondary:
-          "border border-white/10 bg-[#111622]/90 text-zinc-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-amber-400/30 hover:bg-[#171e2e]",
-        ghost: "text-zinc-300 hover:bg-white/[0.06] hover:text-white",
+          "border border-amber-300 bg-amber-50 text-amber-900 shadow-sm hover:bg-amber-100 dark:border-white/10 dark:bg-[#111622]/90 dark:text-zinc-100 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] dark:hover:border-amber-400/30 dark:hover:bg-[#171e2e]",
+        ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-white",
       },
       size: {
         default: "h-9 px-4 py-2",

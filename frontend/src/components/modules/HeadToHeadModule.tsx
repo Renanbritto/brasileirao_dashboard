@@ -88,10 +88,10 @@ export function HeadToHeadModule({
                 <select
                   value={homeSlug}
                   onChange={(e) => setHomeSlug(e.target.value)}
-                  className="mt-0.5 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-extrabold text-white focus:border-emerald-500 focus:outline-none"
+                  className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-extrabold text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
                 >
                   {data.standings.map((t) => (
-                    <option key={t.club.slug} value={t.club.slug}>
+                    <option key={t.club.slug} value={t.club.slug} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
                       {t.position}º {t.club.name} ({t.points} pts • Casa:{" "}
                       {t.aprov_home}%)
                     </option>
@@ -117,10 +117,10 @@ export function HeadToHeadModule({
                 <select
                   value={awaySlug}
                   onChange={(e) => setAwaySlug(e.target.value)}
-                  className="mt-0.5 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm font-extrabold text-white focus:border-sky-500 focus:outline-none"
+                  className="mt-0.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-extrabold text-slate-900 shadow-sm focus:border-sky-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white"
                 >
                   {data.standings.map((t) => (
-                    <option key={t.club.slug} value={t.club.slug}>
+                    <option key={t.club.slug} value={t.club.slug} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-white">
                       {t.position}º {t.club.name} ({t.points} pts • Fora:{" "}
                       {t.aprov_away}%)
                     </option>
@@ -154,29 +154,29 @@ export function HeadToHeadModule({
 
             <CardContent className="space-y-5">
               {/* Expected Goals Strip */}
-              <div className="grid grid-cols-3 gap-3 rounded-xl border border-slate-800 bg-slate-950/80 p-4 text-center">
+              <div className="grid grid-cols-3 gap-3 rounded-xl border border-slate-200 bg-white shadow-sm p-4 text-center dark:border-slate-800 dark:bg-slate-950/80">
                 <div>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
                     xG Esperado ({h2h.home_team.club.short_name})
                   </span>
-                  <p className="text-2xl font-black text-emerald-400">
+                  <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
                     {h2h.poisson.expected_home_goals}
                   </p>
                 </div>
-                <div className="border-x border-slate-800">
-                  <span className="text-xs text-slate-400">
+                <div className="border-x border-slate-200 dark:border-slate-800">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
                     Ambas Marcam / +2.5 Gols
                   </span>
-                  <p className="text-sm font-bold text-amber-300 mt-1.5">
+                  <p className="text-sm font-bold text-amber-700 dark:text-amber-300 mt-1.5">
                     BTTS: {h2h.poisson.prob_btts}% • Over 2.5:{" "}
                     {h2h.poisson.prob_over_25}%
                   </p>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
                     xG Esperado ({h2h.away_team.club.short_name})
                   </span>
-                  <p className="text-2xl font-black text-sky-400">
+                  <p className="text-2xl font-black text-sky-600 dark:text-sky-400">
                     {h2h.poisson.expected_away_goals}
                   </p>
                 </div>
@@ -185,23 +185,23 @@ export function HeadToHeadModule({
               {/* 1X2 Probability Bar */}
               <div>
                 <div className="mb-1.5 flex justify-between text-xs font-bold">
-                  <span className="text-emerald-400">
+                  <span className="text-emerald-700 dark:text-emerald-400">
                     Vitória {h2h.home_team.club.name}: {h2h.poisson.prob_home_win}%
                   </span>
-                  <span className="text-slate-300">
+                  <span className="text-slate-700 dark:text-slate-300">
                     Empate: {h2h.poisson.prob_draw}%
                   </span>
-                  <span className="text-sky-400">
+                  <span className="text-sky-700 dark:text-sky-400">
                     Vitória {h2h.away_team.club.name}: {h2h.poisson.prob_away_win}%
                   </span>
                 </div>
-                <div className="flex h-4 w-full overflow-hidden rounded-full bg-slate-800">
+                <div className="flex h-4 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-slate-800 dark:border-transparent">
                   <div
                     className="bg-emerald-500 transition-all"
                     style={{ width: `${h2h.poisson.prob_home_win}%` }}
                   />
                   <div
-                    className="bg-slate-500 transition-all"
+                    className="bg-slate-400 dark:bg-slate-500 transition-all"
                     style={{ width: `${h2h.poisson.prob_draw}%` }}
                   />
                   <div
@@ -213,27 +213,27 @@ export function HeadToHeadModule({
 
               {/* Top 6 Most Likely Scorelines */}
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
                   Top 6 Placares Exatos Mais Prováveis
                 </p>
                 <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
                   {h2h.poisson.top_scorelines.map((sc, i) => (
                     <div
                       key={sc.score}
-                      className={`rounded-xl border p-3 text-center ${
+                      className={`rounded-xl border p-3 text-center transition-all ${
                         i === 0
                           ? "border-emerald-500/50 bg-emerald-500/15"
-                          : "border-slate-800 bg-slate-950/60"
+                          : "border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950/60"
                       }`}
                     >
-                      <span className="text-[10px] font-bold uppercase text-slate-400">
+                      <span className="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400">
                         #{i + 1} Mais Provável
                       </span>
-                      <p className="mt-0.5 text-lg font-black text-white">
+                      <p className="mt-0.5 text-lg font-black text-slate-900 dark:text-white">
                         {h2h.home_team.club.short_name} {sc.score}{" "}
                         {h2h.away_team.club.short_name}
                       </p>
-                      <span className="text-xs font-bold text-emerald-400">
+                      <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
                         {sc.probability}% de chance
                       </span>
                     </div>
@@ -241,7 +241,7 @@ export function HeadToHeadModule({
                 </div>
               </div>
 
-              <p className="rounded-lg border border-slate-800 bg-slate-950/60 p-2.5 text-xs text-slate-300">
+              <p className="rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-700 dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-300">
                 {h2h.poisson.turf_advantage_note}
               </p>
             </CardContent>
@@ -317,47 +317,47 @@ export function HeadToHeadModule({
               </CardHeader>
               <CardContent className="space-y-3 text-xs">
                 <div className="grid grid-cols-4 gap-2 text-center">
-                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5">
-                    <span className="text-lg font-black text-white">
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 shadow-sm p-2.5 dark:border-slate-800 dark:bg-slate-950">
+                    <span className="text-lg font-black text-slate-900 dark:text-white">
                       {h2h.history_h2h.total_matches}
                     </span>
-                    <p className="text-[10px] text-slate-400">Jogos</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">Jogos</p>
                   </div>
                   <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-2.5 flex flex-col items-center">
-                    <span className="text-lg font-black text-emerald-400">
+                    <span className="text-lg font-black text-emerald-700 dark:text-emerald-400">
                       {h2h.history_h2h.home_club_wins}
                     </span>
                     <div className="mt-1 flex items-center gap-1">
                       <ClubCrest club={h2h.home_team.club} size="xs" />
-                      <p className="text-[10px] text-slate-300">
+                      <p className="text-[10px] text-slate-700 dark:text-slate-300">
                         Vit. {h2h.home_team.club.short_name}
                       </p>
                     </div>
                   </div>
-                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5">
-                    <span className="text-lg font-black text-slate-300">
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 shadow-sm p-2.5 dark:border-slate-800 dark:bg-slate-950">
+                    <span className="text-lg font-black text-slate-700 dark:text-slate-300">
                       {h2h.history_h2h.draws}
                     </span>
-                    <p className="text-[10px] text-slate-400">Empates</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">Empates</p>
                   </div>
                   <div className="rounded-lg border border-sky-500/30 bg-sky-500/10 p-2.5 flex flex-col items-center">
-                    <span className="text-lg font-black text-sky-400">
+                    <span className="text-lg font-black text-sky-700 dark:text-sky-400">
                       {h2h.history_h2h.away_club_wins}
                     </span>
                     <div className="mt-1 flex items-center gap-1">
                       <ClubCrest club={h2h.away_team.club} size="xs" />
-                      <p className="text-[10px] text-slate-300">
+                      <p className="text-[10px] text-slate-700 dark:text-slate-300">
                         Vit. {h2h.away_team.club.short_name}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 space-y-1">
-                  <p className="font-semibold text-amber-300">
+                <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 space-y-1 dark:border-amber-500/20 dark:bg-amber-500/10">
+                  <p className="font-semibold text-amber-900 dark:text-amber-300">
                     Tabu Vigente: {h2h.history_h2h.tabu_summary}
                   </p>
-                  <p className="text-slate-300">
+                  <p className="text-slate-700 dark:text-slate-300">
                     Maior Goleada: <strong>{h2h.history_h2h.biggest_rout}</strong>
                   </p>
                 </div>
