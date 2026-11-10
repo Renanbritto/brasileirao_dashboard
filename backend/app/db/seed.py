@@ -47,7 +47,7 @@ CLUBS_MASTER = [
         "latitude": -3.8073, "longitude": -38.5225, "primary_color": "#1d4ed8", "secondary_color": "#dc2626",
         "yo_yo_index": 5, "promotions_to_a": 3, "relegations_to_b": 2, "immediate_returns": 1,
         "titles_serie_a": 0, "titles_serie_b": 1, "seasons_in_a": 12, "seasons_in_b": 5,
-        "div_2026": "A", "base_strength": 81
+        "div_2026": "B", "base_strength": 81
     },
     {
         "slug": "internacional", "name": "Internacional", "short_name": "INT", "state_uf": "RS", "region": "Sul",
@@ -151,7 +151,7 @@ CLUBS_MASTER = [
         "latitude": -8.0628, "longitude": -34.9029, "primary_color": "#dc2626", "secondary_color": "#facc15",
         "yo_yo_index": 9, "promotions_to_a": 5, "relegations_to_b": 4, "immediate_returns": 2,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 13, "seasons_in_b": 11,
-        "div_2026": "A", "base_strength": 69
+        "div_2026": "B", "base_strength": 69
     },
     {
         "slug": "ceara", "name": "Ceará", "short_name": "CEA", "state_uf": "CE", "region": "Nordeste",
@@ -159,7 +159,7 @@ CLUBS_MASTER = [
         "latitude": -3.8073, "longitude": -38.5225, "primary_color": "#18181b", "secondary_color": "#ffffff",
         "yo_yo_index": 5, "promotions_to_a": 3, "relegations_to_b": 2, "immediate_returns": 0,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 9, "seasons_in_b": 15,
-        "div_2026": "A", "base_strength": 68
+        "div_2026": "B", "base_strength": 68
     },
     {
         "slug": "juventude", "name": "Juventude", "short_name": "JUV", "state_uf": "RS", "region": "Sul",
@@ -167,7 +167,7 @@ CLUBS_MASTER = [
         "latitude": -29.1628, "longitude": -51.1772, "primary_color": "#16a34a", "secondary_color": "#ffffff",
         "yo_yo_index": 6, "promotions_to_a": 3, "relegations_to_b": 3, "immediate_returns": 1,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 10, "seasons_in_b": 8,
-        "div_2026": "A", "base_strength": 67
+        "div_2026": "B", "base_strength": 67
     },
     {
         "slug": "mirassol", "name": "Mirassol", "short_name": "MIR", "state_uf": "SP", "region": "Sudeste",
@@ -185,7 +185,7 @@ CLUBS_MASTER = [
         "latitude": -25.4483, "longitude": -49.2769, "primary_color": "#dc2626", "secondary_color": "#111111",
         "yo_yo_index": 3, "promotions_to_a": 1, "relegations_to_b": 2, "immediate_returns": 1,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 22, "seasons_in_b": 2,
-        "div_2026": "B", "base_strength": 82
+        "div_2026": "A", "base_strength": 82
     },
     {
         "slug": "criciuma", "name": "Criciúma", "short_name": "CRI", "state_uf": "SC", "region": "Sul",
@@ -233,7 +233,7 @@ CLUBS_MASTER = [
         "latitude": -25.4211, "longitude": -49.2597, "primary_color": "#15803d", "secondary_color": "#ffffff",
         "yo_yo_index": 11, "promotions_to_a": 5, "relegations_to_b": 6, "immediate_returns": 3,
         "titles_serie_a": 0, "titles_serie_b": 2, "seasons_in_a": 15, "seasons_in_b": 9,
-        "div_2026": "B", "base_strength": 74
+        "div_2026": "A", "base_strength": 74
     },
     {
         "slug": "america-mg", "name": "América-MG", "short_name": "AME", "state_uf": "MG", "region": "Sudeste",
@@ -289,7 +289,7 @@ CLUBS_MASTER = [
         "latitude": -1.4483, "longitude": -48.4614, "primary_color": "#1e3a8a", "secondary_color": "#ffffff",
         "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 5,
-        "div_2026": "B", "base_strength": 67
+        "div_2026": "A", "base_strength": 67
     },
     {
         "slug": "crb", "name": "CRB", "short_name": "CRB", "state_uf": "AL", "region": "Nordeste",
@@ -305,7 +305,7 @@ CLUBS_MASTER = [
         "latitude": -27.1039, "longitude": -52.6069, "primary_color": "#16a34a", "secondary_color": "#ffffff",
         "yo_yo_index": 4, "promotions_to_a": 2, "relegations_to_b": 2, "immediate_returns": 1,
         "titles_serie_a": 0, "titles_serie_b": 1, "seasons_in_a": 7, "seasons_in_b": 7,
-        "div_2026": "B", "base_strength": 66
+        "div_2026": "A", "base_strength": 66
     },
     {
         "slug": "ponte-preta", "name": "Ponte Preta", "short_name": "PON", "state_uf": "SP", "region": "Sudeste",
@@ -352,6 +352,170 @@ def compute_club_travel_km(club_data: dict, division_clubs: list[dict], rounds_p
     ]
     avg_round_trip = (sum(dists) / len(dists)) * 2.0
     return round(avg_round_trip * away_count, 0)
+
+
+OFFICIAL_SERIE_A_2026 = [
+    {
+        "club_slug": "flamengo", "position": 1, "points": 76, "played": 34, "wins": 23, "draws": 7, "losses": 4, "gf": 71, "ga": 29, "gd": 42,
+        "form_last_5": "V,V,V,V,V", "points_last_5": 15,
+        "home_played": 17, "home_wins": 13, "home_draws": 3, "home_losses": 1, "home_gf": 42, "home_ga": 12,
+        "away_played": 17, "away_wins": 10, "away_draws": 4, "away_losses": 3, "away_gf": 29, "away_ga": 17,
+        "pts_t1": 40, "played_t1": 19, "pts_t2": 36, "played_t2": 15,
+        "prob_title": 74.2, "prob_g4": 100.0, "prob_g6": 100.0, "prob_sula": 0.0, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "palmeiras", "position": 2, "points": 73, "played": 34, "wins": 21, "draws": 10, "losses": 3, "gf": 62, "ga": 23, "gd": 39,
+        "form_last_5": "E,V,V,V,V", "points_last_5": 13,
+        "home_played": 17, "home_wins": 12, "home_draws": 4, "home_losses": 1, "home_gf": 37, "home_ga": 10,
+        "away_played": 17, "away_wins": 9, "away_draws": 6, "away_losses": 2, "away_gf": 25, "away_ga": 13,
+        "pts_t1": 38, "played_t1": 19, "pts_t2": 35, "played_t2": 15,
+        "prob_title": 25.8, "prob_g4": 100.0, "prob_g6": 100.0, "prob_sula": 0.0, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "cruzeiro", "position": 3, "points": 60, "played": 34, "wins": 18, "draws": 6, "losses": 10, "gf": 55, "ga": 48, "gd": 7,
+        "form_last_5": "D,V,V,V,D", "points_last_5": 9,
+        "home_played": 17, "home_wins": 11, "home_draws": 3, "home_losses": 3, "home_gf": 32, "home_ga": 19,
+        "away_played": 17, "away_wins": 7, "away_draws": 3, "away_losses": 7, "away_gf": 23, "away_ga": 29,
+        "pts_t1": 32, "played_t1": 19, "pts_t2": 28, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 91.5, "prob_g6": 98.8, "prob_sula": 1.2, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "fluminense", "position": 4, "points": 57, "played": 34, "wins": 16, "draws": 9, "losses": 9, "gf": 55, "ga": 42, "gd": 13,
+        "form_last_5": "V,D,D,D,D", "points_last_5": 3,
+        "home_played": 17, "home_wins": 10, "home_draws": 4, "home_losses": 3, "home_gf": 33, "home_ga": 18,
+        "away_played": 17, "away_wins": 6, "away_draws": 5, "away_losses": 6, "away_gf": 22, "away_ga": 24,
+        "pts_t1": 37, "played_t1": 19, "pts_t2": 20, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 76.4, "prob_g6": 92.1, "prob_sula": 7.9, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "athletico-pr", "position": 5, "points": 54, "played": 34, "wins": 15, "draws": 9, "losses": 10, "gf": 51, "ga": 43, "gd": 8,
+        "form_last_5": "V,E,D,D,D", "points_last_5": 4,
+        "home_played": 17, "home_wins": 10, "home_draws": 4, "home_losses": 3, "home_gf": 31, "home_ga": 17,
+        "away_played": 17, "away_wins": 5, "away_draws": 5, "away_losses": 7, "away_gf": 20, "away_ga": 26,
+        "pts_t1": 28, "played_t1": 19, "pts_t2": 26, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 51.2, "prob_g6": 78.4, "prob_sula": 21.6, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "bahia", "position": 6, "points": 53, "played": 34, "wins": 14, "draws": 11, "losses": 9, "gf": 50, "ga": 45, "gd": 5,
+        "form_last_5": "D,D,E,D,V", "points_last_5": 4,
+        "home_played": 17, "home_wins": 10, "home_draws": 4, "home_losses": 3, "home_gf": 30, "home_ga": 19,
+        "away_played": 17, "away_wins": 4, "away_draws": 7, "away_losses": 6, "away_gf": 20, "away_ga": 26,
+        "pts_t1": 30, "played_t1": 19, "pts_t2": 23, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 38.6, "prob_g6": 67.5, "prob_sula": 32.5, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "atletico-mg", "position": 7, "points": 50, "played": 34, "wins": 14, "draws": 8, "losses": 12, "gf": 44, "ga": 40, "gd": 4,
+        "form_last_5": "V,V,D,D,D", "points_last_5": 6,
+        "home_played": 17, "home_wins": 9, "home_draws": 4, "home_losses": 4, "home_gf": 26, "home_ga": 16,
+        "away_played": 17, "away_wins": 5, "away_draws": 4, "away_losses": 8, "away_gf": 18, "away_ga": 24,
+        "pts_t1": 28, "played_t1": 19, "pts_t2": 22, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 18.2, "prob_g6": 44.8, "prob_sula": 55.2, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "rb-bragantino", "position": 8, "points": 47, "played": 34, "wins": 13, "draws": 8, "losses": 13, "gf": 44, "ga": 39, "gd": 5,
+        "form_last_5": "V,E,D,V,V", "points_last_5": 10,
+        "home_played": 17, "home_wins": 9, "home_draws": 4, "home_losses": 4, "home_gf": 27, "home_ga": 17,
+        "away_played": 17, "away_wins": 4, "away_draws": 4, "away_losses": 9, "away_gf": 17, "away_ga": 22,
+        "pts_t1": 22, "played_t1": 19, "pts_t2": 25, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 7.5, "prob_g6": 24.1, "prob_sula": 75.9, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "santos", "position": 9, "points": 47, "played": 34, "wins": 12, "draws": 11, "losses": 11, "gf": 50, "ga": 49, "gd": 1,
+        "form_last_5": "D,D,D,D,E", "points_last_5": 1,
+        "home_played": 17, "home_wins": 8, "home_draws": 6, "home_losses": 3, "home_gf": 30, "home_ga": 21,
+        "away_played": 17, "away_wins": 4, "away_draws": 5, "away_losses": 8, "away_gf": 20, "away_ga": 28,
+        "pts_t1": 26, "played_t1": 19, "pts_t2": 21, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 6.8, "prob_g6": 22.5, "prob_sula": 77.5, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "sao-paulo", "position": 10, "points": 44, "played": 34, "wins": 12, "draws": 8, "losses": 14, "gf": 39, "ga": 39, "gd": 0,
+        "form_last_5": "V,E,D,E,E", "points_last_5": 5,
+        "home_played": 17, "home_wins": 8, "home_draws": 4, "home_losses": 5, "home_gf": 23, "home_ga": 17,
+        "away_played": 17, "away_wins": 4, "away_draws": 4, "away_losses": 9, "away_gf": 16, "away_ga": 22,
+        "pts_t1": 25, "played_t1": 19, "pts_t2": 19, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 1.8, "prob_g6": 9.5, "prob_sula": 90.5, "prob_z4": 0.0,
+    },
+    {
+        "club_slug": "botafogo", "position": 11, "points": 42, "played": 34, "wins": 11, "draws": 9, "losses": 14, "gf": 46, "ga": 53, "gd": -7,
+        "form_last_5": "E,D,D,D,V", "points_last_5": 4,
+        "home_played": 17, "home_wins": 7, "home_draws": 5, "home_losses": 5, "home_gf": 28, "home_ga": 23,
+        "away_played": 17, "away_wins": 4, "away_draws": 4, "away_losses": 9, "away_gf": 18, "away_ga": 30,
+        "pts_t1": 25, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.5, "prob_g6": 4.2, "prob_sula": 95.3, "prob_z4": 0.2,
+    },
+    {
+        "club_slug": "coritiba", "position": 12, "points": 42, "played": 34, "wins": 11, "draws": 9, "losses": 14, "gf": 40, "ga": 51, "gd": -11,
+        "form_last_5": "D,D,D,E,V", "points_last_5": 4,
+        "home_played": 17, "home_wins": 8, "home_draws": 4, "home_losses": 5, "home_gf": 25, "home_ga": 21,
+        "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 30,
+        "pts_t1": 23, "played_t1": 19, "pts_t2": 19, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.4, "prob_g6": 3.8, "prob_sula": 95.8, "prob_z4": 0.4,
+    },
+    {
+        "club_slug": "vasco", "position": 13, "points": 41, "played": 33, "wins": 11, "draws": 8, "losses": 14, "gf": 43, "ga": 50, "gd": -7,
+        "form_last_5": "E,D,D,D,D", "points_last_5": 1,
+        "home_played": 17, "home_wins": 7, "home_draws": 4, "home_losses": 6, "home_gf": 25, "home_ga": 21,
+        "away_played": 16, "away_wins": 4, "away_draws": 4, "away_losses": 8, "away_gf": 18, "away_ga": 29,
+        "pts_t1": 24, "played_t1": 19, "pts_t2": 17, "played_t2": 14,
+        "prob_title": 0.0, "prob_g4": 0.8, "prob_g6": 5.6, "prob_sula": 92.1, "prob_z4": 1.5,
+    },
+    {
+        "club_slug": "mirassol", "position": 14, "points": 40, "played": 34, "wins": 10, "draws": 10, "losses": 14, "gf": 39, "ga": 48, "gd": -9,
+        "form_last_5": "D,E,V,D,D", "points_last_5": 4,
+        "home_played": 17, "home_wins": 7, "home_draws": 5, "home_losses": 5, "home_gf": 24, "home_ga": 21,
+        "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 27,
+        "pts_t1": 22, "played_t1": 19, "pts_t2": 18, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.1, "prob_g6": 1.2, "prob_sula": 93.9, "prob_z4": 4.8,
+    },
+    {
+        "club_slug": "vitoria", "position": 15, "points": 38, "played": 34, "wins": 10, "draws": 8, "losses": 16, "gf": 35, "ga": 51, "gd": -16,
+        "form_last_5": "D,V,E,D,D", "points_last_5": 4,
+        "home_played": 17, "home_wins": 7, "home_draws": 4, "home_losses": 6, "home_gf": 22, "home_ga": 22,
+        "away_played": 17, "away_wins": 3, "away_draws": 4, "away_losses": 10, "away_gf": 13, "away_ga": 29,
+        "pts_t1": 20, "played_t1": 19, "pts_t2": 18, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.0, "prob_g6": 0.3, "prob_sula": 78.3, "prob_z4": 21.4,
+    },
+    {
+        "club_slug": "internacional", "position": 16, "points": 38, "played": 34, "wins": 9, "draws": 11, "losses": 14, "gf": 38, "ga": 42, "gd": -4,
+        "form_last_5": "D,D,D,E,V", "points_last_5": 4,
+        "home_played": 17, "home_wins": 6, "home_draws": 6, "home_losses": 5, "home_gf": 23, "home_ga": 18,
+        "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 24,
+        "pts_t1": 21, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.0, "prob_g6": 0.2, "prob_sula": 77.0, "prob_z4": 22.8,
+    },
+    {
+        "club_slug": "corinthians", "position": 17, "points": 37, "played": 34, "wins": 9, "draws": 10, "losses": 15, "gf": 36, "ga": 42, "gd": -6,
+        "form_last_5": "D,D,D,D,E", "points_last_5": 1,
+        "home_played": 17, "home_wins": 6, "home_draws": 6, "home_losses": 5, "home_gf": 22, "home_ga": 18,
+        "away_played": 17, "away_wins": 3, "away_draws": 4, "away_losses": 10, "away_gf": 14, "away_ga": 24,
+        "pts_t1": 19, "played_t1": 19, "pts_t2": 18, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.0, "prob_g6": 0.1, "prob_sula": 60.4, "prob_z4": 39.5,
+    },
+    {
+        "club_slug": "gremio", "position": 18, "points": 37, "played": 34, "wins": 9, "draws": 10, "losses": 15, "gf": 38, "ga": 47, "gd": -9,
+        "form_last_5": "D,D,V,E,D", "points_last_5": 4,
+        "home_played": 17, "home_wins": 6, "home_draws": 5, "home_losses": 6, "home_gf": 24, "home_ga": 21,
+        "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 14, "away_ga": 26,
+        "pts_t1": 20, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.0, "prob_g6": 0.1, "prob_sula": 57.8, "prob_z4": 42.1,
+    },
+    {
+        "club_slug": "remo", "position": 19, "points": 29, "played": 34, "wins": 6, "draws": 11, "losses": 17, "gf": 37, "ga": 57, "gd": -20,
+        "form_last_5": "E,E,D,E,E", "points_last_5": 4,
+        "home_played": 17, "home_wins": 5, "home_draws": 6, "home_losses": 6, "home_gf": 23, "home_ga": 25,
+        "away_played": 17, "away_wins": 1, "away_draws": 5, "away_losses": 11, "away_gf": 14, "away_ga": 32,
+        "pts_t1": 15, "played_t1": 19, "pts_t2": 14, "played_t2": 15,
+        "prob_title": 0.0, "prob_g4": 0.0, "prob_g6": 0.0, "prob_sula": 1.8, "prob_z4": 98.2,
+    },
+    {
+        "club_slug": "chapecoense", "position": 20, "points": 21, "played": 33, "wins": 4, "draws": 9, "losses": 20, "gf": 33, "ga": 68, "gd": -35,
+        "form_last_5": "D,D,D,E,V", "points_last_5": 4,
+        "home_played": 17, "home_wins": 3, "home_draws": 5, "home_losses": 9, "home_gf": 20, "home_ga": 31,
+        "away_played": 16, "away_wins": 1, "away_draws": 4, "away_losses": 11, "away_gf": 13, "away_ga": 37,
+        "pts_t1": 11, "played_t1": 19, "pts_t2": 10, "played_t2": 14,
+        "prob_title": 0.0, "prob_g4": 0.0, "prob_g6": 0.0, "prob_sula": 0.1, "prob_z4": 99.9,
+    },
+]
 
 
 def generate_season_teams_and_matches(
@@ -841,8 +1005,8 @@ def ensure_seeded(db: Session):
     clubs_b = [c for c in CLUBS_MASTER if c["div_2026"] == "B"]
 
     season_specs = [
-        {"year": 2026, "division": "A", "is_current": True, "current_round": 32, "seed": 202601},
-        {"year": 2026, "division": "B", "is_current": True, "current_round": 32, "seed": 202602},
+        {"year": 2026, "division": "A", "is_current": True, "current_round": 34, "seed": 202601},
+        {"year": 2026, "division": "B", "is_current": True, "current_round": 34, "seed": 202602},
         {"year": 2025, "division": "A", "is_current": False, "current_round": 38, "seed": 202501},
         {"year": 2025, "division": "B", "is_current": False, "current_round": 38, "seed": 202502},
         {"year": 2024, "division": "A", "is_current": False, "current_round": 38, "seed": 202401},
@@ -857,9 +1021,9 @@ def ensure_seeded(db: Session):
             is_current=spec["is_current"],
             current_round=spec["current_round"],
             total_rounds=38,
-            magic_title_pts=77 if div == "A" else 72,
-            magic_g4_pts=62 if div == "A" else 64,
-            magic_g6_pts=57 if div == "A" else 60,
+            magic_title_pts=82 if (div == "A" and spec["year"] == 2026) else (77 if div == "A" else 72),
+            magic_g4_pts=63 if div == "A" else 64,
+            magic_g6_pts=58 if div == "A" else 60,
             magic_sula_pts=47 if div == "A" else 50,
             magic_escape_z4_pts=45 if div == "A" else 44,
         )
@@ -873,3 +1037,6 @@ def ensure_seeded(db: Session):
 
     seed_division_history(db)
     db.commit()
+
+    from app.services.table_sync import sync_serie_a_2026_standings
+    sync_serie_a_2026_standings(db)

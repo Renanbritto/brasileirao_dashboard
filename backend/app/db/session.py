@@ -137,6 +137,19 @@ class Session:
     def add(self, obj: Any):
         self._pending.append(obj)
 
+    def execute(self, sql: str, params: tuple | list = ()):
+        cur = self.conn.cursor()
+        cur.execute(sql, params)
+        self.conn.commit()
+        return cur
+
+    def delete(self, obj: Any):
+        if getattr(obj, "id", None) is not None:
+            tname = type(obj).__tablename__
+            cur = self.conn.cursor()
+            cur.execute(f"DELETE FROM {tname} WHERE id = ?", (obj.id,))
+            self.conn.commit()
+
     def commit(self):
         cur = self.conn.cursor()
         for obj in self._pending:

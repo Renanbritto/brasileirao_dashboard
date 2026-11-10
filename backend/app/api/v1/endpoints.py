@@ -6,6 +6,7 @@ from app.db.session import get_db, Session
 from app.db.models import Club, Season, SeasonTeam, Match, DivisionHistory
 from app.services.monte_carlo import simulate_round_and_probabilities, calculate_fan_target
 from app.services.poisson import build_head_to_head_analysis
+from app.services.table_sync import sync_serie_a_2026_standings
 
 router = APIRouter()
 
@@ -580,3 +581,27 @@ def get_history_bridge(db: Session = Depends(get_db)):
         "relegated_destiny": relegated_destiny,
         "historical_cutoffs": historical_cutoffs,
     }
+
+
+@router.post("/sync/official-table")
+def sync_official_table(db: Session = Depends(get_db)):
+    """Sincroniza a tabela oficial da Série A 2026 com os dados oficiais CBF / Google."""
+    result = sync_serie_a_2026_standings(db)
+    return result
+
+
+@router.get("/sync/official-table")
+def get_sync_status(db: Session = Depends(get_db)):
+    """Retorna o status atual da sincronização da tabela oficial."""
+    season = db.query(Season).filter(Season.division == "A", Season.year == 2026).first()
+    if not season:
+        return {"synced": False, "message": "Temporada 2026 não encontrada"}
+    teams_count = db.query(SeasonTeam).filter(SeasonTeam.season_id == season.id).count()
+    return {
+        "synced": True,
+        "division": "A",
+        "year": 2026,
+        "current_round": season.current_round,
+        "teams_count": teams_count,
+    }
+

@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.db.session import Base, engine, SessionLocal
 from app.db.seed import ensure_seeded
+from app.services.table_sync import sync_serie_a_2026_standings
 from app.api.v1.endpoints import router as api_v1_router
 
 
@@ -14,6 +15,7 @@ async def lifespan(app: FastAPI):
     db = SessionLocal()
     try:
         ensure_seeded(db)
+        sync_serie_a_2026_standings(db)
     finally:
         db.close()
     yield
