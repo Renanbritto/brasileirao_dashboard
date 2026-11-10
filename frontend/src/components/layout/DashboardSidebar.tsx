@@ -12,8 +12,11 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Radio,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { ModuleKey } from "@/components/layout/DashboardHeader";
+import { useTheme } from "@/context/ThemeContext";
 
 interface DashboardSidebarProps {
   activeModule: ModuleKey;
@@ -80,6 +83,7 @@ export function DashboardSidebar({
   currentRound,
   isCurrentSeason,
 }: DashboardSidebarProps) {
+  const { theme, toggleTheme } = useTheme();
   return (
     <aside
       className={`sticky top-0 z-40 flex h-screen shrink-0 flex-col border-r border-white/[0.08] bg-[#06080f]/90 backdrop-blur-2xl transition-all duration-300 ease-out ${
@@ -175,6 +179,30 @@ export function DashboardSidebar({
           );
         })}
       </nav>
+
+      {/* Theme Toggle Button */}
+      <div className="border-t border-white/[0.06] p-2">
+        <button
+          onClick={toggleTheme}
+          title={theme === "dark" ? "Alternar para Modo Claro" : "Alternar para Modo Escuro"}
+          aria-label={theme === "dark" ? "Alternar para Modo Claro" : "Alternar para Modo Escuro"}
+          className={`flex w-full items-center gap-2.5 rounded-xl border border-transparent p-2 text-xs font-semibold text-zinc-400 hover:bg-white/[0.04] hover:text-zinc-100 transition-colors ${
+            isCollapsed ? "justify-center" : "px-3"
+          }`}
+        >
+          {theme === "dark" ? (
+            <>
+              <Sun className="h-4 w-4 text-amber-400 shrink-0" />
+              {!isCollapsed && <span>Modo Claro</span>}
+            </>
+          ) : (
+            <>
+              <Moon className="h-4 w-4 text-indigo-400 shrink-0" />
+              {!isCollapsed && <span>Modo Escuro</span>}
+            </>
+          )}
+        </button>
+      </div>
 
       {/* Minimal Footer */}
       <div className="border-t border-white/[0.06] p-2.5">

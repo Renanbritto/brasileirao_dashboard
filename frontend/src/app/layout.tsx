@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Comfortaa } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const comfortaa = Comfortaa({
   subsets: ["latin"],
@@ -20,11 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`dark ${comfortaa.variable}`}>
+    <html lang="pt-BR" className={`dark ${comfortaa.variable}`} suppressHydrationWarning>
       <body
-        className={`${comfortaa.className} obsidian-canvas min-h-screen font-sans text-zinc-100 antialiased`}
+        className={`${comfortaa.className} obsidian-canvas min-h-screen font-sans text-zinc-100 antialiased transition-colors duration-200`}
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

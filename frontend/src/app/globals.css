@@ -164,3 +164,264 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(16, 185, 129, 0.55);
 }
+
+/* ==========================================================================
+   LIGHT MODE DESIGN SYSTEM (CRISP SPORTS ANALYTICS LIGHT GLASS)
+   ========================================================================== */
+
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  selection-background-color: rgba(16, 185, 129, 0.2);
+  selection-color: #047857;
+}
+
+html.light .obsidian-canvas {
+  background-color: #f8fafc;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 15% -10%, rgba(16, 185, 129, 0.12), transparent 60%),
+    radial-gradient(ellipse 65% 45% at 88% 8%, rgba(14, 165, 233, 0.09), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 50% 105%, rgba(245, 158, 11, 0.07), transparent 60%),
+    radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+  background-attachment: fixed;
+  color: #0f172a;
+}
+
+/* Light Mode Glass Cards */
+html.light .obsidian-glass {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 8px 24px -4px rgba(15, 23, 42, 0.06),
+    0 2px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+html.light .obsidian-glass:hover {
+  border-color: rgba(203, 213, 225, 0.95);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 12px 28px -4px rgba(15, 23, 42, 0.08),
+    0 4px 8px -1px rgba(15, 23, 42, 0.04);
+}
+
+html.light .obsidian-glass::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(16, 185, 129, 0.28) 50%,
+    transparent 100%
+  );
+}
+
+/* Light Mode Wells */
+html.light .obsidian-well {
+  background: rgba(241, 245, 249, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow:
+    inset 0 1px 3px rgba(15, 23, 42, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Light Mode Subcards */
+html.light .obsidian-subcard {
+  background: rgba(248, 250, 252, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    0 4px 14px -2px rgba(15, 23, 42, 0.04);
+}
+
+/* Light Mode Header & Sidebar */
+html.light header {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(226, 232, 240, 0.95) !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+}
+
+html.light aside {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(226, 232, 240, 0.95) !important;
+  box-shadow: 4px 0 20px -2px rgba(15, 23, 42, 0.04) !important;
+}
+
+html.light footer {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  color: #64748b !important;
+}
+
+/* Light Mode KPI Hero Glows */
+html.light .obsidian-kpi-emerald {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(16, 185, 129, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(236, 253, 245, 0.9) 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 8px 24px -4px rgba(16, 185, 129, 0.12);
+}
+
+html.light .obsidian-kpi-sky {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(14, 165, 233, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.9) 100%);
+  border-color: rgba(14, 165, 233, 0.4);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 8px 24px -4px rgba(14, 165, 233, 0.12);
+}
+
+html.light .obsidian-kpi-rose {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(244, 63, 94, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 241, 242, 0.9) 100%);
+  border-color: rgba(244, 63, 94, 0.4);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 8px 24px -4px rgba(244, 63, 94, 0.12);
+}
+
+html.light .obsidian-kpi-amber {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(245, 158, 11, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(254, 243, 199, 0.9) 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 8px 24px -4px rgba(245, 158, 11, 0.12);
+}
+
+html.light .obsidian-kpi-purple {
+  background:
+    radial-gradient(120% 100% at 95% 0%, rgba(168, 85, 247, 0.16) 0%, transparent 65%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 245, 255, 0.9) 100%);
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 1),
+    0 8px 24px -4px rgba(168, 85, 247, 0.12);
+}
+
+/* Light Mode Typography Adjustments */
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html.light .text-zinc-100 {
+  color: #0f172a !important;
+}
+
+html.light .text-zinc-200 {
+  color: #1e293b !important;
+}
+
+html.light .text-zinc-300 {
+  color: #334155 !important;
+}
+
+html.light .text-zinc-400 {
+  color: #64748b !important;
+}
+
+html.light .text-zinc-500 {
+  color: #64748b !important;
+}
+
+html.light .text-zinc-600 {
+  color: #94a3b8 !important;
+}
+
+/* Protect text on primary theme accents and badges */
+html.light .text-emerald-400 {
+  color: #059669 !important;
+}
+
+html.light .text-sky-400 {
+  color: #0284c7 !important;
+}
+
+html.light .text-rose-400 {
+  color: #e11d48 !important;
+}
+
+html.light .text-amber-400 {
+  color: #d97706 !important;
+}
+
+html.light .text-indigo-400 {
+  color: #4f46e5 !important;
+}
+
+/* Card titles and borders in light mode */
+html.light [class*="border-white"] {
+  border-color: rgba(226, 232, 240, 0.9) !important;
+}
+
+html.light [class*="bg-black\/"] {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+}
+
+html.light .bg-\[\#04060a\],
+html.light .bg-\[\#06080f\],
+html.light .bg-\[\#05070d\],
+html.light .bg-\[\#090c14\] {
+  background-color: #ffffff !important;
+}
+
+html.light select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Light mode Table styles */
+html.light thead {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html.light thead th {
+  color: #475569 !important;
+}
+
+html.light tbody tr {
+  border-bottom-color: rgba(226, 232, 240, 0.8) !important;
+}
+
+html.light tbody tr:hover {
+  background-color: rgba(241, 245, 249, 0.75) !important;
+}
+
+html.light td {
+  color: #1e293b !important;
+}
+
+/* Sidebar in light mode */
+html.light aside nav button:not([class*="bg-emerald"]) {
+  color: #475569 !important;
+}
+
+html.light aside nav button:not([class*="bg-emerald"]):hover {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+  color: #0f172a !important;
+}
+
+/* Scrollbar in light mode */
+html.light ::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.9);
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.65);
+}

@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { Trophy, Calendar, Shield, X } from "lucide-react";
+import { Trophy, Calendar, Shield, X, Sun, Moon } from "lucide-react";
 import { ClubCrest } from "@/components/ui/ClubCrest";
 import { Club } from "@/lib/api";
 import { MODULES_LIST } from "@/components/layout/DashboardSidebar";
+import { useTheme } from "@/context/ThemeContext";
 
 export type ModuleKey =
   | "live"
@@ -42,6 +43,7 @@ export function DashboardHeader({
   const favClub = clubs.find((c) => c.slug === favoriteClubSlug);
   const currentMod =
     MODULES_LIST.find((m) => m.key === activeModule) || MODULES_LIST[0];
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-[#05070d]/90 backdrop-blur-2xl shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
@@ -156,6 +158,26 @@ export function DashboardHeader({
               </button>
             )}
           </div>
+
+          {/* Theme Toggle Button (Claro / Escuro) */}
+          <button
+            onClick={toggleTheme}
+            title={theme === "dark" ? "Alternar para Modo Claro" : "Alternar para Modo Escuro"}
+            aria-label={theme === "dark" ? "Alternar para Modo Claro" : "Alternar para Modo Escuro"}
+            className="flex items-center gap-1.5 rounded-xl bg-black/40 border border-white/[0.08] px-2.5 py-1 text-xs font-bold text-zinc-300 hover:text-white hover:border-white/20 transition-all active:scale-95 shadow-sm"
+          >
+            {theme === "dark" ? (
+              <>
+                <Sun className="h-3.5 w-3.5 text-amber-400" />
+                <span className="hidden sm:inline">Modo Claro</span>
+              </>
+            ) : (
+              <>
+                <Moon className="h-3.5 w-3.5 text-indigo-400" />
+                <span className="hidden sm:inline">Modo Escuro</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </header>
