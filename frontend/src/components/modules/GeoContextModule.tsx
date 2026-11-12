@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -26,16 +26,34 @@ import { SeasonOverview } from "@/lib/api";
 
 interface GeoContextModuleProps {
   data: SeasonOverview;
+  division?: "A" | "B";
+  year?: number;
   favoriteClubSlug: string;
 }
 
 export function GeoContextModule({
   data,
+  division,
+  year,
   favoriteClubSlug,
 }: GeoContextModuleProps) {
   const [selectedSlotClub, setSelectedSlotClub] = useState<string>(
     favoriteClubSlug || data.standings[0]?.club.slug || ""
   );
+
+  useEffect(() => {
+    const favInDiv =
+      favoriteClubSlug &&
+      data.standings.some((t) => t.club.slug === favoriteClubSlug);
+    if (favInDiv) {
+      setSelectedSlotClub(favoriteClubSlug);
+    } else if (
+      data.standings.length > 0 &&
+      !data.standings.some((t) => t.club.slug === selectedSlotClub)
+    ) {
+      setSelectedSlotClub(data.standings[0].club.slug);
+    }
+  }, [data, division, year, favoriteClubSlug]);
 
   const mostTraveled = useMemo(() => {
     return [...data.standings].sort((a, b) => b.travel_km - a.travel_km);
@@ -185,8 +203,10 @@ export function GeoContextModule({
 
           <CardContent className="space-y-2.5 max-h-[450px] overflow-y-auto pr-2">
             {data.standings.map((t) => {
-              const leftVal = Math.min(t.aprov_away, t.aprov_home);
-              const rightVal = Math.max(t.aprov_away, t.aprov_home);
+              const awayClamped = Math.min(94, Math.max(6, t.aprov_away));
+              const homeClamped = Math.min(94, Math.max(6, t.aprov_home));
+              const leftVal = Math.min(awayClamped, homeClamped);
+              const rightVal = Math.max(awayClamped, homeClamped);
               const widthVal = Math.max(2, rightVal - leftVal);
               const isFav = t.club.slug === favoriteClubSlug;
 
@@ -218,7 +238,7 @@ export function GeoContextModule({
                     <div
                       title={`Visitante: ${t.aprov_away}%`}
                       className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-5 w-9 items-center justify-center rounded-full bg-sky-500 text-[9px] font-extrabold text-slate-950 shadow"
-                      style={{ left: `${t.aprov_away}%` }}
+                      style={{ left: `${awayClamped}%` }}
                     >
                       {t.aprov_away}%
                     </div>
@@ -226,7 +246,7 @@ export function GeoContextModule({
                     <div
                       title={`Mandante: ${t.aprov_home}%`}
                       className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-5 w-9 items-center justify-center rounded-full bg-emerald-400 text-[9px] font-extrabold text-slate-950 shadow"
-                      style={{ left: `${t.aprov_home}%` }}
+                      style={{ left: `${homeClamped}%` }}
                     >
                       {t.aprov_home}%
                     </div>

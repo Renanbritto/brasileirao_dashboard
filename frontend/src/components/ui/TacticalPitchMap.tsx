@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ShieldAlert,
   Crosshair,
@@ -48,6 +48,19 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
   const [selectedSlug, setSelectedSlug] = useState<string>(
     favoriteClubSlug || teams[0]?.club.slug || ""
   );
+
+  useEffect(() => {
+    const favInTeams =
+      favoriteClubSlug && teams.some((t) => t.club.slug === favoriteClubSlug);
+    if (favInTeams) {
+      setSelectedSlug(favoriteClubSlug);
+    } else if (
+      teams.length > 0 &&
+      !teams.some((t) => t.club.slug === selectedSlug)
+    ) {
+      setSelectedSlug(teams[0].club.slug);
+    }
+  }, [teams, favoriteClubSlug]);
   const [mode, setMode] = useState<"attack" | "defense">("attack");
   const [showGridLines, setShowGridLines] = useState<boolean>(true);
   const [intensityMode, setIntensityMode] = useState<"high" | "normal">("high");
@@ -237,15 +250,15 @@ export function TacticalPitchMap({ teams, favoriteClubSlug }: TacticalPitchMapPr
           <div>
             <div className="flex items-center gap-2">
               <select
-                value={selectedSlug}
+                value={currentTeam?.club.slug || selectedSlug}
                 onChange={(e) => setSelectedSlug(e.target.value)}
-                className="cursor-pointer bg-transparent text-sm sm:text-base font-extrabold text-white focus:outline-none"
+                className="cursor-pointer bg-transparent text-sm sm:text-base font-extrabold text-slate-900 dark:text-white focus:outline-none"
               >
                 {teams.map((t) => (
                   <option
                     key={t.club.slug}
                     value={t.club.slug}
-                    className="bg-[#090c14] text-zinc-100"
+                    className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100"
                   >
                     {t.position}º {t.club.name} ({t.goals_for} GP / {t.goals_against} GC)
                   </option>

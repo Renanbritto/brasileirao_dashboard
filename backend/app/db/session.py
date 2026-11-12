@@ -119,8 +119,16 @@ class QueryBuilder:
 
     def count(self) -> int:
         tname = self.model_cls.__tablename__
+        sql = f"SELECT COUNT(*) FROM {tname}"
+        params: list[Any] = []
+        if self.filters:
+            where_clauses = []
+            for op, col, val in self.filters:
+                where_clauses.append(f"{col} {op} ?")
+                params.append(1 if val is True else (0 if val is False else val))
+            sql += " WHERE " + " AND ".join(where_clauses)
         cur = self.session.conn.cursor()
-        cur.execute(f"SELECT COUNT(*) FROM {tname}")
+        cur.execute(sql, params)
         row = cur.fetchone()
         return int(row[0]) if row else 0
 

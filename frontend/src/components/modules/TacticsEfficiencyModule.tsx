@@ -34,14 +34,43 @@ import { SeasonOverview } from "@/lib/api";
 
 interface TacticsEfficiencyModuleProps {
   data: SeasonOverview;
+  division?: "A" | "B";
+  year?: number;
   favoriteClubSlug: string;
 }
 
 export function TacticsEfficiencyModule({
   data,
+  division,
+  year,
   favoriteClubSlug,
 }: TacticsEfficiencyModuleProps) {
   const [timingMode, setTimingMode] = useState<"scored" | "conceded">("scored");
+
+  const avgXg = useMemo(() => {
+    if (data.benchmarks?.avg_xg_per_game) return data.benchmarks.avg_xg_per_game;
+    const sum = data.standings.reduce((acc, t) => acc + t.xg_per_game, 0);
+    return Number((sum / Math.max(1, data.standings.length)).toFixed(2));
+  }, [data]);
+
+  const avgXga = useMemo(() => {
+    if (data.benchmarks?.avg_xga_per_game) return data.benchmarks.avg_xga_per_game;
+    const sum = data.standings.reduce((acc, t) => acc + t.xga_per_game, 0);
+    return Number((sum / Math.max(1, data.standings.length)).toFixed(2));
+  }, [data]);
+
+  const { xDomain, yDomain } = useMemo(() => {
+    const xVals = data.standings.map((t) => t.xg_per_game);
+    const yVals = data.standings.map((t) => t.xga_per_game);
+    const minX = Math.max(0.3, Math.floor((Math.min(...xVals, avgXg) - 0.12) * 10) / 10);
+    const maxX = Math.ceil((Math.max(...xVals, avgXg) + 0.12) * 10) / 10;
+    const minY = Math.max(0.3, Math.floor((Math.min(...yVals, avgXga) - 0.12) * 10) / 10);
+    const maxY = Math.ceil((Math.max(...yVals, avgXga) + 0.12) * 10) / 10;
+    return {
+      xDomain: [minX, maxX] as [number, number],
+      yDomain: [minY, maxY] as [number, number],
+    };
+  }, [data.standings, avgXg, avgXga]);
 
   const scatterData = useMemo(() => {
     return data.standings.map((t) => ({
@@ -244,7 +273,7 @@ export function TacticsEfficiencyModule({
                     type="number"
                     dataKey="xgPerGame"
                     name="xG Criado / Jogo"
-                    domain={[0.8, 2.1]}
+                    domain={xDomain}
                     stroke="#94a3b8"
                     fontSize={11}
                     label={{
@@ -259,7 +288,7 @@ export function TacticsEfficiencyModule({
                     dataKey="xgaPerGame"
                     name="xGA Sofrido / Jogo"
                     reversed
-                    domain={[0.7, 1.9]}
+                    domain={yDomain}
                     stroke="#94a3b8"
                     fontSize={11}
                     label={{
@@ -320,21 +349,21 @@ export function TacticsEfficiencyModule({
                     }}
                   />
                   <ReferenceLine
-                    x={1.38}
+                    x={avgXg}
                     stroke="#475569"
                     strokeDasharray="4 4"
                     label={{
-                      value: "Média Ataque",
+                      value: `Média Ataque (${avgXg.toFixed(2)})`,
                       fill: "#64748b",
                       fontSize: 10,
                     }}
                   />
                   <ReferenceLine
-                    y={1.18}
+                    y={avgXga}
                     stroke="#475569"
                     strokeDasharray="4 4"
                     label={{
-                      value: "Média Defesa",
+                      value: `Média Defesa (${avgXga.toFixed(2)})`,
                       fill: "#64748b",
                       fontSize: 10,
                     }}
@@ -346,11 +375,11 @@ export function TacticsEfficiencyModule({
                         fill={
                           entry.slug === favoriteClubSlug
                             ? "#fbbf24"
-                            : entry.xgPerGame >= 1.38 && entry.xgaPerGame <= 1.18
+                            : entry.xgPerGame >= avgXg && entry.xgaPerGame <= avgXga
                             ? "#10b981"
-                            : entry.xgaPerGame <= 1.18
+                            : entry.xgaPerGame <= avgXga
                             ? "#38bdf8"
-                            : entry.xgPerGame >= 1.38
+                            : entry.xgPerGame >= avgXg
                             ? "#f59e0b"
                             : "#f43f5e"
                         }
@@ -521,7 +550,7 @@ export function TacticsEfficiencyModule({
                   >
                     <div className="col-span-2 flex items-center gap-2 text-left pl-1">
                       <ClubCrest club={t.club} size="xs" />
-                      <span className="truncate font-semibold text-slate-200">
+                      <span className="truncate font-semibold text-slate-900 dark:text-slate-200">
                         {t.club.name}
                       </span>
                     </div>
@@ -536,7 +565,7 @@ export function TacticsEfficiencyModule({
                         {val}
                       </div>
                     ))}
-                    <div className="rounded border border-amber-500/40 bg-amber-500/15 py-1.5 font-extrabold text-amber-300">
+                    <div className="rounded border border-amber-400 bg-amber-100 py-1.5 font-extrabold text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/15 dark:text-amber-300">
                       {late85}
                     </div>
                   </div>

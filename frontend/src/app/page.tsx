@@ -51,7 +51,8 @@ export default function BrasileiraoDashboardPage() {
   }, [division, year]);
 
   const clubsInDivision = overview?.standings.map((t) => t.club) || [];
-  const currentRound = overview?.season.current_round || 32;
+  const currentRound = overview?.season.current_round ?? 38;
+  const totalRounds = overview?.season.total_rounds ?? 38;
   const isCurrentSeason = overview?.season.is_current ?? true;
 
   return (
@@ -63,7 +64,9 @@ export default function BrasileiraoDashboardPage() {
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
         division={division}
+        year={year}
         currentRound={currentRound}
+        totalRounds={totalRounds}
         isCurrentSeason={isCurrentSeason}
       />
 
@@ -118,12 +121,16 @@ export default function BrasileiraoDashboardPage() {
               {activeModule === "tactics" && (
                 <TacticsEfficiencyModule
                   data={overview}
+                  division={division}
+                  year={year}
                   favoriteClubSlug={favoriteClubSlug}
                 />
               )}
               {activeModule === "geo" && (
                 <GeoContextModule
                   data={overview}
+                  division={division}
+                  year={year}
                   favoriteClubSlug={favoriteClubSlug}
                 />
               )}
@@ -136,7 +143,11 @@ export default function BrasileiraoDashboardPage() {
                 />
               )}
               {activeModule === "history" && (
-                <HistoryBridgeModule favoriteClubSlug={favoriteClubSlug} />
+                <HistoryBridgeModule
+                  favoriteClubSlug={favoriteClubSlug}
+                  division={division}
+                  year={year}
+                />
               )}
             </>
           ) : null}
