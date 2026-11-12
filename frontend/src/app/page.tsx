@@ -5,6 +5,7 @@ import {
   DashboardHeader,
   ModuleKey,
 } from "@/components/layout/DashboardHeader";
+import { DashboardFilterBar } from "@/components/layout/DashboardFilterBar";
 import { DashboardSidebar } from "@/components/layout/DashboardSidebar";
 import { LiveSeasonModule } from "@/components/modules/LiveSeasonModule";
 import { RoundsTurnsModule } from "@/components/modules/RoundsTurnsModule";
@@ -73,19 +74,23 @@ export default function BrasileiraoDashboardPage() {
       {/* Right Main Workspace */}
       <div className="flex min-w-0 flex-1 flex-col">
         <DashboardHeader
-          division={division}
-          setDivision={setDivision}
           year={year}
-          setYear={setYear}
           activeModule={activeModule}
-          clubs={clubsInDivision}
-          favoriteClubSlug={favoriteClubSlug}
-          setFavoriteClubSlug={setFavoriteClubSlug}
           currentRound={currentRound}
           isCurrentSeason={isCurrentSeason}
         />
 
-        <main className="mx-auto w-full max-w-[1640px] flex-1 px-4 py-6 sm:px-6">
+        <main className="mx-auto w-full max-w-[1640px] flex-1 px-4 pt-6 pb-8 sm:px-6">
+          <DashboardFilterBar
+            division={division}
+            setDivision={setDivision}
+            year={year}
+            setYear={setYear}
+            clubs={clubsInDivision}
+            favoriteClubSlug={favoriteClubSlug}
+            setFavoriteClubSlug={setFavoriteClubSlug}
+            className="mb-8"
+          />
           {loading && !overview ? (
             <div className="obsidian-glass flex h-72 flex-col items-center justify-center rounded-2xl p-8 text-center">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-400 border-t-transparent" />
