@@ -28,6 +28,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { SeriesTooltipContent } from "@/components/ui/ChartTooltip";
 import { ClubCrest } from "@/components/ui/ClubCrest";
 import { HistoryBridgeData, fetchHistoryBridge } from "@/lib/api";
 
@@ -267,12 +268,15 @@ export function HistoryBridgeModule({
                     tickFormatter={(v) => `${v}%`}
                   />
                   <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#0f172a",
-                      borderColor: "#334155",
-                      borderRadius: "10px",
-                      fontSize: "12px",
-                    }}
+                    cursor={{ fill: "rgba(255, 255, 255, 0.06)" }}
+                    content={({ active, payload, label }) => (
+                      <SeriesTooltipContent
+                        active={active}
+                        payload={payload as any}
+                        label={label}
+                        valueFormatter={(v) => `${v}%`}
+                      />
+                    )}
                   />
                   <Legend wrapperStyle={{ fontSize: "12px" }} />
                   <Bar
@@ -373,12 +377,16 @@ export function HistoryBridgeModule({
                       tickFormatter={(v) => `${v}p`}
                     />
                     <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#0f172a",
-                        borderColor: "#334155",
-                        borderRadius: "10px",
-                        fontSize: "11px",
-                      }}
+                      cursor={{ stroke: "#64748b", strokeWidth: 1, strokeDasharray: "3 3" }}
+                      content={({ active, payload, label }) => (
+                        <SeriesTooltipContent
+                          active={active}
+                          payload={payload as any}
+                          label={label}
+                          labelFormatter={(yr) => `Temporada ${yr}`}
+                          valueFormatter={(v) => `${v} pts`}
+                        />
+                      )}
                     />
                     <Legend wrapperStyle={{ fontSize: "11px" }} />
                     <Line

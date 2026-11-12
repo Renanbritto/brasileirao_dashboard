@@ -973,7 +973,7 @@ export function LiveSeasonModule({
                         onChange={(e) =>
                           handleScoreChange(match.id, "home", e.target.value)
                         }
-                        className="h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold border border-slate-300 bg-white text-slate-900 shadow-inner focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
+                        className="obsidian-well h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
                       />
                       <span className="text-xs font-bold text-zinc-500">×</span>
                       <input
@@ -985,7 +985,7 @@ export function LiveSeasonModule({
                         onChange={(e) =>
                           handleScoreChange(match.id, "away", e.target.value)
                         }
-                        className="h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold border border-slate-300 bg-white text-slate-900 shadow-inner focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
+                        className="obsidian-well h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
                       />
                     </div>
 
@@ -1063,7 +1063,7 @@ export function LiveSeasonModule({
                 <select
                   value={calcClubSlug}
                   onChange={(e) => setCalcClubSlug(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
+                  className="obsidian-well w-full rounded-xl px-3 py-2 text-xs font-bold text-white focus:border-emerald-400 focus:outline-none"
                 >
                   {data.standings.map((t) => (
                     <option
@@ -1087,7 +1087,7 @@ export function LiveSeasonModule({
                     setCalcTarget(e.target.value);
                     setCalcCustomPts(undefined);
                   }}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-900 focus:border-emerald-500 focus:outline-none dark:obsidian-well dark:border-white/10 dark:text-white"
+                  className="obsidian-well w-full rounded-xl px-3 py-2 text-xs font-bold text-white focus:border-emerald-400 focus:outline-none"
                 >
                   <option value="Z4" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"

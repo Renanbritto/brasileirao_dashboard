@@ -31,6 +31,10 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  ClubMetricTooltip,
+  SeriesTooltipContent,
+} from "@/components/ui/ChartTooltip";
 import { SeasonOverview } from "@/lib/api";
 
 interface RoundsTurnsModuleProps {
@@ -239,13 +243,17 @@ export function RoundsTurnsModule({
                   tickFormatter={(v) => `${v}º`}
                 />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#0f172a",
-                    borderColor: "#334155",
-                    borderRadius: "10px",
-                    fontSize: "12px",
-                  }}
-                  labelFormatter={(r) => `Rodada ${r}`}
+                  cursor={{ stroke: "#64748b", strokeWidth: 1, strokeDasharray: "4 4" }}
+                  content={({ active, payload, label }) => (
+                    <SeriesTooltipContent
+                      active={active}
+                      payload={payload as any}
+                      label={label}
+                      sortByValue="asc"
+                      labelFormatter={(r) => `Rodada ${r}`}
+                      valueFormatter={(v) => `${v}º lugar`}
+                    />
+                  )}
                 />
                 <ReferenceLine
                   x={19}
@@ -327,16 +335,24 @@ export function RoundsTurnsModule({
                     tickFormatter={(v) => `${v > 0 ? "+" : ""}${v}%`}
                   />
                   <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#0f172a",
-                      borderColor: "#334155",
-                      borderRadius: "10px",
-                      fontSize: "12px",
+                    cursor={{ fill: "rgba(255, 255, 255, 0.06)" }}
+                    content={({ active, payload }) => {
+                      if (!active || !payload || !payload.length) return null;
+                      const d = payload[0].payload;
+                      return (
+                        <ClubMetricTooltip
+                          shortName={d.name}
+                          fullName={d.fullName}
+                          badgeText={`${d.delta > 0 ? "+" : ""}${d.delta}%`}
+                          isPositive={d.delta >= 0}
+                          isFavorite={d.slug === favoriteClubSlug}
+                          rows={[
+                            { label: `1º Turno (${d.rank1}º)`, value: `${d.aprov1}%` },
+                            { label: `2º Turno (${d.rank2}º)`, value: `${d.aprov2}%` },
+                          ]}
+                        />
+                      );
                     }}
-                    formatter={(value: number, _name, props) => [
-                      `${value > 0 ? "+" : ""}${value}% (1ºT: ${props.payload.aprov1}% -> 2ºT: ${props.payload.aprov2}%)`,
-                      props.payload.fullName,
-                    ]}
                   />
                   <ReferenceLine y={0} stroke="#475569" />
                   <Bar dataKey="delta" radius={[4, 4, 0, 0]}>
@@ -393,12 +409,16 @@ export function RoundsTurnsModule({
                     tickFormatter={(v) => `${v}%`}
                   />
                   <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#0f172a",
-                      borderColor: "#334155",
-                      borderRadius: "10px",
-                      fontSize: "12px",
-                    }}
+                    cursor={{ stroke: "#64748b", strokeWidth: 1, strokeDasharray: "3 3" }}
+                    content={({ active, payload, label }) => (
+                      <SeriesTooltipContent
+                        active={active}
+                        payload={payload as any}
+                        label={label}
+                        labelFormatter={(pts) => `${pts} pontos`}
+                        valueFormatter={(v) => `${v}%`}
+                      />
+                    )}
                   />
                   <Area
                     type="monotone"

@@ -24,6 +24,10 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  ChartTooltipCard,
+  ClubMetricTooltip,
+} from "@/components/ui/ChartTooltip";
 import { ClubCrest } from "@/components/ui/ClubCrest";
 import { TacticalPitchMap } from "@/components/ui/TacticalPitchMap";
 import { SeasonOverview } from "@/lib/api";
@@ -268,25 +272,50 @@ export function TacticsEfficiencyModule({
                   />
                   <ZAxis type="number" dataKey="points" range={[90, 260]} />
                   <Tooltip
-                    cursor={{ strokeDasharray: "3 3" }}
+                    cursor={{ stroke: "#64748b", strokeDasharray: "3 3" }}
                     content={({ active, payload }) => {
                       if (!active || !payload || !payload.length) return null;
                       const d = payload[0].payload;
                       return (
-                        <div className="rounded-xl border border-slate-700 bg-slate-950 p-3 text-xs shadow-xl">
-                          <p className="font-bold text-white">
-                            {d.fullName} ({d.points} pts)
-                          </p>
-                          <p className="text-emerald-400">
-                            xG Pró/Jogo: {d.xgPerGame}
-                          </p>
-                          <p className="text-sky-400">
-                            xGA Contra/Jogo: {d.xgaPerGame}
-                          </p>
-                          <p className="mt-1 text-[11px] text-slate-300">
-                            Perfil: <strong>{d.quadrant}</strong>
-                          </p>
-                        </div>
+                        <ChartTooltipCard className="min-w-[215px]">
+                          <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-2 dark:border-white/10">
+                            <div>
+                              <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-zinc-400">
+                                {d.name}
+                              </p>
+                              <p className="text-sm font-bold text-slate-900 dark:text-white">
+                                {d.fullName}
+                              </p>
+                            </div>
+                            <span className="rounded-lg bg-slate-100 px-2 py-1 font-mono text-xs font-extrabold text-slate-800 dark:bg-white/10 dark:text-white">
+                              {d.points} pts
+                            </span>
+                          </div>
+                          <div className="mt-2 space-y-1 text-[11px]">
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="text-slate-600 dark:text-zinc-300">
+                                xG Pró / Jogo:
+                              </span>
+                              <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                                {d.xgPerGame}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between gap-3">
+                              <span className="text-slate-600 dark:text-zinc-300">
+                                xGA Contra / Jogo:
+                              </span>
+                              <span className="font-mono font-bold text-sky-700 dark:text-sky-400">
+                                {d.xgaPerGame}
+                              </span>
+                            </div>
+                            <div className="pt-1 text-[11px] font-semibold text-slate-500 dark:text-zinc-400">
+                              Perfil:{" "}
+                              <strong className="text-slate-800 dark:text-zinc-200">
+                                {d.quadrant}
+                              </strong>
+                            </div>
+                          </div>
+                        </ChartTooltipCard>
                       );
                     }}
                   />
@@ -362,16 +391,30 @@ export function TacticsEfficiencyModule({
                     width={38}
                   />
                   <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#0f172a",
-                      borderColor: "#334155",
-                      borderRadius: "10px",
-                      fontSize: "12px",
+                    cursor={{ fill: "rgba(255, 255, 255, 0.06)" }}
+                    content={({ active, payload }) => {
+                      if (!active || !payload || !payload.length) return null;
+                      const d = payload[0].payload;
+                      return (
+                        <ClubMetricTooltip
+                          shortName={d.name}
+                          fullName={d.fullName}
+                          badgeText={`${d.diff > 0 ? "+" : ""}${d.diff} gols`}
+                          isPositive={d.diff >= 0}
+                          isFavorite={d.slug === favoriteClubSlug}
+                          rows={[
+                            {
+                              label: "Gols Reais vs. xG",
+                              value: `${d.gf} Gols / ${d.xg} xG`,
+                            },
+                            {
+                              label: "Eficiência de Chute",
+                              value: `${d.shotsPerGoal} chutes/gol`,
+                            },
+                          ]}
+                        />
+                      );
                     }}
-                    formatter={(val: number, _n, props) => [
-                      `${val > 0 ? "+" : ""}${val} gols (${props.payload.gf} Gols / ${props.payload.xg} xG • ${props.payload.shotsPerGoal} chutes/gol)`,
-                      props.payload.fullName,
-                    ]}
                   />
                   <ReferenceLine x={0} stroke="#475569" />
                   <Bar dataKey="diff" radius={[0, 4, 4, 0]}>

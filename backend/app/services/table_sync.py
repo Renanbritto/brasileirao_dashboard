@@ -1,5 +1,6 @@
 import json
 import math
+import random
 from typing import Any
 from app.db.models import Club, Season, SeasonTeam, Match
 from app.db.session import Session
@@ -197,8 +198,136 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
     db.execute("DELETE FROM season_teams WHERE season_id = ?", (season.id,))
     db.execute("DELETE FROM matches WHERE season_id = ?", (season.id,))
 
+    # 1. Turn rankings maps (Rei do Returno vs Cavalo Paraguaio)
+    sorted_t1 = sorted(OFFICIAL_SERIE_A_2026_DATA, key=lambda x: (x["pts_t1"], x["gd"]), reverse=True)
+    rank_t1_map = {x["club_slug"]: rk for rk, x in enumerate(sorted_t1, start=1)}
+
+    sorted_t2 = sorted(OFFICIAL_SERIE_A_2026_DATA, key=lambda x: (x["pts_t2"], x["gd"]), reverse=True)
+    rank_t2_map = {x["club_slug"]: rk for rk, x in enumerate(sorted_t2, start=1)}
+
+    # 2. Dynamic round progression (Bump Chart from Round 1 to 34)
+    def make_steps(n_games: int, target_pts: int, seed_val: int) -> list[int]:
+        r = random.Random(seed_val)
+        best: list[int] = []
+        for w in range(target_pts // 3, -1, -1):
+            d = target_pts - (3 * w)
+            l = n_games - (w + d)
+            if l >= 0:
+                best = [3] * w + [1] * d + [0] * l
+                break
+        r.shuffle(best)
+        return best
+
+    round_pts_matrix: dict[str, list[int]] = {t["club_slug"]: [] for t in OFFICIAL_SERIE_A_2026_DATA}
+    for idx, t in enumerate(OFFICIAL_SERIE_A_2026_DATA):
+        s1 = make_steps(19, t["pts_t1"], 100 + idx)
+        pl2 = t["played"] - 19
+        s2 = make_steps(pl2, t["pts_t2"], 500 + idx)
+        if t["played"] < 34:
+            s2.append(0)
+        cum = 0
+        for stp in (s1 + s2):
+            cum += stp
+            round_pts_matrix[t["club_slug"]].append(cum)
+
+    round_rank_matrix: dict[str, list[dict[str, int]]] = {t["club_slug"]: [] for t in OFFICIAL_SERIE_A_2026_DATA}
+    for r_idx in range(34):
+        order_r = sorted(
+            OFFICIAL_SERIE_A_2026_DATA,
+            key=lambda x: (round_pts_matrix[x["club_slug"]][r_idx], -x["position"]),
+            reverse=True,
+        )
+        for rk, tm in enumerate(order_r, start=1):
+            round_rank_matrix[tm["club_slug"]].append({
+                "round": r_idx + 1,
+                "position": rk,
+                "points": round_pts_matrix[tm["club_slug"]][r_idx],
+            })
+
+    # 3. Remaining schedule fixtures for rounds 35 to 38 (SOS calendar)
+    REMAINING_ROUNDS_FIXTURES: dict[int, list[tuple[str, str, bool, str]]] = {
+        35: [
+            ("palmeiras", "flamengo", True, "Duelo Direto pelo Título (6 Pontos)"),
+            ("corinthians", "gremio", True, "Final Contra o Z4 (Jogo de 6 Pontos)"),
+            ("cruzeiro", "fluminense", True, "Confronto Direto G4 / Libertadores"),
+            ("athletico-pr", "bahia", True, "Disputa Direta G4/G6"),
+            ("internacional", "vitoria", True, "Duelo Dramático Contra o Rebaixamento"),
+            ("santos", "sao-paulo", False, "Clássico San-São"),
+            ("atletico-mg", "botafogo", False, "Duelo Tradicional da Elite"),
+            ("coritiba", "rb-bragantino", False, "Briga por Vaga Internacional"),
+            ("vasco", "mirassol", False, "Pressão na Reta Final"),
+            ("chapecoense", "remo", False, "Confronto de Honra"),
+        ],
+        36: [
+            ("flamengo", "santos", False, "Duelo Histórico da Elite"),
+            ("botafogo", "palmeiras", True, "Confronto de Gigantes"),
+            ("fluminense", "athletico-pr", True, "Disputa Direta G4 / Libertadores"),
+            ("bahia", "cruzeiro", True, "Batalha por Vaga na Libertadores"),
+            ("rb-bragantino", "atletico-mg", False, "Briga por Vaga na Sul-Americana"),
+            ("sao-paulo", "coritiba", False, "Duelo Tradicional"),
+            ("mirassol", "chapecoense", False, "Pressão Contra o Z4"),
+            ("vitoria", "corinthians", True, "Final Contra o Z4 (Jogo de 6 Pontos)"),
+            ("gremio", "vasco", False, "Duelo de Camisas Pesadas"),
+            ("remo", "internacional", False, "Luta pela Sobrevivência"),
+        ],
+        37: [
+            ("internacional", "flamengo", False, "Clássico Nacional"),
+            ("palmeiras", "gremio", False, "Duelo Tradicional da Elite"),
+            ("cruzeiro", "sao-paulo", False, "Confronto de Campeões"),
+            ("athletico-pr", "rb-bragantino", False, "Briga Direta por Copa"),
+            ("atletico-mg", "fluminense", True, "Disputa por G4 / Libertadores"),
+            ("santos", "mirassol", False, "Confronto Paulista"),
+            ("corinthians", "botafogo", False, "Duelo dos Alvinegros"),
+            ("coritiba", "remo", False, "Duelo Decisivo"),
+            ("vasco", "vitoria", True, "Batalha Direta Contra o Rebaixamento"),
+            ("chapecoense", "bahia", False, "Luta Contra a Queda"),
+        ],
+        38: [
+            ("flamengo", "cruzeiro", True, "Superclássico Decisivo"),
+            ("fluminense", "palmeiras", True, "Confronto Decisivo de Elite"),
+            ("bahia", "santos", False, "Despedida da Série A"),
+            ("rb-bragantino", "corinthians", False, "Pressão na Última Rodada"),
+            ("botafogo", "athletico-pr", False, "Vaga Internacional em Jogo"),
+            ("sao-paulo", "atletico-mg", False, "Duelo Tradicional"),
+            ("mirassol", "internacional", False, "Última Cartada na Elite"),
+            ("vitoria", "chapecoense", False, "Jogo Dramático da Rodada Final"),
+            ("gremio", "coritiba", False, "Confronto de Força"),
+            ("remo", "vasco", False, "Encerramento do Campeonato"),
+        ],
+    }
+
+    team_pos_map = {t["club_slug"]: t["position"] for t in OFFICIAL_SERIE_A_2026_DATA}
+    remaining_schedule_map: dict[str, list[dict[str, Any]]] = {t["club_slug"]: [] for t in OFFICIAL_SERIE_A_2026_DATA}
+    sos_score_map: dict[str, float] = {}
+
+    for slug, my_pos in team_pos_map.items():
+        sched: list[dict[str, Any]] = []
+        for r_num in [35, 36, 37, 38]:
+            for h_slug, a_slug, _is_six, _lbl in REMAINING_ROUNDS_FIXTURES[r_num]:
+                if h_slug == slug or a_slug == slug:
+                    is_home = h_slug == slug
+                    opp_slug = a_slug if is_home else h_slug
+                    opp_club = club_lookup.get(opp_slug)
+                    opp_pos = team_pos_map[opp_slug]
+                    diff_score = (21 - opp_pos) * 4.2 + (0.0 if is_home else 14.0)
+                    sched.append({
+                        "round": r_num,
+                        "opponent_slug": opp_slug,
+                        "opponent_name": opp_club.name if opp_club else opp_slug,
+                        "opponent_short": opp_club.short_name if opp_club else opp_slug[:3].upper(),
+                        "opponent_position": opp_pos,
+                        "venue": "C" if is_home else "F",
+                        "difficulty": "PEDREIRA" if diff_score >= 62.0 else "EQUILIBRADO" if diff_score >= 38.0 else "ACESSIVEL",
+                        "difficulty_score": round(diff_score, 1),
+                        "is_six_pointer": abs(my_pos - opp_pos) <= 3 and (my_pos <= 6 or my_pos >= 15),
+                    })
+                    break
+        remaining_schedule_map[slug] = sched
+        avg_diff = sum(s["difficulty_score"] for s in sched) / float(len(sched)) if sched else 50.0
+        sos_score_map[slug] = round(min(98.0, max(18.0, avg_diff)), 1)
+
     synced_count = 0
-    for off in OFFICIAL_SERIE_A_2026_DATA:
+    for idx, off in enumerate(OFFICIAL_SERIE_A_2026_DATA):
         slug = off["club_slug"]
         club = club_lookup.get(slug)
         if not club:
@@ -218,11 +347,15 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
         bands_ga = [int(round(ga * w)) for w in weights_ga]
         bands_ga[5] += ga - sum(bands_ga)
 
+        rng_xg = random.Random(700 + idx)
+        finishing_delta = round((pts - 46) * 0.13 + rng_xg.uniform(-3.6, 3.6), 1)
+        defending_delta = round(rng_xg.uniform(-2.8, 2.8), 1)
+
         st = SeasonTeam(
             season_id=season.id,
             club_id=club.id,
             position=off["position"],
-            prev_position=max(1, min(20, off["position"])),
+            prev_position=round_rank_matrix[slug][32]["position"],
             points=pts,
             played=pl,
             wins=off["wins"],
@@ -233,10 +366,10 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
             goal_diff=off["gd"],
             points_turn_1=off["pts_t1"],
             played_turn_1=off["played_t1"],
-            rank_turn_1=off["position"],
+            rank_turn_1=rank_t1_map[slug],
             points_turn_2=off["pts_t2"],
             played_turn_2=off["played_t2"],
-            rank_turn_2=off["position"],
+            rank_turn_2=rank_t2_map[slug],
             home_played=off["home_played"],
             home_wins=off["home_wins"],
             home_draws=off["home_draws"],
@@ -257,6 +390,7 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
             prob_sula=off["prob_sula"],
             prob_z4=off["prob_z4"],
             prob_delta_main=round((off["points_last_5"] - 7.5) * 1.4, 1),
+            sos_score=sos_score_map[slug],
             goals_0_15=bands_gf[0],
             goals_16_30=bands_gf[1],
             goals_31_45=bands_gf[2],
@@ -275,8 +409,8 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
             played_vs_g6=10,
             points_vs_z4=max(3, int(round(pts * 0.30))),
             played_vs_z4=8,
-            xg_for=round(gf + 0.8, 1),
-            xg_against=round(ga - 0.5, 1),
+            xg_for=round(max(14.0, gf - finishing_delta), 1),
+            xg_against=round(max(14.0, ga - defending_delta), 1),
             shots_per_game=round(10.5 + (off["wins"] * 0.25), 1),
             shots_per_goal=round((11.0 * pl) / max(1, gf), 1),
             shots_conceded_per_goal=round((11.5 * pl) / max(1, ga), 1),
@@ -286,10 +420,8 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
             avg_attendance=int(round(club.capacity * (round(min(95.0, max(38.0, 68.0 + (pts - 45) * 0.6)), 1) / 100.0))),
             aprov_synthetic=round(min(85.0, max(20.0, aprov_total + (9.0 if club.turf_type == "Sintético" else -2.5))), 1),
             aprov_natural=round(min(82.0, max(22.0, aprov_total + (-2.0 if club.turf_type == "Sintético" else 2.5))), 1),
-            round_progression_json=json.dumps([
-                {"round": r, "position": off["position"], "points": int(round((pts / float(pl)) * r)) if r <= pl else pts}
-                for r in range(1, 35)
-            ]),
+            round_progression_json=json.dumps(round_rank_matrix[slug]),
+            remaining_schedule_json=json.dumps(remaining_schedule_map[slug]),
         )
         db.add(st)
         synced_count += 1
