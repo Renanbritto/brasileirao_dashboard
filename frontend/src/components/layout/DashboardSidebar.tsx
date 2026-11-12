@@ -103,7 +103,7 @@ export function DashboardSidebar({
             </div>
             <div className="truncate">
               <p className="text-xs font-black tracking-wider uppercase text-white leading-none">
-                Brasileirão <span className="text-emerald-400">Glass</span>
+                Futebol <span className="text-emerald-400">Analytics</span>
               </p>
             </div>
           </div>
