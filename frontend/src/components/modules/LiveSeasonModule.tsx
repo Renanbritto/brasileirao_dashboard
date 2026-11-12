@@ -235,6 +235,38 @@ export function LiveSeasonModule({
     }
   }
 
+  function renderFormLast5Badges(formLast5: string[]) {
+    return (
+      <div className="flex items-center justify-center gap-1">
+        {formLast5.map((res, i) => {
+          const isLatest = i === formLast5.length - 1;
+          const resLabel =
+            res === "V" ? "Vitória" : res === "E" ? "Empate" : "Derrota";
+          const recencyLabel = isLatest
+            ? "último jogo"
+            : `${formLast5.length - 1 - i} jogo(s) atrás`;
+          return (
+            <span
+              key={i}
+              title={`${resLabel} (${recencyLabel})`}
+              className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
+                res === "V"
+                  ? "bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-400/40 dark:shadow-[0_0_8px_rgba(16,185,129,0.2)]"
+                  : res === "E"
+                  ? "bg-slate-200 text-slate-700 border border-slate-300 dark:bg-white/[0.06] dark:text-zinc-300 dark:border-white/10"
+                  : "bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/40"
+              } ${
+                isLatest ? "ring-1 ring-slate-500/60 dark:ring-white/45" : ""
+              }`}
+            >
+              {res}
+            </span>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-9">
       {/* Top Hero Obsidian Glass KPI Cards */}
@@ -503,7 +535,12 @@ export function LiveSeasonModule({
                       <TableHead className="text-center" title="Gols Contra (Sofridos)">GC</TableHead>
                       <TableHead className="text-center" title="Saldo de Gols">SG</TableHead>
                       <TableHead className="text-center" title="Aproveitamento">%</TableHead>
-                      <TableHead className="text-center">Últimos 5J</TableHead>
+                      <TableHead
+                        className="text-center"
+                        title="Ordem cronológica: do jogo mais antigo (esquerda) ao mais recente (direita, destacado)"
+                      >
+                        Últimos 5J
+                      </TableHead>
                     </TableRow>
                   ) : (
                     <TableRow>
@@ -514,7 +551,12 @@ export function LiveSeasonModule({
                       <TableHead className="text-center">V</TableHead>
                       <TableHead className="text-center">SG</TableHead>
                       <TableHead className="text-center">% Aprov</TableHead>
-                      <TableHead className="text-center">Momento (5J)</TableHead>
+                      <TableHead
+                        className="text-center"
+                        title="Ordem cronológica: do jogo mais antigo (esquerda) ao mais recente (direita, destacado)"
+                      >
+                        Momento (5J)
+                      </TableHead>
                       <TableHead className="text-right">
                         {division === "A" ? "Título / G4" : "Título / Acesso"}
                       </TableHead>
@@ -720,22 +762,7 @@ export function LiveSeasonModule({
 
                             {/* Forma Últimos 5J */}
                             <TableCell className="text-center">
-                              <div className="flex items-center justify-center gap-1">
-                                {team.form_last_5.map((res, i) => (
-                                  <span
-                                    key={i}
-                                    className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
-                                      res === "V"
-                                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-400/40 dark:shadow-[0_0_8px_rgba(16,185,129,0.2)]"
-                                        : res === "E"
-                                        ? "bg-slate-200 text-slate-700 border border-slate-300 dark:bg-white/[0.06] dark:text-zinc-300 dark:border-white/10"
-                                        : "bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/40"
-                                    }`}
-                                  >
-                                    {res}
-                                  </span>
-                                ))}
-                              </div>
+                              {renderFormLast5Badges(team.form_last_5)}
                             </TableCell>
                           </>
                         ) : (
@@ -762,22 +789,7 @@ export function LiveSeasonModule({
 
                             {/* Form Last 5 Pills */}
                             <TableCell className="text-center">
-                              <div className="flex items-center justify-center gap-1">
-                                {team.form_last_5.map((res, i) => (
-                                  <span
-                                    key={i}
-                                    className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
-                                      res === "V"
-                                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-400/40 dark:shadow-[0_0_8px_rgba(16,185,129,0.2)]"
-                                        : res === "E"
-                                        ? "bg-slate-200 text-slate-700 border border-slate-300 dark:bg-white/[0.06] dark:text-zinc-300 dark:border-white/10"
-                                        : "bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/40"
-                                    }`}
-                                  >
-                                    {res}
-                                  </span>
-                                ))}
-                              </div>
+                              {renderFormLast5Badges(team.form_last_5)}
                             </TableCell>
 
                             {/* Title / G4 Probabilities */}

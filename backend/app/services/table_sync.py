@@ -18,7 +18,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "palmeiras", "position": 2, "points": 73, "played": 34, "wins": 21, "draws": 10, "losses": 3, "gf": 62, "ga": 23, "gd": 39,
-        "form_last_5": "E,V,V,V,V", "points_last_5": 13,
+        "form_last_5": "V,V,V,E,V", "points_last_5": 13,
         "home_played": 17, "home_wins": 12, "home_draws": 4, "home_losses": 1, "home_gf": 37, "home_ga": 10,
         "away_played": 17, "away_wins": 9, "away_draws": 6, "away_losses": 2, "away_gf": 25, "away_ga": 13,
         "pts_t1": 38, "played_t1": 19, "pts_t2": 35, "played_t2": 15,
@@ -26,7 +26,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "cruzeiro", "position": 3, "points": 60, "played": 34, "wins": 18, "draws": 6, "losses": 10, "gf": 55, "ga": 48, "gd": 7,
-        "form_last_5": "D,V,V,V,D", "points_last_5": 9,
+        "form_last_5": "D,V,V,V,V", "points_last_5": 12,
         "home_played": 17, "home_wins": 11, "home_draws": 3, "home_losses": 3, "home_gf": 32, "home_ga": 19,
         "away_played": 17, "away_wins": 7, "away_draws": 3, "away_losses": 7, "away_gf": 23, "away_ga": 29,
         "pts_t1": 32, "played_t1": 19, "pts_t2": 28, "played_t2": 15,
@@ -34,7 +34,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "fluminense", "position": 4, "points": 57, "played": 34, "wins": 16, "draws": 9, "losses": 9, "gf": 55, "ga": 42, "gd": 13,
-        "form_last_5": "V,D,D,D,D", "points_last_5": 3,
+        "form_last_5": "D,D,D,V,V", "points_last_5": 6,
         "home_played": 17, "home_wins": 10, "home_draws": 4, "home_losses": 3, "home_gf": 33, "home_ga": 18,
         "away_played": 17, "away_wins": 6, "away_draws": 5, "away_losses": 6, "away_gf": 22, "away_ga": 24,
         "pts_t1": 37, "played_t1": 19, "pts_t2": 20, "played_t2": 15,
@@ -42,7 +42,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "athletico-pr", "position": 5, "points": 54, "played": 34, "wins": 15, "draws": 9, "losses": 10, "gf": 51, "ga": 43, "gd": 8,
-        "form_last_5": "V,E,D,D,D", "points_last_5": 4,
+        "form_last_5": "V,D,E,D,D", "points_last_5": 4,
         "home_played": 17, "home_wins": 10, "home_draws": 4, "home_losses": 3, "home_gf": 31, "home_ga": 17,
         "away_played": 17, "away_wins": 5, "away_draws": 5, "away_losses": 7, "away_gf": 20, "away_ga": 26,
         "pts_t1": 28, "played_t1": 19, "pts_t2": 26, "played_t2": 15,
@@ -50,7 +50,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "bahia", "position": 6, "points": 53, "played": 34, "wins": 14, "draws": 11, "losses": 9, "gf": 50, "ga": 45, "gd": 5,
-        "form_last_5": "D,D,E,D,V", "points_last_5": 4,
+        "form_last_5": "V,D,E,V,D", "points_last_5": 7,
         "home_played": 17, "home_wins": 10, "home_draws": 4, "home_losses": 3, "home_gf": 30, "home_ga": 19,
         "away_played": 17, "away_wins": 4, "away_draws": 7, "away_losses": 6, "away_gf": 20, "away_ga": 26,
         "pts_t1": 30, "played_t1": 19, "pts_t2": 23, "played_t2": 15,
@@ -74,7 +74,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "santos", "position": 9, "points": 47, "played": 34, "wins": 12, "draws": 11, "losses": 11, "gf": 50, "ga": 49, "gd": 1,
-        "form_last_5": "D,D,D,D,E", "points_last_5": 1,
+        "form_last_5": "D,V,E,E,D", "points_last_5": 5,
         "home_played": 17, "home_wins": 8, "home_draws": 6, "home_losses": 3, "home_gf": 30, "home_ga": 21,
         "away_played": 17, "away_wins": 4, "away_draws": 5, "away_losses": 8, "away_gf": 20, "away_ga": 28,
         "pts_t1": 26, "played_t1": 19, "pts_t2": 21, "played_t2": 15,
@@ -82,7 +82,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "sao-paulo", "position": 10, "points": 44, "played": 34, "wins": 12, "draws": 8, "losses": 14, "gf": 39, "ga": 39, "gd": 0,
-        "form_last_5": "V,E,D,E,E", "points_last_5": 6,
+        "form_last_5": "V,V,E,D,E", "points_last_5": 8,
         "home_played": 17, "home_wins": 8, "home_draws": 4, "home_losses": 5, "home_gf": 23, "home_ga": 17,
         "away_played": 17, "away_wins": 4, "away_draws": 4, "away_losses": 9, "away_gf": 16, "away_ga": 22,
         "pts_t1": 25, "played_t1": 19, "pts_t2": 19, "played_t2": 15,
@@ -90,7 +90,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "botafogo", "position": 11, "points": 42, "played": 34, "wins": 11, "draws": 9, "losses": 14, "gf": 46, "ga": 53, "gd": -7,
-        "form_last_5": "E,D,D,D,V", "points_last_5": 4,
+        "form_last_5": "E,V,D,D,V", "points_last_5": 7,
         "home_played": 17, "home_wins": 7, "home_draws": 5, "home_losses": 5, "home_gf": 28, "home_ga": 23,
         "away_played": 17, "away_wins": 4, "away_draws": 4, "away_losses": 9, "away_gf": 18, "away_ga": 30,
         "pts_t1": 25, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
@@ -98,7 +98,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "coritiba", "position": 12, "points": 42, "played": 34, "wins": 11, "draws": 9, "losses": 14, "gf": 40, "ga": 51, "gd": -11,
-        "form_last_5": "D,D,D,E,V", "points_last_5": 4,
+        "form_last_5": "D,D,D,V,D", "points_last_5": 3,
         "home_played": 17, "home_wins": 8, "home_draws": 4, "home_losses": 5, "home_gf": 25, "home_ga": 21,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 30,
         "pts_t1": 23, "played_t1": 19, "pts_t2": 19, "played_t2": 15,
@@ -106,7 +106,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "vasco", "position": 13, "points": 41, "played": 33, "wins": 11, "draws": 8, "losses": 14, "gf": 43, "ga": 50, "gd": -7,
-        "form_last_5": "E,D,D,D,D", "points_last_5": 1,
+        "form_last_5": "E,D,V,D,V", "points_last_5": 7,
         "home_played": 17, "home_wins": 7, "home_draws": 4, "home_losses": 6, "home_gf": 25, "home_ga": 21,
         "away_played": 16, "away_wins": 4, "away_draws": 4, "away_losses": 8, "away_gf": 18, "away_ga": 29,
         "pts_t1": 24, "played_t1": 19, "pts_t2": 17, "played_t2": 14,
@@ -114,7 +114,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "mirassol", "position": 14, "points": 40, "played": 34, "wins": 10, "draws": 10, "losses": 14, "gf": 39, "ga": 48, "gd": -9,
-        "form_last_5": "D,E,V,D,D", "points_last_5": 4,
+        "form_last_5": "D,V,E,E,V", "points_last_5": 8,
         "home_played": 17, "home_wins": 7, "home_draws": 5, "home_losses": 5, "home_gf": 24, "home_ga": 21,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 27,
         "pts_t1": 22, "played_t1": 19, "pts_t2": 18, "played_t2": 15,
@@ -122,7 +122,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "vitoria", "position": 15, "points": 38, "played": 34, "wins": 10, "draws": 8, "losses": 16, "gf": 35, "ga": 51, "gd": -16,
-        "form_last_5": "D,V,E,D,D", "points_last_5": 4,
+        "form_last_5": "D,E,E,D,D", "points_last_5": 2,
         "home_played": 17, "home_wins": 7, "home_draws": 4, "home_losses": 6, "home_gf": 22, "home_ga": 22,
         "away_played": 17, "away_wins": 3, "away_draws": 4, "away_losses": 10, "away_gf": 13, "away_ga": 29,
         "pts_t1": 20, "played_t1": 19, "pts_t2": 18, "played_t2": 15,
@@ -130,7 +130,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "internacional", "position": 16, "points": 38, "played": 34, "wins": 9, "draws": 11, "losses": 14, "gf": 38, "ga": 42, "gd": -4,
-        "form_last_5": "D,D,D,E,V", "points_last_5": 4,
+        "form_last_5": "D,E,V,D,V", "points_last_5": 7,
         "home_played": 17, "home_wins": 6, "home_draws": 6, "home_losses": 5, "home_gf": 23, "home_ga": 18,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 24,
         "pts_t1": 21, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
@@ -138,7 +138,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "corinthians", "position": 17, "points": 37, "played": 34, "wins": 9, "draws": 10, "losses": 15, "gf": 36, "ga": 42, "gd": -6,
-        "form_last_5": "D,D,D,D,E", "points_last_5": 1,
+        "form_last_5": "D,E,D,V,E", "points_last_5": 5,
         "home_played": 17, "home_wins": 6, "home_draws": 6, "home_losses": 5, "home_gf": 22, "home_ga": 18,
         "away_played": 17, "away_wins": 3, "away_draws": 4, "away_losses": 10, "away_gf": 14, "away_ga": 24,
         "pts_t1": 19, "played_t1": 19, "pts_t2": 18, "played_t2": 15,
@@ -146,7 +146,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "gremio", "position": 18, "points": 37, "played": 34, "wins": 9, "draws": 10, "losses": 15, "gf": 38, "ga": 47, "gd": -9,
-        "form_last_5": "D,D,V,E,D", "points_last_5": 4,
+        "form_last_5": "D,V,V,D,D", "points_last_5": 6,
         "home_played": 17, "home_wins": 6, "home_draws": 5, "home_losses": 6, "home_gf": 24, "home_ga": 21,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 14, "away_ga": 26,
         "pts_t1": 20, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
@@ -154,7 +154,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "remo", "position": 19, "points": 29, "played": 34, "wins": 6, "draws": 11, "losses": 17, "gf": 37, "ga": 57, "gd": -20,
-        "form_last_5": "E,E,D,E,E", "points_last_5": 4,
+        "form_last_5": "E,E,D,V,D", "points_last_5": 5,
         "home_played": 17, "home_wins": 5, "home_draws": 6, "home_losses": 6, "home_gf": 23, "home_ga": 25,
         "away_played": 17, "away_wins": 1, "away_draws": 5, "away_losses": 11, "away_gf": 14, "away_ga": 32,
         "pts_t1": 15, "played_t1": 19, "pts_t2": 14, "played_t2": 15,
@@ -162,7 +162,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "chapecoense", "position": 20, "points": 21, "played": 33, "wins": 4, "draws": 9, "losses": 20, "gf": 33, "ga": 68, "gd": -35,
-        "form_last_5": "D,D,D,E,V", "points_last_5": 4,
+        "form_last_5": "D,D,V,D,D", "points_last_5": 3,
         "home_played": 17, "home_wins": 3, "home_draws": 5, "home_losses": 9, "home_gf": 20, "home_ga": 31,
         "away_played": 16, "away_wins": 1, "away_draws": 4, "away_losses": 11, "away_gf": 13, "away_ga": 37,
         "pts_t1": 11, "played_t1": 19, "pts_t2": 10, "played_t2": 14,
@@ -427,6 +427,56 @@ SERIE_A_2026_REMAINING_FIXTURES: dict[int, list[tuple[str, str, str]]] = {
 }
 
 
+# Official verified last-5 match sequences (oldest -> newest, left -> right)
+OFFICIAL_COMPACT_FORMS: dict[tuple[int, str], dict[str, str]] = {
+    (2024, "A"): {
+        "athletico-pr": "V,E,E,D,D", "atletico-go": "D,D,E,V,D", "atletico-mg": "E,E,D,D,V",
+        "bahia": "D,E,V,D,V", "botafogo": "E,E,V,V,V", "corinthians": "V,V,V,V,V",
+        "criciuma": "D,E,D,D,D", "cruzeiro": "D,E,E,D,V", "cuiaba": "D,E,D,D,D",
+        "flamengo": "V,E,V,V,E", "fluminense": "E,E,E,V,V", "fortaleza": "E,E,D,D,V",
+        "gremio": "E,E,V,E,D", "internacional": "V,V,D,D,D", "juventude": "E,E,V,V,D",
+        "palmeiras": "V,V,D,V,D", "rb-bragantino": "E,D,E,V,V", "sao-paulo": "E,E,D,D,D",
+        "vasco": "D,D,E,V,V", "vitoria": "V,E,V,E,E",
+    },
+    (2024, "B"): {
+        "amazonas": "D,V,E,D,V", "america-mg": "V,D,V,D,V", "avai": "V,D,E,V,V",
+        "botafogo-sp": "V,V,D,D,V", "brusque": "D,D,D,V,D", "ceara": "V,V,V,V,E",
+        "chapecoense": "V,D,E,V,D", "coritiba": "V,D,D,D,D", "crb": "D,V,D,V,E",
+        "goias": "V,V,V,V,V", "guarani": "D,D,E,D,E", "ituano": "D,D,D,V,D",
+        "mirassol": "V,V,E,E,V", "novorizontino": "V,V,V,E,D", "operario-pr": "D,V,D,E,E",
+        "paysandu": "D,V,V,E,V", "ponte-preta": "D,D,D,D,D", "santos": "V,V,V,D,D",
+        "sport": "D,D,E,V,V", "vila-nova": "D,D,V,D,D",
+    },
+    (2025, "A"): {
+        "atletico-mg": "D,E,D,D,V", "bahia": "D,V,E,V,D", "botafogo": "V,V,E,E,V",
+        "ceara": "D,D,E,D,D", "corinthians": "V,D,E,D,E", "cruzeiro": "E,V,E,E,D",
+        "flamengo": "D,V,E,V,E", "fluminense": "V,E,V,V,V", "fortaleza": "V,V,V,V,D",
+        "gremio": "V,D,V,D,V", "internacional": "V,E,D,D,V", "juventude": "E,D,E,D,E",
+        "mirassol": "E,V,D,V,E", "palmeiras": "E,E,D,V,V", "rb-bragantino": "V,D,D,V,D",
+        "santos": "E,E,V,V,V", "sao-paulo": "D,V,D,V,D", "sport": "D,D,D,D,D",
+        "vasco": "D,D,V,D,D", "vitoria": "E,V,V,D,V",
+    },
+    (2025, "B"): {
+        "amazonas": "D,V,D,E,D", "america-mg": "V,E,V,E,D", "athletic-mg": "D,D,V,E,V",
+        "athletico-pr": "V,V,V,V,V", "atletico-go": "D,V,D,E,D", "avai": "V,V,E,V,E",
+        "botafogo-sp": "E,V,V,D,E", "chapecoense": "V,E,D,E,V", "coritiba": "V,E,V,E,V",
+        "crb": "V,E,V,V,D", "criciuma": "D,E,V,V,D", "cuiaba": "D,D,D,E,V",
+        "ferroviaria": "E,E,D,D,D", "goias": "V,D,V,V,D", "novorizontino": "E,E,E,D,V",
+        "operario-pr": "D,E,D,E,V", "paysandu": "D,D,D,E,D", "remo": "V,E,E,D,V",
+        "vila-nova": "E,E,E,D,E", "volta-redonda": "D,D,D,E,E",
+    },
+    (2026, "B"): {
+        "america-mg": "D,V,V,V,V", "athletic-mg": "E,E,D,V,D", "atletico-go": "E,E,D,D,V",
+        "avai": "V,E,D,D,V", "botafogo-sp": "V,V,V,E,V", "ceara": "D,E,D,D,D",
+        "crb": "E,D,V,D,V", "criciuma": "V,V,D,V,D", "cuiaba": "D,D,D,D,D",
+        "fortaleza": "E,V,E,V,D", "goias": "V,E,V,V,V", "juventude": "E,E,V,E,V",
+        "londrina": "E,V,D,D,D", "nautico": "D,E,D,V,D", "novorizontino": "V,E,V,V,V",
+        "operario-pr": "D,D,V,D,V", "ponte-preta": "D,E,E,D,D", "sao-bernardo": "E,D,V,V,D",
+        "sport": "E,D,V,E,D", "vila-nova": "V,E,D,E,V",
+    },
+}
+
+
 def _nearest_feasible_turn_points(total_pts: int, p1: int, p2: int, target_t1: int) -> tuple[int, int]:
     """Return feasible (pts_t1, pts_t2) such that both turns can be realized in W/D/L and sum to total_pts."""
     def _is_possible(n: int, pts: int) -> bool:
@@ -518,25 +568,29 @@ def _derive_rich_row(
     raw_t1 = int(round(pts * (p1 / max(1, played)) * (1.0 + swing)))
     pts_t1, pts_t2 = _nearest_feasible_turn_points(pts, p1, p2, raw_t1)
 
-    pool_f = ["V"] * min(5, wins) + ["E"] * min(5, draws) + ["D"] * min(5, losses)
-    aprov = pts / max(1, played * 3)
-    rng_f = random.Random(year * 5000 + (1 if division == "A" else 2) * 300 + idx)
-    form_chars: list[str] = []
-    for _ in range(min(5, played)):
-        u = rng_f.random()
-        if u < min(0.80, max(0.15, aprov * 1.08)):
-            want = "V"
-        elif u < min(0.92, max(0.40, aprov * 1.08 + 0.24)):
-            want = "E"
-        else:
-            want = "D"
-        if want in pool_f:
-            pool_f.remove(want)
-            form_chars.append(want)
-        elif pool_f:
-            form_chars.append(pool_f.pop(0))
-        else:
-            form_chars.append("E")
+    official_form_str = OFFICIAL_COMPACT_FORMS.get((year, division), {}).get(slug)
+    if official_form_str:
+        form_chars = [c.strip().upper() for c in official_form_str.split(",") if c.strip()][:5]
+    else:
+        pool_f = ["V"] * min(5, wins) + ["E"] * min(5, draws) + ["D"] * min(5, losses)
+        aprov = pts / max(1, played * 3)
+        rng_f = random.Random(year * 5000 + (1 if division == "A" else 2) * 300 + idx)
+        form_chars = []
+        for _ in range(min(5, played)):
+            u = rng_f.random()
+            if u < min(0.80, max(0.15, aprov * 1.08)):
+                want = "V"
+            elif u < min(0.92, max(0.40, aprov * 1.08 + 0.24)):
+                want = "E"
+            else:
+                want = "D"
+            if want in pool_f:
+                pool_f.remove(want)
+                form_chars.append(want)
+            elif pool_f:
+                form_chars.append(pool_f.pop(0))
+            else:
+                form_chars.append("E")
     points_last_5 = sum(3 if c == "V" else 1 if c == "E" else 0 for c in form_chars)
 
     return {
