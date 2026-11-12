@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SeriesTooltipContent } from "@/components/ui/ChartTooltip";
 import { ClubCrest } from "@/components/ui/ClubCrest";
 import { SeasonOverview, H2HAnalysis, fetchHeadToHead } from "@/lib/api";
 
@@ -291,12 +292,14 @@ export function HeadToHeadModule({
                         fillOpacity={0.35}
                       />
                       <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#0f172a",
-                          borderColor: "#334155",
-                          borderRadius: "10px",
-                          fontSize: "12px",
-                        }}
+                        content={({ active, payload, label }) => (
+                          <SeriesTooltipContent
+                            active={active}
+                            payload={payload as any}
+                            label={label}
+                            valueFormatter={(v) => `${v}/100`}
+                          />
+                        )}
                       />
                       <Legend wrapperStyle={{ fontSize: "12px" }} />
                     </RadarChart>
