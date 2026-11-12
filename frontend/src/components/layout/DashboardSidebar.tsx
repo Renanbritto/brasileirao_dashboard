@@ -2,7 +2,6 @@
 
 import React from "react";
 import {
-  Trophy,
   Flame,
   TrendingUp,
   Target,
@@ -16,6 +15,7 @@ import {
   Moon,
 } from "lucide-react";
 import { ModuleKey } from "@/components/layout/DashboardHeader";
+import { SoccerBallLogo } from "@/components/ui/SoccerBallLogo";
 import { useTheme } from "@/context/ThemeContext";
 
 interface DashboardSidebarProps {
@@ -98,8 +98,8 @@ export function DashboardSidebar({
       <div className="flex h-16 items-center justify-between border-b border-white/[0.06] px-3.5">
         {!isCollapsed && (
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400/20 via-emerald-500/10 to-transparent border border-emerald-400/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-              <Trophy className="h-4 w-4" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400/20 via-emerald-500/10 to-transparent border border-emerald-400/35 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+              <SoccerBallLogo className="h-4 w-4" />
             </div>
             <div className="truncate">
               <p className="text-xs font-black tracking-wider uppercase text-white leading-none">

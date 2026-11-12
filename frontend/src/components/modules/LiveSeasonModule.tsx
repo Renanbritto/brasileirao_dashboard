@@ -236,9 +236,9 @@ export function LiveSeasonModule({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-9">
       {/* Top Hero Obsidian Glass KPI Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Card className="obsidian-kpi-emerald">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
@@ -411,7 +411,7 @@ export function LiveSeasonModule({
       </div>
 
       {/* Main Grid: Live Standings Table (Left 7 cols) + Interactive Round Simulator ("Secador Oficial") (Right 5 cols) */}
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
+      <div className="mt-10 grid grid-cols-1 gap-6 xl:grid-cols-12">
         {/* Standings + Monte Carlo Probabilities */}
         <Card className="xl:col-span-7">
           <CardHeader className="pb-4">

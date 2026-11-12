@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "Brasileirão Analytics | Série A & B Intelligence Platform",
   description:
     "Plataforma de Sports Analytics do Brasileirão Série A e B: Temporada Atual Ao Vivo, Simulação de Monte Carlo, Raio-X Tático, Geografia e Ponte Histórica 2003–Presente.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
