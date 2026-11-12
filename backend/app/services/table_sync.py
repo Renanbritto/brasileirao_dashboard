@@ -98,7 +98,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "coritiba", "position": 12, "points": 42, "played": 34, "wins": 11, "draws": 9, "losses": 14, "gf": 40, "ga": 51, "gd": -11,
-        "form_last_5": "D,D,D,V,D", "points_last_5": 3,
+        "form_last_5": "E,D,D,V,D", "points_last_5": 4,
         "home_played": 17, "home_wins": 8, "home_draws": 4, "home_losses": 5, "home_gf": 25, "home_ga": 21,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 30,
         "pts_t1": 23, "played_t1": 19, "pts_t2": 19, "played_t2": 15,
@@ -114,7 +114,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "mirassol", "position": 14, "points": 40, "played": 34, "wins": 10, "draws": 10, "losses": 14, "gf": 39, "ga": 48, "gd": -9,
-        "form_last_5": "D,V,E,E,V", "points_last_5": 8,
+        "form_last_5": "D,V,E,D,V", "points_last_5": 7,
         "home_played": 17, "home_wins": 7, "home_draws": 5, "home_losses": 5, "home_gf": 24, "home_ga": 21,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 27,
         "pts_t1": 22, "played_t1": 19, "pts_t2": 18, "played_t2": 15,
@@ -130,7 +130,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "internacional", "position": 16, "points": 38, "played": 34, "wins": 9, "draws": 11, "losses": 14, "gf": 38, "ga": 42, "gd": -4,
-        "form_last_5": "D,E,V,D,V", "points_last_5": 7,
+        "form_last_5": "E,D,V,D,V", "points_last_5": 7,
         "home_played": 17, "home_wins": 6, "home_draws": 6, "home_losses": 5, "home_gf": 23, "home_ga": 18,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 15, "away_ga": 24,
         "pts_t1": 21, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
@@ -146,7 +146,7 @@ OFFICIAL_SERIE_A_2026_DATA = [
     },
     {
         "club_slug": "gremio", "position": 18, "points": 37, "played": 34, "wins": 9, "draws": 10, "losses": 15, "gf": 38, "ga": 47, "gd": -9,
-        "form_last_5": "D,V,V,D,D", "points_last_5": 6,
+        "form_last_5": "E,D,V,V,D", "points_last_5": 7,
         "home_played": 17, "home_wins": 6, "home_draws": 5, "home_losses": 6, "home_gf": 24, "home_ga": 21,
         "away_played": 17, "away_wins": 3, "away_draws": 5, "away_losses": 9, "away_gf": 14, "away_ga": 26,
         "pts_t1": 20, "played_t1": 19, "pts_t2": 17, "played_t2": 15,
@@ -466,15 +466,155 @@ OFFICIAL_COMPACT_FORMS: dict[tuple[int, str], dict[str, str]] = {
         "vila-nova": "E,E,E,D,E", "volta-redonda": "D,D,D,E,E",
     },
     (2026, "B"): {
-        "america-mg": "D,V,V,V,V", "athletic-mg": "E,E,D,V,D", "atletico-go": "E,E,D,D,V",
+        "america-mg": "D,V,V,V,V", "athletic-mg": "E,E,D,V,D", "atletico-go": "E,E,D,E,V",
         "avai": "V,E,D,D,V", "botafogo-sp": "V,V,V,E,V", "ceara": "D,E,D,D,D",
         "crb": "E,D,V,D,V", "criciuma": "V,V,D,V,D", "cuiaba": "D,D,D,D,D",
-        "fortaleza": "E,V,E,V,D", "goias": "V,E,V,V,V", "juventude": "E,E,V,E,V",
+        "fortaleza": "E,V,E,E,D", "goias": "V,E,V,V,V", "juventude": "E,E,V,E,V",
         "londrina": "E,V,D,D,D", "nautico": "D,E,D,V,D", "novorizontino": "V,E,V,V,V",
         "operario-pr": "D,D,V,D,V", "ponte-preta": "D,E,E,D,D", "sao-bernardo": "E,D,V,V,D",
         "sport": "E,D,V,E,D", "vila-nova": "V,E,D,E,V",
     },
 }
+
+
+# Official verified last-5 matches in chronological order: (home_slug, away_slug, home_score, away_score, round_number).
+# For 2024 A and 2025 A, Round 38 is appended automatically from OFFICIAL_COMPACT_TABLES[...]["finished_round_38"].
+OFFICIAL_LAST_5_FIXTURES: dict[tuple[int, str], list[tuple[str, str, int, int, int]]] = {
+    (2026, "A"): [
+        # R30
+        ("vasco", "remo", 0, 0, 30), ("sao-paulo", "vitoria", 2, 1, 30), ("atletico-mg", "santos", 2, 1, 30),
+        ("flamengo", "fluminense", 1, 0, 30), ("palmeiras", "corinthians", 4, 1, 30), ("gremio", "internacional", 1, 1, 30),
+        ("bahia", "mirassol", 1, 0, 30), ("coritiba", "botafogo", 1, 1, 30), ("chapecoense", "athletico-pr", 1, 4, 30),
+        ("rb-bragantino", "cruzeiro", 4, 2, 30),
+        # R31
+        ("mirassol", "internacional", 2, 0, 31), ("botafogo", "chapecoense", 1, 0, 31), ("atletico-mg", "coritiba", 1, 0, 31),
+        ("athletico-pr", "palmeiras", 0, 2, 31), ("sao-paulo", "vasco", 1, 0, 31), ("fluminense", "santos", 1, 2, 31),
+        ("gremio", "cruzeiro", 2, 4, 31), ("bahia", "flamengo", 0, 3, 31), ("remo", "rb-bragantino", 1, 1, 31),
+        ("corinthians", "vitoria", 1, 1, 31),
+        # R32
+        ("cruzeiro", "remo", 1, 0, 32), ("mirassol", "sao-paulo", 1, 1, 32), ("internacional", "botafogo", 3, 0, 32),
+        ("vitoria", "athletico-pr", 1, 1, 32), ("vasco", "corinthians", 3, 2, 32), ("palmeiras", "rb-bragantino", 2, 0, 32),
+        ("chapecoense", "fluminense", 2, 1, 32), ("santos", "bahia", 1, 1, 32), ("coritiba", "gremio", 0, 1, 32),
+        ("flamengo", "atletico-mg", 3, 2, 32),
+        # R33
+        ("rb-bragantino", "chapecoense", 3, 0, 33), ("santos", "palmeiras", 0, 0, 33), ("fluminense", "internacional", 2, 1, 33),
+        ("remo", "botafogo", 2, 1, 33), ("bahia", "sao-paulo", 3, 2, 33), ("atletico-mg", "cruzeiro", 0, 1, 33),
+        ("vasco", "flamengo", 1, 4, 33), ("gremio", "athletico-pr", 2, 0, 33), ("corinthians", "mirassol", 2, 0, 33),
+        ("coritiba", "vitoria", 2, 0, 33),
+        # R34
+        ("rb-bragantino", "santos", 2, 1, 34), ("chapecoense", "mirassol", 1, 2, 34), ("internacional", "coritiba", 1, 0, 34),
+        ("athletico-pr", "vasco", 1, 3, 34), ("flamengo", "gremio", 3, 1, 34), ("sao-paulo", "corinthians", 0, 0, 34),
+        ("botafogo", "atletico-mg", 1, 0, 34), ("palmeiras", "remo", 6, 1, 34), ("cruzeiro", "bahia", 3, 2, 34),
+        ("vitoria", "fluminense", 0, 3, 34),
+    ],
+    (2026, "B"): [
+        # R33
+        ("juventude", "sao-bernardo", 2, 2, 33), ("atletico-go", "sport", 1, 1, 33), ("nautico", "vila-nova", 0, 2, 33),
+        ("operario-pr", "goias", 0, 2, 33), ("cuiaba", "avai", 0, 1, 33), ("fortaleza", "crb", 2, 2, 33),
+        ("novorizontino", "ponte-preta", 5, 1, 33), ("criciuma", "america-mg", 1, 0, 33),
+        ("athletic-mg", "londrina", 2, 2, 33), ("botafogo-sp", "ceara", 1, 0, 33),
+        # R34
+        ("ponte-preta", "atletico-go", 1, 1, 34), ("sport", "fortaleza", 0, 2, 34), ("ceara", "juventude", 2, 2, 34),
+        ("america-mg", "operario-pr", 1, 0, 34), ("sao-bernardo", "criciuma", 0, 1, 34), ("avai", "athletic-mg", 0, 0, 34),
+        ("crb", "botafogo-sp", 0, 1, 34), ("vila-nova", "novorizontino", 2, 2, 34), ("goias", "nautico", 0, 0, 34),
+        ("londrina", "cuiaba", 1, 0, 34),
+        # R35
+        ("sport", "criciuma", 2, 1, 35), ("avai", "botafogo-sp", 0, 2, 35), ("ceara", "goias", 0, 2, 35),
+        ("atletico-go", "novorizontino", 0, 1, 35), ("ponte-preta", "fortaleza", 2, 2, 35),
+        ("operario-pr", "athletic-mg", 1, 0, 35), ("sao-bernardo", "vila-nova", 3, 2, 35),
+        ("crb", "londrina", 2, 1, 35), ("juventude", "nautico", 4, 0, 35), ("america-mg", "cuiaba", 1, 0, 35),
+        # R36
+        ("criciuma", "ponte-preta", 2, 0, 36), ("botafogo-sp", "sport", 1, 1, 36), ("vila-nova", "juventude", 2, 2, 36),
+        ("cuiaba", "sao-bernardo", 1, 2, 36), ("novorizontino", "operario-pr", 2, 1, 36), ("goias", "crb", 2, 1, 36),
+        ("athletic-mg", "ceara", 2, 1, 36), ("fortaleza", "atletico-go", 0, 0, 36), ("nautico", "avai", 1, 0, 36),
+        ("londrina", "america-mg", 1, 3, 36),
+        # R37
+        ("botafogo-sp", "londrina", 4, 0, 37), ("operario-pr", "sport", 3, 2, 37), ("avai", "sao-bernardo", 2, 1, 37),
+        ("novorizontino", "fortaleza", 2, 1, 37), ("vila-nova", "criciuma", 1, 0, 37), ("cuiaba", "juventude", 1, 2, 37),
+        ("nautico", "crb", 0, 3, 37), ("athletic-mg", "atletico-go", 2, 3, 37), ("goias", "ponte-preta", 1, 0, 37),
+        ("ceara", "america-mg", 0, 1, 37),
+    ],
+    (2025, "A"): [
+        # Chronological late-season sequence (R34..R37 including advanced/rescheduled dates; R38 appended from table)
+        ("rb-bragantino", "atletico-mg", 2, 0, 34), ("botafogo", "sport", 2, 1, 34), ("fluminense", "flamengo", 2, 1, 34),
+        ("palmeiras", "vitoria", 0, 0, 37), ("santos", "mirassol", 1, 1, 34), ("gremio", "vasco", 2, 0, 34),
+        ("juventude", "cruzeiro", 3, 3, 34), ("bahia", "fortaleza", 2, 3, 34), ("corinthians", "sao-paulo", 3, 1, 34),
+        ("ceara", "internacional", 1, 2, 34),
+        ("botafogo", "gremio", 3, 2, 35), ("flamengo", "rb-bragantino", 3, 0, 35), ("palmeiras", "fluminense", 0, 0, 35),
+        ("sao-paulo", "juventude", 2, 1, 35), ("bahia", "vasco", 1, 0, 35), ("sport", "vitoria", 1, 3, 35),
+        ("cruzeiro", "corinthians", 3, 0, 35), ("mirassol", "ceara", 3, 0, 35), ("internacional", "santos", 1, 1, 35),
+        ("atletico-mg", "flamengo", 1, 1, 36), ("gremio", "palmeiras", 3, 2, 36), ("rb-bragantino", "fortaleza", 0, 1, 36),
+        ("fluminense", "sao-paulo", 6, 0, 36), ("juventude", "bahia", 1, 1, 36), ("vasco", "internacional", 5, 1, 36),
+        ("santos", "sport", 3, 0, 36), ("vitoria", "mirassol", 2, 0, 36), ("ceara", "cruzeiro", 1, 1, 36),
+        ("corinthians", "botafogo", 2, 2, 36), ("fortaleza", "atletico-mg", 1, 0, 35),
+        ("vasco", "mirassol", 0, 2, 37), ("gremio", "fluminense", 1, 2, 37), ("atletico-mg", "palmeiras", 0, 3, 34),
+        ("rb-bragantino", "vitoria", 4, 0, 37), ("fortaleza", "corinthians", 2, 1, 37), ("juventude", "santos", 0, 3, 37),
+        ("sao-paulo", "internacional", 3, 0, 37), ("bahia", "sport", 2, 0, 37), ("flamengo", "ceara", 1, 0, 37),
+        ("cruzeiro", "botafogo", 2, 2, 37),
+    ],
+    (2024, "A"): [
+        # R34..R37 (R38 appended from OFFICIAL_COMPACT_TABLES)
+        ("corinthians", "cruzeiro", 2, 1, 34), ("athletico-pr", "atletico-go", 2, 0, 34), ("rb-bragantino", "sao-paulo", 1, 1, 34),
+        ("criciuma", "vitoria", 0, 1, 34), ("gremio", "juventude", 2, 2, 34), ("atletico-mg", "botafogo", 0, 0, 34),
+        ("bahia", "palmeiras", 1, 2, 34), ("cuiaba", "flamengo", 1, 2, 34), ("fluminense", "fortaleza", 2, 2, 34),
+        ("vasco", "internacional", 0, 1, 34),
+        ("internacional", "rb-bragantino", 4, 1, 35), ("bahia", "athletico-pr", 1, 1, 35), ("botafogo", "vitoria", 1, 1, 35),
+        ("corinthians", "vasco", 3, 1, 35), ("sao-paulo", "atletico-mg", 2, 2, 35), ("fortaleza", "flamengo", 0, 0, 35),
+        ("atletico-go", "palmeiras", 0, 1, 35), ("juventude", "cuiaba", 1, 1, 35), ("cruzeiro", "gremio", 1, 1, 35),
+        ("fluminense", "criciuma", 0, 0, 35),
+        ("gremio", "sao-paulo", 2, 1, 36), ("atletico-mg", "juventude", 2, 3, 36), ("vitoria", "fortaleza", 2, 0, 36),
+        ("flamengo", "internacional", 3, 2, 36), ("vasco", "atletico-go", 2, 2, 36), ("palmeiras", "botafogo", 1, 3, 36),
+        ("rb-bragantino", "cruzeiro", 1, 1, 36), ("athletico-pr", "fluminense", 1, 1, 36), ("cuiaba", "bahia", 1, 2, 36),
+        ("criciuma", "corinthians", 2, 4, 36),
+        ("internacional", "botafogo", 0, 1, 37), ("cruzeiro", "palmeiras", 1, 2, 37), ("vitoria", "gremio", 1, 1, 37),
+        ("fluminense", "cuiaba", 1, 0, 37), ("vasco", "atletico-mg", 2, 0, 37), ("corinthians", "bahia", 3, 0, 37),
+        ("sao-paulo", "juventude", 1, 2, 37), ("athletico-pr", "rb-bragantino", 0, 1, 37), ("atletico-go", "fortaleza", 3, 1, 37),
+        ("criciuma", "flamengo", 0, 3, 37),
+    ],
+}
+
+
+def _build_last_5_matches_map(
+    year: int,
+    division: str,
+    club_lookup: dict[str, Club],
+    finished_last_round: list[tuple[str, str, int, int]] | None,
+) -> dict[str, list[dict[str, Any] | None]]:
+    """Build per-club chronological list (oldest -> newest) of match score dicts for Últimos 5J tooltips."""
+    per_club: dict[str, list[dict[str, Any] | None]] = {}
+
+    def _entry(h_slug: str, a_slug: str, hs: int, as_: int, r_num: int, res: str) -> dict[str, Any]:
+        h_club = club_lookup.get(h_slug)
+        a_club = club_lookup.get(a_slug)
+        return {
+            "round_number": r_num,
+            "home_short": h_club.short_name if h_club else h_slug[:3].upper(),
+            "away_short": a_club.short_name if a_club else a_slug[:3].upper(),
+            "home_name": h_club.name if h_club else h_slug,
+            "away_name": a_club.name if a_club else a_slug,
+            "home_score": hs,
+            "away_score": as_,
+            "result": res,
+        }
+
+    fixtures = list(OFFICIAL_LAST_5_FIXTURES.get((year, division), []))
+    if fixtures:
+        if finished_last_round:
+            fixtures.extend((h, a, hs, as_, 38) for h, a, hs, as_ in finished_last_round)
+        for h_slug, a_slug, hs, as_, r_num in fixtures:
+            h_res = "V" if hs > as_ else ("E" if hs == as_ else "D")
+            a_res = "V" if as_ > hs else ("E" if as_ == hs else "D")
+            per_club.setdefault(h_slug, []).append(_entry(h_slug, a_slug, hs, as_, r_num, h_res))
+            per_club.setdefault(a_slug, []).append(_entry(h_slug, a_slug, hs, as_, r_num, a_res))
+        return {slug: items[-5:] for slug, items in per_club.items()}
+
+    if finished_last_round:
+        for h_slug, a_slug, hs, as_ in finished_last_round:
+            h_res = "V" if hs > as_ else ("E" if hs == as_ else "D")
+            a_res = "V" if as_ > hs else ("E" if as_ == hs else "D")
+            per_club[h_slug] = [None, None, None, None, _entry(h_slug, a_slug, hs, as_, 38, h_res)]
+            per_club[a_slug] = [None, None, None, None, _entry(h_slug, a_slug, hs, as_, 38, a_res)]
+    return per_club
 
 
 def _nearest_feasible_turn_points(total_pts: int, p1: int, p2: int, target_t1: int) -> tuple[int, int]:
@@ -806,6 +946,7 @@ def _sync_single_season(
 
     # 3. Remaining Schedule & SOS Score
     team_pos_map = {t["club_slug"]: t["position"] for t in rich_rows}
+    last_5_map = _build_last_5_matches_map(year, division, club_lookup, finished_last_round)
     row_by_slug = {t["club_slug"]: t for t in rich_rows}
     remaining_schedule_map: dict[str, list[dict[str, Any]]] = {t["club_slug"]: [] for t in rich_rows}
     sos_score_map: dict[str, float] = {}
@@ -1010,6 +1151,7 @@ def _sync_single_season(
             round_progression_json=json.dumps(round_rank_matrix[slug]),
             remaining_schedule_json=json.dumps(remaining_schedule_map[slug]),
             time_slots_json=json.dumps(time_slots),
+            last_5_matches_json=json.dumps(last_5_map.get(slug, [])),
         )
         season_team_objs[slug] = st
         sim_inputs.append({

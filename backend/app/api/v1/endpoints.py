@@ -292,6 +292,7 @@ def serialize_season_team(
         "round_progression": json.loads(st.round_progression_json),
         "remaining_schedule": json.loads(st.remaining_schedule_json),
         "time_slots": json.loads(st.time_slots_json),
+        "last_5_matches": json.loads(st.last_5_matches_json or "[]"),
         "spatial_tactics": compute_spatial_tactics(
             st.club.slug, st.goals_for, st.goals_against
         ),

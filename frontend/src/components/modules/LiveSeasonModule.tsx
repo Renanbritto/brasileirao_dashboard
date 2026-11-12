@@ -37,6 +37,7 @@ import { ClubCrest } from "@/components/ui/ClubCrest";
 import {
   SeasonOverview,
   StandingTeam,
+  Last5MatchDetail,
   FanCalculatorResult,
   fetchFanCalculator,
   simulateRoundScores,
@@ -60,6 +61,14 @@ export function LiveSeasonModule({
 }: LiveSeasonModuleProps) {
   const [tableMode, setTableMode] = useState<TableFilterMode>("overall");
   const [tableViewType, setTableViewType] = useState<TableViewType>("official");
+  const [hoveredFormTooltip, setHoveredFormTooltip] = useState<{
+    x: number;
+    y: number;
+    res: string;
+    match: Last5MatchDetail | null;
+    isLatest: boolean;
+    gamesAgo: number;
+  } | null>(null);
   const [simScores, setSimScores] = useState<
     Record<number, { home: number | ""; away: number | "" }>
   >({});
@@ -235,21 +244,47 @@ export function LiveSeasonModule({
     }
   }
 
-  function renderFormLast5Badges(formLast5: string[]) {
+  function renderFormLast5Badges(team: StandingTeam) {
+    const formLast5 = team.form_last_5;
+    const matchHistory = team.last_5_matches || [];
     return (
       <div className="flex items-center justify-center gap-1">
         {formLast5.map((res, i) => {
           const isLatest = i === formLast5.length - 1;
+          const gamesAgo = formLast5.length - 1 - i;
+          const matchDetail = matchHistory[i] ?? null;
           const resLabel =
             res === "V" ? "Vitória" : res === "E" ? "Empate" : "Derrota";
-          const recencyLabel = isLatest
-            ? "último jogo"
-            : `${formLast5.length - 1 - i} jogo(s) atrás`;
+          const ariaText = matchDetail
+            ? `${matchDetail.home_name} ${matchDetail.home_score} x ${matchDetail.away_score} ${matchDetail.away_name}`
+            : `${resLabel} (${isLatest ? "último jogo" : `${gamesAgo} jogo(s) atrás`})`;
+
+          const openTooltip = (el: HTMLElement) => {
+            const rect = el.getBoundingClientRect();
+            const safeX =
+              typeof window !== "undefined"
+                ? Math.min(window.innerWidth - 135, Math.max(135, rect.left + rect.width / 2))
+                : rect.left + rect.width / 2;
+            setHoveredFormTooltip({
+              x: safeX,
+              y: Math.max(12, rect.top - 8),
+              res,
+              match: matchDetail,
+              isLatest,
+              gamesAgo,
+            });
+          };
+
           return (
-            <span
+            <button
               key={i}
-              title={`${resLabel} (${recencyLabel})`}
-              className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
+              type="button"
+              aria-label={ariaText}
+              onMouseEnter={(e) => openTooltip(e.currentTarget)}
+              onMouseLeave={() => setHoveredFormTooltip(null)}
+              onFocus={(e) => openTooltip(e.currentTarget)}
+              onBlur={() => setHoveredFormTooltip(null)}
+              className={`flex h-4 w-4 cursor-default items-center justify-center rounded-md text-[9px] font-extrabold transition-transform hover:scale-110 focus:outline-none ${
                 res === "V"
                   ? "bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-400/40 dark:shadow-[0_0_8px_rgba(16,185,129,0.2)]"
                   : res === "E"
@@ -260,7 +295,7 @@ export function LiveSeasonModule({
               }`}
             >
               {res}
-            </span>
+            </button>
           );
         })}
       </div>
@@ -269,6 +304,55 @@ export function LiveSeasonModule({
 
   return (
     <div className="space-y-9">
+      {hoveredFormTooltip && (
+        <div
+          role="tooltip"
+          style={{
+            left: hoveredFormTooltip.x,
+            top: hoveredFormTooltip.y,
+            transform: "translate(-50%, -100%)",
+          }}
+          className="pointer-events-none fixed z-50 whitespace-nowrap rounded-lg border border-slate-200 bg-white/95 px-2.5 py-1.5 text-xs shadow-xl backdrop-blur-md dark:border-white/15 dark:bg-zinc-900/95"
+        >
+          {hoveredFormTooltip.match ? (
+            <div className="flex items-center gap-2">
+              <span
+                className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                  hoveredFormTooltip.res === "V"
+                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300"
+                    : hoveredFormTooltip.res === "E"
+                    ? "bg-slate-200 text-slate-700 dark:bg-white/10 dark:text-zinc-300"
+                    : "bg-rose-100 text-rose-800 dark:bg-rose-500/20 dark:text-rose-300"
+                }`}
+              >
+                {hoveredFormTooltip.match.simulated
+                  ? "Sim."
+                  : hoveredFormTooltip.match.round_number
+                  ? `R${hoveredFormTooltip.match.round_number}`
+                  : hoveredFormTooltip.res}
+              </span>
+              <span className="font-semibold text-slate-800 dark:text-zinc-100">
+                {hoveredFormTooltip.match.home_name}{" "}
+                <strong className="font-mono font-extrabold text-slate-950 dark:text-white">
+                  {hoveredFormTooltip.match.home_score} x {hoveredFormTooltip.match.away_score}
+                </strong>{" "}
+                {hoveredFormTooltip.match.away_name}
+              </span>
+            </div>
+          ) : (
+            <span className="font-semibold text-slate-700 dark:text-zinc-200">
+              {hoveredFormTooltip.res === "V"
+                ? "Vitória"
+                : hoveredFormTooltip.res === "E"
+                ? "Empate"
+                : "Derrota"}{" "}
+              ({hoveredFormTooltip.isLatest
+                ? "último jogo"
+                : `${hoveredFormTooltip.gamesAgo} jogo(s) atrás`})
+            </span>
+          )}
+        </div>
+      )}
       {/* Top Hero Obsidian Glass KPI Cards */}
       <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Card className="obsidian-kpi-emerald">
@@ -762,7 +846,7 @@ export function LiveSeasonModule({
 
                             {/* Forma Últimos 5J */}
                             <TableCell className="text-center">
-                              {renderFormLast5Badges(team.form_last_5)}
+                              {renderFormLast5Badges(team)}
                             </TableCell>
                           </>
                         ) : (
@@ -789,7 +873,7 @@ export function LiveSeasonModule({
 
                             {/* Form Last 5 Pills */}
                             <TableCell className="text-center">
-                              {renderFormLast5Badges(team.form_last_5)}
+                              {renderFormLast5Badges(team)}
                             </TableCell>
 
                             {/* Title / G4 Probabilities */}

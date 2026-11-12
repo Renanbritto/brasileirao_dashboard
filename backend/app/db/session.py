@@ -36,13 +36,27 @@ class _Metadata:
         for cls in MODEL_CLASSES:
             tname = cls.__tablename__
             col_defs = ["id INTEGER PRIMARY KEY AUTOINCREMENT"]
+            model_cols: list[tuple[str, str, Any]] = []
             for f in fields(cls):
                 if f.name in ("id", "club", "season", "teams", "matches"):
                     continue
                 sql_t = _python_type_to_sql(f.type)
                 col_defs.append(f"{f.name} {sql_t}")
+                model_cols.append((f.name, sql_t, f.default))
             ddl = f"CREATE TABLE IF NOT EXISTS {tname} ({', '.join(col_defs)})"
             cur.execute(ddl)
+            cur.execute(f"PRAGMA table_info({tname})")
+            existing_cols = {row[1] for row in cur.fetchall()}
+            for col_name, sql_t, default_val in model_cols:
+                if col_name not in existing_cols:
+                    default_sql = (
+                        f"'{default_val}'"
+                        if sql_t == "TEXT" and isinstance(default_val, str)
+                        else ("0" if sql_t in ("INTEGER", "REAL") else "''")
+                    )
+                    cur.execute(
+                        f"ALTER TABLE {tname} ADD COLUMN {col_name} {sql_t} DEFAULT {default_sql}"
+                    )
         conn.commit()
         conn.close()
 
