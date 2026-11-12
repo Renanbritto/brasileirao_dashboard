@@ -3,6 +3,7 @@ import math
 import random
 from typing import Any
 from app.db.models import Club, Season, SeasonTeam, Match
+from app.db.seed import haversine_km
 from app.db.session import Session
 
 
@@ -326,6 +327,26 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
         avg_diff = sum(s["difficulty_score"] for s in sched) / float(len(sched)) if sched else 50.0
         sos_score_map[slug] = round(min(98.0, max(18.0, avg_diff)), 1)
 
+    COACH_CHANGE_PROFILES: dict[str, tuple[int, float, float]] = {
+        "fluminense": (1, 64.9, 44.4),
+        "athletico-pr": (1, 45.2, 59.5),
+        "atletico-mg": (1, 43.5, 53.8),
+        "rb-bragantino": (1, 36.8, 56.4),
+        "santos": (1, 51.0, 41.7),
+        "sao-paulo": (1, 48.1, 39.2),
+        "botafogo": (2, 47.4, 35.6),
+        "coritiba": (1, 38.9, 44.4),
+        "vasco": (2, 46.7, 36.1),
+        "vitoria": (1, 31.6, 43.3),
+        "internacional": (1, 34.0, 41.2),
+        "corinthians": (2, 30.8, 42.9),
+        "gremio": (2, 33.3, 40.0),
+        "remo": (2, 24.1, 33.3),
+        "chapecoense": (2, 23.8, 18.5),
+    }
+
+    serie_a_clubs = [club_lookup[t["club_slug"]] for t in OFFICIAL_SERIE_A_2026_DATA if t["club_slug"] in club_lookup]
+
     synced_count = 0
     for idx, off in enumerate(OFFICIAL_SERIE_A_2026_DATA):
         slug = off["club_slug"]
@@ -350,6 +371,25 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
         rng_xg = random.Random(700 + idx)
         finishing_delta = round((pts - 46) * 0.13 + rng_xg.uniform(-3.6, 3.6), 1)
         defending_delta = round(rng_xg.uniform(-2.8, 2.8), 1)
+
+        away_opps = [c for c in serie_a_clubs if c.slug != club.slug]
+        avg_rt_km = (
+            sum(haversine_km(club.latitude, club.longitude, opp.latitude, opp.longitude) for opp in away_opps)
+            / max(1, len(away_opps))
+        ) * 2.0
+        travel_km = round(avg_rt_km * off["away_played"], 0)
+
+        coach_changes, aprov_before, aprov_after = COACH_CHANGE_PROFILES.get(
+            slug, (0, round(aprov_total, 1), round(aprov_total, 1))
+        )
+
+        time_slots = {
+            "Dom 16h": round(min(88.0, max(18.0, aprov_total + rng_xg.uniform(-6.0, 8.5))), 1),
+            "Qua 21h30": round(min(85.0, max(18.0, aprov_total + rng_xg.uniform(-8.0, 7.5))), 1),
+            "Sáb 18h30": round(min(85.0, max(18.0, aprov_total + rng_xg.uniform(-7.0, 7.5))), 1),
+            "Dom 11h": round(min(85.0, max(15.0, aprov_total + rng_xg.uniform(-11.0, 9.0))), 1),
+            "Seg/Sex 20h": round(min(85.0, max(16.0, aprov_total + rng_xg.uniform(-8.0, 8.0))), 1),
+        }
 
         st = SeasonTeam(
             season_id=season.id,
@@ -405,9 +445,9 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
             ga_61_75=bands_ga[4],
             ga_76_90=bands_ga[5],
             ga_85_plus=max(1, int(round(bands_ga[5] * 0.52))),
-            points_vs_g6=max(2, int(round(pts * 0.28))),
+            points_vs_g6=max(2, min(28, int(round(pts * rng_xg.uniform(0.18, 0.34))))),
             played_vs_g6=10,
-            points_vs_z4=max(3, int(round(pts * 0.30))),
+            points_vs_z4=max(3, min(24, int(round(pts * rng_xg.uniform(0.20, 0.36))))),
             played_vs_z4=8,
             xg_for=round(max(14.0, gf - finishing_delta), 1),
             xg_against=round(max(14.0, ga - defending_delta), 1),
@@ -416,12 +456,21 @@ def sync_serie_a_2026_standings(db: Session) -> dict[str, Any]:
             shots_conceded_per_goal=round((11.5 * pl) / max(1, ga), 1),
             possession_avg=round(min(62.0, max(42.0, 48.0 + (pts - 45) * 0.4)), 1),
             clean_sheets=min(pl, max(3, int(round(pl * 0.35 - (ga / pl) * 3.8)))),
-            occupation_rate=round(min(95.0, max(38.0, 68.0 + (pts - 45) * 0.6)), 1),
+            comeback_points=rng_xg.randint(3, 15),
+            points_dropped_leading=rng_xg.randint(2, 14),
+            travel_km=travel_km,
             avg_attendance=int(round(club.capacity * (round(min(95.0, max(38.0, 68.0 + (pts - 45) * 0.6)), 1) / 100.0))),
+            occupation_rate=round(min(95.0, max(38.0, 68.0 + (pts - 45) * 0.6)), 1),
             aprov_synthetic=round(min(85.0, max(20.0, aprov_total + (9.0 if club.turf_type == "Sintético" else -2.5))), 1),
             aprov_natural=round(min(82.0, max(22.0, aprov_total + (-2.0 if club.turf_type == "Sintético" else 2.5))), 1),
+            yellow_cards=rng_xg.randint(62, 96),
+            red_cards=rng_xg.randint(1, 8),
+            coach_changes=coach_changes,
+            aprov_before_coach=aprov_before,
+            aprov_after_coach=aprov_after,
             round_progression_json=json.dumps(round_rank_matrix[slug]),
             remaining_schedule_json=json.dumps(remaining_schedule_map[slug]),
+            time_slots_json=json.dumps(time_slots),
         )
         db.add(st)
         synced_count += 1

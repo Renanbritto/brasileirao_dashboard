@@ -561,18 +561,39 @@ export function TacticsEfficiencyModule({
           </CardHeader>
 
           <CardContent className="space-y-2.5 max-h-[420px] overflow-y-auto">
-            {data.standings
-              .filter((t) => t.coach_changes > 0)
-              .map((t) => {
+            {(() => {
+              const coachChangedTeams = data.standings
+                .filter((t) => t.coach_changes > 0)
+                .sort(
+                  (a, b) =>
+                    b.aprov_after_coach -
+                    b.aprov_before_coach -
+                    (a.aprov_after_coach - a.aprov_before_coach)
+                );
+
+              if (coachChangedTeams.length === 0) {
+                return (
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center text-xs text-slate-500 dark:border-white/10 dark:bg-white/[0.02] dark:text-zinc-400">
+                    Nenhuma troca de comando técnico registrada nesta temporada.
+                  </div>
+                );
+              }
+
+              return coachChangedTeams.map((t) => {
                 const diff = +(
                   t.aprov_after_coach - t.aprov_before_coach
                 ).toFixed(1);
+                const isFav = t.club.slug === favoriteClubSlug;
                 return (
                   <div
                     key={t.club.slug}
-                    className="rounded-xl border border-slate-200 bg-white shadow-sm p-3 dark:border-slate-800 dark:bg-slate-950/60"
+                    className={`rounded-xl border p-3 shadow-sm ${
+                      isFav
+                        ? "border-amber-400/50 bg-amber-500/10"
+                        : "border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950/60"
+                    }`}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <ClubCrest club={t.club} size="sm" />
                         <span className="text-xs font-bold text-slate-900 dark:text-white">
@@ -586,14 +607,23 @@ export function TacticsEfficiencyModule({
                     <div className="mt-2 flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400">
                       <span>Antes: {t.aprov_before_coach}%</span>
                       <span>→</span>
-                      <span className="font-semibold text-emerald-300">
+                      <span
+                        className={`font-semibold ${
+                          diff >= 0
+                            ? "text-emerald-700 dark:text-emerald-300"
+                            : "text-rose-700 dark:text-rose-400"
+                        }`}
+                      >
                         Depois: {t.aprov_after_coach}%
                       </span>
-                      <span>({t.coach_changes}x trocas)</span>
+                      <span>
+                        ({t.coach_changes}x {t.coach_changes === 1 ? "troca" : "trocas"})
+                      </span>
                     </div>
                   </div>
                 );
-              })}
+              });
+            })()}
           </CardContent>
         </Card>
       </div>
