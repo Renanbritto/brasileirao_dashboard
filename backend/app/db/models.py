@@ -175,6 +175,7 @@ class SeasonTeam:
     round_progression_json: str = "[]"
     remaining_schedule_json: str = "[]"
     time_slots_json: str = "{}"
+    last_5_matches_json: str = "[]"
 
     club: Club | None = field(default=None, repr=False)
 

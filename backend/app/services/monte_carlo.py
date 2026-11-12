@@ -298,12 +298,25 @@ def simulate_round_and_probabilities(
             at["points"] += 1
             h_res, a_res = "E", "E"
 
+        sim_base = {
+            "round_number": m.get("round_number"),
+            "home_short": ht["club"].get("short_name", ht["club"].get("name", "")),
+            "away_short": at["club"].get("short_name", at["club"].get("name", "")),
+            "home_name": ht["club"].get("name", ""),
+            "away_name": at["club"].get("name", ""),
+            "home_score": h_score,
+            "away_score": a_score,
+            "simulated": True,
+        }
         for tm, res_char in ((ht, h_res), (at, a_res)):
             seq = (list(tm.get("form_last_5") or []) + [res_char])[-5:]
             tm["form_last_5"] = seq
             pts5 = sum(3 if c == "V" else 1 if c == "E" else 0 for c in seq)
             tm["points_last_5"] = pts5
             tm["aprov_last_5"] = round((pts5 / max(1, len(seq) * 3)) * 100.0, 1)
+            hist5 = list(tm.get("last_5_matches") or [])
+            hist5 = (hist5 + [{**sim_base, "result": res_char}])[-5:]
+            tm["last_5_matches"] = hist5
 
     updated_list = list(team_map.values())
     compute_standings_probabilities(

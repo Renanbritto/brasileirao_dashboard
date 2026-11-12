@@ -72,6 +72,18 @@ export interface SpatialTactics {
   };
 }
 
+export interface Last5MatchDetail {
+  round_number?: number;
+  home_short: string;
+  away_short: string;
+  home_name: string;
+  away_name: string;
+  home_score: number;
+  away_score: number;
+  result: string;
+  simulated?: boolean;
+}
+
 export interface StandingTeam {
   id: number;
   club: Club;
@@ -182,6 +194,7 @@ export interface StandingTeam {
   round_progression: RoundProgressionPoint[];
   remaining_schedule: RemainingScheduleItem[];
   time_slots: Record<string, number>;
+  last_5_matches?: (Last5MatchDetail | null)[];
   spatial_tactics?: SpatialTactics;
 }
 
