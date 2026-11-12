@@ -285,15 +285,25 @@ def simulate_round_and_probabilities(
             ht["wins"] += 1
             ht["points"] += 3
             at["losses"] += 1
+            h_res, a_res = "V", "D"
         elif h_score < a_score:
             at["wins"] += 1
             at["points"] += 3
             ht["losses"] += 1
+            h_res, a_res = "D", "V"
         else:
             ht["draws"] += 1
             at["draws"] += 1
             ht["points"] += 1
             at["points"] += 1
+            h_res, a_res = "E", "E"
+
+        for tm, res_char in ((ht, h_res), (at, a_res)):
+            seq = (list(tm.get("form_last_5") or []) + [res_char])[-5:]
+            tm["form_last_5"] = seq
+            pts5 = sum(3 if c == "V" else 1 if c == "E" else 0 for c in seq)
+            tm["points_last_5"] = pts5
+            tm["aprov_last_5"] = round((pts5 / max(1, len(seq) * 3)) * 100.0, 1)
 
     updated_list = list(team_map.values())
     compute_standings_probabilities(
