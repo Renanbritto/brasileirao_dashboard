@@ -41,13 +41,17 @@ export function DashboardHeader({
           </div>
 
           <div className="flex items-center gap-2 truncate">
-            <span className="text-xs font-black tracking-wider uppercase text-white hidden sm:inline">
-              Brasileirão <span className="text-emerald-400">Analytics</span>
+            <span className="text-xs sm:text-sm font-black tracking-wider uppercase text-white">
+              Futebol <span className="text-emerald-400">Analytics</span>
             </span>
-            <span className="text-zinc-600 font-light hidden sm:inline">/</span>
-            <span className="text-xs sm:text-sm font-bold text-zinc-200 truncate">
-              {currentMod.shortTitle}
-            </span>
+            {activeModule !== "live" && (
+              <>
+                <span className="text-zinc-600 font-light hidden sm:inline">/</span>
+                <span className="text-xs sm:text-sm font-bold text-zinc-200 truncate hidden sm:inline">
+                  {currentMod.shortTitle}
+                </span>
+              </>
+            )}
           </div>
 
           {/* Compact Live Round Pill */}
