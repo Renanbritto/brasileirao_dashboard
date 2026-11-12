@@ -226,6 +226,12 @@ export interface SeasonOverview {
     z4_escape: { points: number; escape_prob: number; relegated_prob: number }[];
     g4_target: { points: number; target_prob: number }[];
   };
+  benchmarks?: {
+    avg_xg_per_game: number;
+    avg_xga_per_game: number;
+    avg_home_gf: number;
+    avg_away_gf: number;
+  };
 }
 
 export interface FanCalculatorResult {

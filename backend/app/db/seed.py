@@ -183,7 +183,7 @@ CLUBS_MASTER = [
         "slug": "athletico-pr", "name": "Athletico-PR", "short_name": "CAP", "state_uf": "PR", "region": "Sul",
         "city": "Curitiba", "stadium_name": "Ligga Arena", "turf_type": "Sintético", "capacity": 42372,
         "latitude": -25.4483, "longitude": -49.2769, "primary_color": "#dc2626", "secondary_color": "#111111",
-        "yo_yo_index": 3, "promotions_to_a": 1, "relegations_to_b": 2, "immediate_returns": 1,
+        "yo_yo_index": 4, "promotions_to_a": 2, "relegations_to_b": 2, "immediate_returns": 2,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 22, "seasons_in_b": 2,
         "div_2026": "A", "base_strength": 82
     },
@@ -231,8 +231,8 @@ CLUBS_MASTER = [
         "slug": "coritiba", "name": "Coritiba", "short_name": "CFC", "state_uf": "PR", "region": "Sul",
         "city": "Curitiba", "stadium_name": "Couto Pereira", "turf_type": "Natural", "capacity": 40502,
         "latitude": -25.4211, "longitude": -49.2597, "primary_color": "#15803d", "secondary_color": "#ffffff",
-        "yo_yo_index": 11, "promotions_to_a": 5, "relegations_to_b": 6, "immediate_returns": 3,
-        "titles_serie_a": 0, "titles_serie_b": 2, "seasons_in_a": 15, "seasons_in_b": 9,
+        "yo_yo_index": 12, "promotions_to_a": 6, "relegations_to_b": 6, "immediate_returns": 4,
+        "titles_serie_a": 0, "titles_serie_b": 3, "seasons_in_a": 15, "seasons_in_b": 9,
         "div_2026": "A", "base_strength": 74
     },
     {
@@ -272,8 +272,8 @@ CLUBS_MASTER = [
         "city": "Manaus", "stadium_name": "Arena da Amazônia", "turf_type": "Natural", "capacity": 44000,
         "latitude": -3.0831, "longitude": -60.0281, "primary_color": "#eab308", "secondary_color": "#111111",
         "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
-        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 3,
-        "div_2026": "B", "base_strength": 69
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 2,
+        "div_2026": "C", "base_strength": 66
     },
     {
         "slug": "paysandu", "name": "Paysandu", "short_name": "PAY", "state_uf": "PA", "region": "Norte",
@@ -281,14 +281,14 @@ CLUBS_MASTER = [
         "latitude": -1.4439, "longitude": -48.4631, "primary_color": "#38bdf8", "secondary_color": "#ffffff",
         "yo_yo_index": 1, "promotions_to_a": 0, "relegations_to_b": 1, "immediate_returns": 0,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 3, "seasons_in_b": 10,
-        "div_2026": "B", "base_strength": 68
+        "div_2026": "C", "base_strength": 65
     },
     {
         "slug": "remo", "name": "Clube do Remo", "short_name": "REM", "state_uf": "PA", "region": "Norte",
         "city": "Belém", "stadium_name": "Baenão", "turf_type": "Natural", "capacity": 13792,
         "latitude": -1.4483, "longitude": -48.4614, "primary_color": "#1e3a8a", "secondary_color": "#ffffff",
-        "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
-        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 5,
+        "yo_yo_index": 1, "promotions_to_a": 1, "relegations_to_b": 0, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 1, "seasons_in_b": 5,
         "div_2026": "A", "base_strength": 67
     },
     {
@@ -338,6 +338,63 @@ CLUBS_MASTER = [
         "yo_yo_index": 4, "promotions_to_a": 2, "relegations_to_b": 2, "immediate_returns": 0,
         "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 5, "seasons_in_b": 12,
         "div_2026": "B", "base_strength": 63
+    },
+    {
+        "slug": "sao-bernardo", "name": "São Bernardo", "short_name": "SBE", "state_uf": "SP", "region": "Sudeste",
+        "city": "São Bernardo do Campo", "stadium_name": "Primeiro de Maio", "turf_type": "Natural", "capacity": 15759,
+        "latitude": -23.7044, "longitude": -46.5494, "primary_color": "#eab308", "secondary_color": "#111111",
+        "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 1,
+        "div_2026": "B", "base_strength": 66
+    },
+    {
+        "slug": "londrina", "name": "Londrina", "short_name": "LON", "state_uf": "PR", "region": "Sul",
+        "city": "Londrina", "stadium_name": "Estádio do Café", "turf_type": "Natural", "capacity": 30000,
+        "latitude": -23.2794, "longitude": -51.1636, "primary_color": "#0ea5e9", "secondary_color": "#ffffff",
+        "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 10,
+        "div_2026": "B", "base_strength": 63
+    },
+    # --- CLUBES PRESENTES EM EDICOES ANTERIORES (2024 / 2025) ---
+    {
+        "slug": "ituano", "name": "Ituano", "short_name": "ITU", "state_uf": "SP", "region": "Sudeste",
+        "city": "Itu", "stadium_name": "Novelli Júnior", "turf_type": "Natural", "capacity": 18560,
+        "latitude": -23.2797, "longitude": -47.2917, "primary_color": "#dc2626", "secondary_color": "#111111",
+        "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 4,
+        "div_2026": "C", "base_strength": 62
+    },
+    {
+        "slug": "brusque", "name": "Brusque", "short_name": "BRU", "state_uf": "SC", "region": "Sul",
+        "city": "Brusque", "stadium_name": "Augusto Bauer", "turf_type": "Natural", "capacity": 5000,
+        "latitude": -27.1008, "longitude": -48.9175, "primary_color": "#eab308", "secondary_color": "#16a34a",
+        "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 3,
+        "div_2026": "C", "base_strength": 61
+    },
+    {
+        "slug": "guarani", "name": "Guarani", "short_name": "GUA", "state_uf": "SP", "region": "Sudeste",
+        "city": "Campinas", "stadium_name": "Brinco de Ouro", "turf_type": "Natural", "capacity": 29130,
+        "latitude": -22.9094, "longitude": -47.0439, "primary_color": "#15803d", "secondary_color": "#ffffff",
+        "yo_yo_index": 2, "promotions_to_a": 1, "relegations_to_b": 1, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 3, "seasons_in_b": 15,
+        "div_2026": "C", "base_strength": 61
+    },
+    {
+        "slug": "ferroviaria", "name": "Ferroviária", "short_name": "FER", "state_uf": "SP", "region": "Sudeste",
+        "city": "Araraquara", "stadium_name": "Fonte Luminosa", "turf_type": "Natural", "capacity": 20950,
+        "latitude": -21.7717, "longitude": -48.1694, "primary_color": "#7f1d1d", "secondary_color": "#ffffff",
+        "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 1,
+        "div_2026": "C", "base_strength": 62
+    },
+    {
+        "slug": "volta-redonda", "name": "Volta Redonda", "short_name": "VOL", "state_uf": "RJ", "region": "Sudeste",
+        "city": "Volta Redonda", "stadium_name": "Raulino de Oliveira", "turf_type": "Natural", "capacity": 20255,
+        "latitude": -22.5078, "longitude": -44.0972, "primary_color": "#eab308", "secondary_color": "#111111",
+        "yo_yo_index": 0, "promotions_to_a": 0, "relegations_to_b": 0, "immediate_returns": 0,
+        "titles_serie_a": 0, "titles_serie_b": 0, "seasons_in_a": 0, "seasons_in_b": 1,
+        "div_2026": "C", "base_strength": 61
     },
 ]
 
@@ -941,23 +998,45 @@ def seed_division_history(db: Session):
     years = list(range(2015, 2027))
 
     trajectories = {
-        "coritiba":    [("A",15),("A",15),("A",17),("B",10),("B",3),("A",19),("B",3),("A",15),("A",19),("B",12),("B",7),("B",7)],
-        "goias":       [("A",19),("B",13),("B",14),("B",4),("A",10),("A",18),("B",2),("A",13),("A",18),("B",6),("B",5),("B",4)],
-        "america-mg":  [("B",4),("A",20),("B",1),("A",18),("B",5),("B",2),("A",8),("A",10),("A",20),("B",8),("B",6),("B",8)],
-        "sport":       [("A",6),("A",14),("A",15),("A",17),("B",2),("A",15),("A",19),("B",7),("B",7),("B",3),("A",15),("A",17)],
-        "vitoria":     [("B",3),("A",16),("A",16),("A",19),("B",12),("B",14),("B",18),("C",4),("B",1),("A",11),("A",13),("A",15)],
-        "avai":        [("A",17),("B",2),("A",18),("B",3),("A",20),("B",9),("B",4),("A",19),("B",13),("B",10),("B",9),("B",11)],
-        "atletico-go": [("B",14),("B",1),("A",20),("B",6),("B",4),("A",13),("A",9),("A",18),("B",4),("A",19),("B",5),("B",5)],
-        "vasco":       [("A",18),("B",3),("A",7),("A",16),("A",12),("A",17),("B",10),("B",4),("A",15),("A",10),("A",11),("A",11)],
-        "bahia":       [("B",9),("B",4),("A",12),("A",11),("A",11),("A",14),("A",18),("B",3),("A",16),("A",8),("A",7),("A",8)],
-        "fortaleza":   [("C",5),("C",6),("C",2),("B",1),("A",9),("A",16),("A",4),("A",8),("A",10),("A",4),("A",5),("A",4)],
-        "ceara":       [("B",15),("B",10),("B",3),("A",15),("A",16),("A",11),("A",11),("A",17),("B",11),("B",4),("A",16),("A",18)],
-        "criciuma":    [("B",12),("B",8),("B",13),("B",14),("B",19),("C",16),("C",4),("B",8),("B",3),("A",17),("B",3),("B",2)],
-        "juventude":   [("C",11),("C",4),("B",9),("B",19),("C",3),("B",3),("A",16),("A",20),("B",2),("A",15),("A",16),("A",19)],
-        "cruzeiro":    [("A",8),("A",12),("A",5),("A",8),("A",17),("B",11),("B",14),("B",1),("A",14),("A",9),("A",8),("A",9)],
-        "botafogo":    [("B",1),("A",5),("A",10),("A",9),("A",15),("A",20),("B",1),("A",11),("A",5),("A",1),("A",3),("A",3)],
-        "palmeiras":   [("A",9),("A",1),("A",2),("A",1),("A",3),("A",7),("A",3),("A",1),("A",1),("A",2),("A",1),("A",1)],
-        "flamengo":    [("A",12),("A",3),("A",6),("A",2),("A",1),("A",1),("A",2),("A",5),("A",4),("A",3),("A",2),("A",2)],
+        "coritiba":     [("A",15),("A",15),("A",17),("B",10),("B",3),("A",19),("B",3),("A",15),("A",19),("B",12),("B",1),("A",12)],
+        "goias":        [("A",19),("B",13),("B",14),("B",4),("A",10),("A",18),("B",2),("A",13),("A",18),("B",6),("B",6),("B",7)],
+        "america-mg":   [("B",4),("A",20),("B",1),("A",18),("B",5),("B",2),("A",8),("A",10),("A",20),("B",8),("B",14),("B",19)],
+        "sport":        [("A",6),("A",14),("A",15),("A",17),("B",2),("A",15),("A",19),("B",7),("B",7),("B",3),("A",20),("B",9)],
+        "vitoria":      [("B",3),("A",16),("A",16),("A",19),("B",12),("B",14),("B",18),("C",4),("B",1),("A",11),("A",15),("A",15)],
+        "avai":         [("A",17),("B",2),("A",18),("B",3),("A",20),("B",9),("B",4),("A",19),("B",13),("B",10),("B",9),("B",17)],
+        "atletico-go":  [("B",14),("B",1),("A",20),("B",6),("B",4),("A",13),("A",9),("A",18),("B",4),("A",19),("B",11),("B",8)],
+        "vasco":        [("A",18),("B",3),("A",7),("A",16),("A",12),("A",17),("B",10),("B",4),("A",15),("A",10),("A",14),("A",13)],
+        "bahia":        [("B",9),("B",4),("A",12),("A",11),("A",11),("A",14),("A",18),("B",3),("A",16),("A",8),("A",7),("A",6)],
+        "fortaleza":    [("C",5),("C",6),("C",2),("B",1),("A",9),("A",16),("A",4),("A",8),("A",10),("A",4),("A",18),("B",5)],
+        "ceara":        [("B",15),("B",10),("B",3),("A",15),("A",16),("A",11),("A",11),("A",17),("B",11),("B",4),("A",17),("B",16)],
+        "criciuma":     [("B",12),("B",8),("B",13),("B",14),("B",19),("C",16),("C",4),("B",8),("B",3),("A",18),("B",5),("B",4)],
+        "juventude":    [("C",11),("C",4),("B",9),("B",19),("C",3),("B",3),("A",16),("A",20),("B",2),("A",15),("A",19),("B",2)],
+        "cruzeiro":     [("A",8),("A",12),("A",5),("A",8),("A",17),("B",11),("B",14),("B",1),("A",14),("A",9),("A",3),("A",3)],
+        "botafogo":     [("B",1),("A",5),("A",10),("A",9),("A",15),("A",20),("B",1),("A",11),("A",5),("A",1),("A",6),("A",11)],
+        "palmeiras":    [("A",9),("A",1),("A",2),("A",1),("A",3),("A",7),("A",3),("A",1),("A",1),("A",2),("A",2),("A",2)],
+        "flamengo":     [("A",12),("A",3),("A",6),("A",2),("A",1),("A",1),("A",2),("A",5),("A",4),("A",3),("A",1),("A",1)],
+        "santos":       [("A",7),("A",2),("A",3),("A",10),("A",2),("A",8),("A",10),("A",12),("A",17),("B",1),("A",12),("A",9)],
+        "athletico-pr": [("A",10),("A",6),("A",11),("A",7),("A",5),("A",9),("A",14),("A",6),("A",8),("A",17),("B",2),("A",5)],
+        "chapecoense":  [("A",14),("A",11),("A",8),("A",14),("A",19),("B",1),("A",20),("B",14),("B",16),("B",15),("B",3),("A",20)],
+    }
+
+    exact_pts = {
+        ("botafogo", 2024): 79, ("palmeiras", 2024): 73, ("flamengo", 2024): 70, ("fortaleza", 2024): 68,
+        ("cruzeiro", 2024): 52, ("bahia", 2024): 53, ("vasco", 2024): 50, ("vitoria", 2024): 47,
+        ("juventude", 2024): 45, ("athletico-pr", 2024): 42, ("criciuma", 2024): 38, ("atletico-go", 2024): 30,
+        ("santos", 2024): 68, ("sport", 2024): 66, ("ceara", 2024): 64, ("goias", 2024): 63,
+        ("america-mg", 2024): 58, ("avai", 2024): 53, ("coritiba", 2024): 50, ("chapecoense", 2024): 44,
+        ("flamengo", 2025): 79, ("palmeiras", 2025): 76, ("cruzeiro", 2025): 70, ("botafogo", 2025): 63,
+        ("bahia", 2025): 60, ("santos", 2025): 47, ("vasco", 2025): 45, ("vitoria", 2025): 45,
+        ("ceara", 2025): 43, ("fortaleza", 2025): 43, ("juventude", 2025): 35, ("sport", 2025): 17,
+        ("coritiba", 2025): 68, ("athletico-pr", 2025): 65, ("chapecoense", 2025): 62, ("criciuma", 2025): 61,
+        ("goias", 2025): 61, ("avai", 2025): 56, ("atletico-go", 2025): 52, ("america-mg", 2025): 46,
+        ("flamengo", 2026): 76, ("palmeiras", 2026): 73, ("cruzeiro", 2026): 60, ("athletico-pr", 2026): 54,
+        ("bahia", 2026): 53, ("santos", 2026): 47, ("botafogo", 2026): 42, ("coritiba", 2026): 42,
+        ("vasco", 2026): 41, ("vitoria", 2026): 38, ("chapecoense", 2026): 23,
+        ("juventude", 2026): 68, ("criciuma", 2026): 62, ("fortaleza", 2026): 62, ("goias", 2026): 58,
+        ("atletico-go", 2026): 58, ("sport", 2026): 55, ("ceara", 2026): 43, ("avai", 2026): 40,
+        ("america-mg", 2026): 29,
     }
 
     for slug, hist in trajectories.items():
@@ -978,7 +1057,7 @@ def seed_division_history(db: Session):
             else:
                 outcome = "PERMANENCIA"
 
-            pts = max(32, 84 - pos * 2)
+            pts = exact_pts.get((slug, yr), max(32, 84 - pos * 2))
             db.add(
                 DivisionHistory(
                     club_id=c_id,
@@ -1005,27 +1084,28 @@ def ensure_seeded(db: Session):
     clubs_b = [c for c in CLUBS_MASTER if c["div_2026"] == "B"]
 
     season_specs = [
-        {"year": 2026, "division": "A", "is_current": True, "current_round": 34, "seed": 202601},
-        {"year": 2026, "division": "B", "is_current": True, "current_round": 34, "seed": 202602},
-        {"year": 2025, "division": "A", "is_current": False, "current_round": 38, "seed": 202501},
-        {"year": 2025, "division": "B", "is_current": False, "current_round": 38, "seed": 202502},
-        {"year": 2024, "division": "A", "is_current": False, "current_round": 38, "seed": 202401},
-        {"year": 2024, "division": "B", "is_current": False, "current_round": 38, "seed": 202402},
+        {"year": 2026, "division": "A", "is_current": True, "current_round": 34, "seed": 202601, "magic": (82, 63, 58, 47, 45)},
+        {"year": 2026, "division": "B", "is_current": True, "current_round": 37, "seed": 202602, "magic": (72, 64, 60, 52, 44)},
+        {"year": 2025, "division": "A", "is_current": False, "current_round": 38, "seed": 202501, "magic": (79, 67, 63, 47, 44)},
+        {"year": 2025, "division": "B", "is_current": False, "current_round": 38, "seed": 202502, "magic": (68, 62, 61, 48, 42)},
+        {"year": 2024, "division": "A", "is_current": False, "current_round": 38, "seed": 202401, "magic": (79, 68, 59, 47, 44)},
+        {"year": 2024, "division": "B", "is_current": False, "current_round": 38, "seed": 202402, "magic": (68, 64, 63, 50, 43)},
     ]
 
     for spec in season_specs:
         div = spec["division"]
+        m_title, m_g4, m_g6, m_sula, m_z4 = spec["magic"]
         season = Season(
             year=spec["year"],
             division=div,
             is_current=spec["is_current"],
             current_round=spec["current_round"],
             total_rounds=38,
-            magic_title_pts=82 if (div == "A" and spec["year"] == 2026) else (77 if div == "A" else 72),
-            magic_g4_pts=63 if div == "A" else 64,
-            magic_g6_pts=58 if div == "A" else 60,
-            magic_sula_pts=47 if div == "A" else 50,
-            magic_escape_z4_pts=45 if div == "A" else 44,
+            magic_title_pts=m_title,
+            magic_g4_pts=m_g4,
+            magic_g6_pts=m_g6,
+            magic_sula_pts=m_sula,
+            magic_escape_z4_pts=m_z4,
         )
         db.add(season)
         db.commit()
@@ -1038,5 +1118,5 @@ def ensure_seeded(db: Session):
     seed_division_history(db)
     db.commit()
 
-    from app.services.table_sync import sync_serie_a_2026_standings
-    sync_serie_a_2026_standings(db)
+    from app.services.table_sync import sync_all_official_seasons
+    sync_all_official_seasons(db)

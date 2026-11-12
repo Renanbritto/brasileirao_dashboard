@@ -80,14 +80,15 @@ export function LiveSeasonModule({
   );
 
   useEffect(() => {
-    if (favoriteClubSlug) {
-      const existsInDiv = data.standings.some(
-        (t) => t.club.slug === favoriteClubSlug
-      );
-      if (existsInDiv) {
-        setCalcClubSlug(favoriteClubSlug);
-      }
-    } else if (data.standings.length > 0) {
+    const favInDiv =
+      favoriteClubSlug &&
+      data.standings.some((t) => t.club.slug === favoriteClubSlug);
+    if (favInDiv) {
+      setCalcClubSlug(favoriteClubSlug);
+    } else if (
+      data.standings.length > 0 &&
+      !data.standings.some((t) => t.club.slug === calcClubSlug)
+    ) {
       setCalcClubSlug(data.standings[0].club.slug);
     }
     setSimulatedStandings(null);
@@ -205,6 +206,15 @@ export function LiveSeasonModule({
   const simulatedCount = Object.values(simScores).filter(
     (s) => s.home !== "" && s.away !== ""
   ).length;
+
+  const remainingRounds = Math.max(
+    0,
+    data.season.total_rounds - data.season.current_round
+  );
+  const z4SafeProb =
+    data.magic_curves.z4_escape.find(
+      (p) => p.points === data.season.magic_escape_z4_pts
+    )?.escape_prob ?? (division === "A" ? 98.2 : 94.5);
 
   function getZoneStyle(pos: number) {
     if (division === "A") {
@@ -339,7 +349,7 @@ export function LiveSeasonModule({
                   <strong className="font-mono text-rose-300">
                     {data.season.magic_escape_z4_pts} pts
                   </strong>{" "}
-                  (98,2% salvos)
+                  ({z4SafeProb.toFixed(1).replace(".", ",")}% salvos)
                 </p>
               </div>
               <div className="text-right">
@@ -358,8 +368,9 @@ export function LiveSeasonModule({
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-amber-400">
-                Tensão da Rodada{" "}
-                {data.season.current_round + (data.season.is_current ? 1 : 0)}
+                {data.season.is_current
+                  ? `Tensão da Rodada ${data.round_matches[0]?.round_number ?? data.season.current_round + 1}`
+                  : `Fechamento • Rodada ${data.season.current_round}/${data.season.total_rounds}`}
               </span>
               <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-amber-400">
                 <Flame className="h-4 w-4" />
@@ -368,17 +379,32 @@ export function LiveSeasonModule({
             <div className="mt-3 flex items-end justify-between">
               <div>
                 <p className="text-xl font-extrabold tracking-tight text-white">
-                  {sixPointersCount} Jogos de &ldquo;6 Pontos&rdquo;
+                  {data.season.is_current
+                    ? `${sixPointersCount} Jogos de "6 Pontos"`
+                    : `Edição ${year} Finalizada`}
                 </p>
                 <p className="mt-0.5 text-xs text-zinc-400">
-                  Restam{" "}
-                  <strong className="font-mono text-amber-300">
-                    {data.season.total_rounds - data.season.current_round} rodadas
-                  </strong>{" "}
-                  ({(data.season.total_rounds - data.season.current_round) * 3} pts em jogo)
+                  {data.season.is_current ? (
+                    <>
+                      Restam{" "}
+                      <strong className="font-mono text-amber-300">
+                        {remainingRounds} {remainingRounds === 1 ? "rodada" : "rodadas"}
+                      </strong>{" "}
+                      ({remainingRounds * 3} pts em jogo)
+                    </>
+                  ) : (
+                    <>
+                      Temporada encerrada em{" "}
+                      <strong className="font-mono text-amber-300">
+                        {data.season.current_round}/{data.season.total_rounds} rodadas
+                      </strong>
+                    </>
+                  )}
                 </p>
               </div>
-              <Badge variant="warning">Simulador Ativo</Badge>
+              <Badge variant={data.season.is_current ? "warning" : "info"}>
+                {data.season.is_current ? "Simulador Ativo" : "Edição Encerrada"}
+              </Badge>
             </div>
           </CardContent>
         </Card>
@@ -664,25 +690,27 @@ export function LiveSeasonModule({
 
                             {/* GP (Gols Pró) */}
                             <TableCell className="text-center font-mono text-xs text-zinc-300">
-                              {gfShow}
+                              {isForm5 ? "—" : gfShow}
                             </TableCell>
 
                             {/* GC (Gols Contra) */}
                             <TableCell className="text-center font-mono text-xs text-zinc-400">
-                              {gaShow}
+                              {isForm5 ? "—" : gaShow}
                             </TableCell>
 
                             {/* SG (Saldo de Gols) */}
                             <TableCell
                               className={`text-center font-mono text-xs font-bold ${
-                                sgShow > 0
+                                isForm5
+                                  ? "text-zinc-400"
+                                  : sgShow > 0
                                   ? "text-emerald-400"
                                   : sgShow < 0
                                   ? "text-rose-400"
                                   : "text-zinc-400"
                               }`}
                             >
-                              {sgShow > 0 ? `+${sgShow}` : sgShow}
+                              {isForm5 ? "—" : sgShow > 0 ? `+${sgShow}` : sgShow}
                             </TableCell>
 
                             {/* % Aproveitamento */}
@@ -715,14 +743,16 @@ export function LiveSeasonModule({
                             {/* SG (Saldo) */}
                             <TableCell
                               className={`text-center font-mono text-xs font-bold ${
-                                team.goal_diff > 0
+                                isForm5
+                                  ? "text-zinc-400"
+                                  : sgShow > 0
                                   ? "text-emerald-400"
-                                  : team.goal_diff < 0
+                                  : sgShow < 0
                                   ? "text-rose-400"
                                   : "text-zinc-400"
                               }`}
                             >
-                              {team.goal_diff > 0 ? `+${team.goal_diff}` : team.goal_diff}
+                              {isForm5 ? "—" : sgShow > 0 ? `+${sgShow}` : sgShow}
                             </TableCell>
 
                             {/* % Aproveitamento */}
@@ -738,10 +768,10 @@ export function LiveSeasonModule({
                                     key={i}
                                     className={`flex h-4 w-4 items-center justify-center rounded-md text-[9px] font-extrabold ${
                                       res === "V"
-                                        ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.2)]"
+                                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-400/40 dark:shadow-[0_0_8px_rgba(16,185,129,0.2)]"
                                         : res === "E"
-                                        ? "bg-white/[0.06] text-zinc-300 border border-white/10"
-                                        : "bg-rose-500/20 text-rose-300 border border-rose-400/40"
+                                        ? "bg-slate-200 text-slate-700 border border-slate-300 dark:bg-white/[0.06] dark:text-zinc-300 dark:border-white/10"
+                                        : "bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/40"
                                     }`}
                                   >
                                     {res}
@@ -877,45 +907,54 @@ export function LiveSeasonModule({
                   <Gamepad2 className="h-4 w-4" />
                 </div>
                 <CardTitle className="text-base sm:text-lg">
-                  Simulador da Rodada {data.round_matches[0]?.round_number || 33}{" "}
-                  (&ldquo;Secador Oficial&rdquo;)
+                  {data.season.is_current
+                    ? `Simulador da Rodada ${data.round_matches[0]?.round_number ?? data.season.current_round + 1} ("Secador Oficial")`
+                    : `Resultados da Rodada ${data.round_matches[0]?.round_number ?? data.season.total_rounds} (${year} Final)`}
                 </CardTitle>
               </div>
-              {isSimulating && (
-                <span className="text-xs font-bold text-emerald-400 animate-pulse">
-                  Recalculando...
-                </span>
+              {data.season.is_current ? (
+                isSimulating && (
+                  <span className="text-xs font-bold text-emerald-400 animate-pulse">
+                    Recalculando...
+                  </span>
+                )
+              ) : (
+                <Badge variant="info">Placar Oficial Definitivo</Badge>
               )}
             </div>
             <CardDescription className="text-xs">
-              Altere os placares abaixo e veja a Tabela e as Probabilidades Monte Carlo mudarem em tempo real!
+              {data.season.is_current
+                ? "Altere os placares abaixo e veja a Tabela e as Probabilidades Monte Carlo mudarem em tempo real!"
+                : `Placares definitivos da ${data.season.total_rounds}ª rodada da Série ${division} ${year} (edição encerrada).`}
             </CardDescription>
 
-            {/* Quick Simulator Action Buttons */}
-            <div className="mt-2 flex flex-wrap gap-2">
-              <Button
-                size="sm"
-                variant="default"
-                onClick={() => fillAiPredictions(false)}
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-                Palpites IA (Favoritos)
-              </Button>
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={() => fillAiPredictions(true)}
-              >
-                <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
-                Simular Rodada de Zebras
-              </Button>
-              {simulatedCount > 0 && (
-                <Button size="sm" variant="outline" onClick={resetSimulation}>
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  Limpar ({simulatedCount})
+            {/* Quick Simulator Action Buttons (Live Season Only) */}
+            {data.season.is_current && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={() => fillAiPredictions(false)}
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Palpites IA (Favoritos)
                 </Button>
-              )}
-            </div>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => fillAiPredictions(true)}
+                >
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
+                  Simular Rodada de Zebras
+                </Button>
+                {simulatedCount > 0 && (
+                  <Button size="sm" variant="outline" onClick={resetSimulation}>
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    Limpar ({simulatedCount})
+                  </Button>
+                )}
+              </div>
+            )}
           </CardHeader>
 
           <CardContent className="flex flex-1 flex-col pt-0 pb-4">
@@ -964,31 +1003,43 @@ export function LiveSeasonModule({
                       </div>
 
                       {/* Score Box */}
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          min={0}
-                          max={9}
-                          placeholder="-"
-                          value={score.home}
-                          onChange={(e) =>
-                            handleScoreChange(match.id, "home", e.target.value)
-                          }
-                          className="obsidian-well h-8 w-10 rounded-lg text-center font-mono text-xs font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
-                        />
-                        <span className="text-[11px] font-bold text-zinc-500">×</span>
-                        <input
-                          type="number"
-                          min={0}
-                          max={9}
-                          placeholder="-"
-                          value={score.away}
-                          onChange={(e) =>
-                            handleScoreChange(match.id, "away", e.target.value)
-                          }
-                          className="obsidian-well h-8 w-10 rounded-lg text-center font-mono text-xs font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
-                        />
-                      </div>
+                      {data.season.is_current && match.status === "SCHEDULED" ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            min={0}
+                            max={9}
+                            placeholder="-"
+                            value={score.home}
+                            onChange={(e) =>
+                              handleScoreChange(match.id, "home", e.target.value)
+                            }
+                            className="obsidian-well h-8 w-10 rounded-lg text-center font-mono text-xs font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
+                          />
+                          <span className="text-[11px] font-bold text-zinc-500">×</span>
+                          <input
+                            type="number"
+                            min={0}
+                            max={9}
+                            placeholder="-"
+                            value={score.away}
+                            onChange={(e) =>
+                              handleScoreChange(match.id, "away", e.target.value)
+                            }
+                            className="obsidian-well h-8 w-10 rounded-lg text-center font-mono text-xs font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5">
+                          <span className="obsidian-well flex h-8 w-9 items-center justify-center rounded-lg font-mono text-sm font-extrabold text-white">
+                            {match.home_score ?? "-"}
+                          </span>
+                          <span className="text-[11px] font-bold text-zinc-500">×</span>
+                          <span className="obsidian-well flex h-8 w-9 items-center justify-center rounded-lg font-mono text-sm font-extrabold text-white">
+                            {match.away_score ?? "-"}
+                          </span>
+                        </div>
+                      )}
 
                       {/* Away Club */}
                       <div className="flex min-w-0 items-center gap-2 text-left">
@@ -1095,26 +1146,26 @@ export function LiveSeasonModule({
                 >
                   <option value="Z4" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
-                      ? "Escapar do Z4 (45 pts)"
-                      : "Permanência Série B (44 pts)"}
+                      ? `Escapar do Z4 (${data.season.magic_escape_z4_pts} pts)`
+                      : `Permanência Série B (${data.season.magic_escape_z4_pts} pts)`}
                   </option>
                   <option value="SULA" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
-                      ? "Sul-Americana (47 pts)"
-                      : "Metade Superior (50 pts)"}
+                      ? `Sul-Americana (${data.season.magic_sula_pts} pts)`
+                      : `Metade Superior (${data.season.magic_sula_pts} pts)`}
                   </option>
                   <option value="G6" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
-                      ? "Pré-Libertadores G6 (57 pts)"
-                      : "Briga pelo Acesso Top 6 (60 pts)"}
+                      ? `Pré-Libertadores G6 (${data.season.magic_g6_pts} pts)`
+                      : `Briga pelo Acesso Top 6 (${data.season.magic_g6_pts} pts)`}
                   </option>
                   <option value="G4" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
                     {division === "A"
-                      ? "Libertadores Direta G4 (62 pts)"
-                      : "Acesso à Série A G4 (64 pts)"}
+                      ? `Libertadores Direta G4 (${data.season.magic_g4_pts} pts)`
+                      : `Acesso à Série A G4 (${data.season.magic_g4_pts} pts)`}
                   </option>
                   <option value="TITULO" className="bg-white text-slate-900 dark:bg-[#090c14] dark:text-zinc-100">
-                    Título ({division === "A" ? "77 pts" : "72 pts"})
+                    Título ({data.season.magic_title_pts} pts)
                   </option>
                 </select>
               </div>
@@ -1132,14 +1183,24 @@ export function LiveSeasonModule({
                       (<span className="font-mono">{calcResult.target_points}</span>{" "}
                       pts)
                     </p>
-                    <p className="text-lg font-extrabold text-white mt-0.5">
-                      Precisa somar{" "}
-                      <span className="font-mono text-amber-400">
-                        +{calcResult.points_needed} pts
-                      </span>{" "}
-                      em <span className="font-mono">{calcResult.remaining_games}</span>{" "}
-                      jogos
-                    </p>
+                    {calcResult.remaining_games > 0 ? (
+                      <p className="text-lg font-extrabold text-white mt-0.5">
+                        Precisa somar{" "}
+                        <span className="font-mono text-amber-400">
+                          +{calcResult.points_needed} pts
+                        </span>{" "}
+                        em <span className="font-mono">{calcResult.remaining_games}</span>{" "}
+                        {calcResult.remaining_games === 1 ? "jogo" : "jogos"}
+                      </p>
+                    ) : (
+                      <p className="text-lg font-extrabold text-white mt-0.5">
+                        Campanha final:{" "}
+                        <span className="font-mono text-amber-400">
+                          {calcResult.current_points} pts
+                        </span>{" "}
+                        em {data.season.total_rounds} jogos
+                      </p>
+                    )}
                   </div>
                   <Badge
                     variant={
@@ -1226,8 +1287,10 @@ export function LiveSeasonModule({
                 </div>
 
                 <p className="text-xs text-zinc-300 leading-relaxed border-t border-white/[0.06] pt-3">
-                  {calcResult.explanation} ({calcResult.remaining_home} jogos em
-                  Casa e {calcResult.remaining_away} Fora).
+                  {calcResult.explanation}
+                  {calcResult.remaining_games > 0
+                    ? ` (${calcResult.remaining_home} ${calcResult.remaining_home === 1 ? "jogo em Casa" : "jogos em Casa"} e ${calcResult.remaining_away} Fora).`
+                    : ""}
                 </p>
               </div>
             )}
@@ -1247,19 +1310,30 @@ export function LiveSeasonModule({
                 </CardTitle>
               </div>
               <Badge variant="info" className="font-mono">
-                Rodadas 33 a 38
+                {data.season.is_current && remainingRounds > 0
+                  ? remainingRounds === 1
+                    ? `Rodada ${data.season.total_rounds}`
+                    : `Rodadas ${data.season.current_round + 1} a ${data.season.total_rounds}`
+                  : "Calendário Concluído"}
               </Badge>
             </div>
             <CardDescription>
-              Quem enfrenta um &ldquo;corredor polonês&rdquo; e quem tem a tabela mais acessível nas 6 rodadas finais (C = Casa, F = Fora, 6P = Jogo de 6 Pontos)
+              {data.season.is_current && remainingRounds > 0
+                ? `Quem enfrenta o caminho mais duro e quem tem a tabela mais acessível ${
+                    remainingRounds === 1
+                      ? "na rodada decisiva"
+                      : `nas ${remainingRounds} rodadas finais`
+                  } (C = Casa, F = Fora, 6P = Jogo de 6 Pontos)`
+                : `Temporada Série ${division} ${year} encerrada após 38/38 rodadas. Não há confrontos restantes nesta edição.`}
             </CardDescription>
           </CardHeader>
 
           <CardContent className="max-h-[420px] overflow-y-auto pr-2">
-            <div className="space-y-2">
-              {[...activeStandings]
-                .sort((a, b) => b.sos_score - a.sos_score)
-                .map((team) => {
+            {data.season.is_current && remainingRounds > 0 ? (
+              <div className="space-y-2">
+                {[...activeStandings]
+                  .sort((a, b) => b.sos_score - a.sos_score)
+                  .map((team) => {
                   const isFav = team.club.slug === favoriteClubSlug;
                   return (
                     <div
@@ -1321,7 +1395,18 @@ export function LiveSeasonModule({
                     </div>
                   );
                 })}
-            </div>
+              </div>
+            ) : (
+              <div className="obsidian-subcard flex flex-col items-center justify-center rounded-2xl p-8 text-center">
+                <Trophy className="h-8 w-8 text-emerald-400 mb-2" />
+                <p className="text-sm font-extrabold text-white">
+                  Temporada Série {division} {year} encerrada (38/38 rodadas)
+                </p>
+                <p className="mt-1 max-w-md text-xs text-zinc-400">
+                  Todos os confrontos desta edição foram concluídos. Selecione a edição 2026 (Ao Vivo) para simular a reta final e acompanhar a dificuldade de calendário.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

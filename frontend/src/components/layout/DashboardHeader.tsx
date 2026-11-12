@@ -65,9 +65,17 @@ export function DashboardHeader({
           </div>
 
           {/* Compact Live Round Pill */}
-          <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-400 shrink-0">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            {isCurrentSeason ? `Rodada ${currentRound}/38` : `Edição ${year}`}
+          <div
+            className={`flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider shrink-0 ${
+              isCurrentSeason
+                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                : "border-slate-300 bg-slate-100 text-slate-700 dark:border-white/[0.12] dark:bg-white/[0.04] dark:text-zinc-300"
+            }`}
+          >
+            {isCurrentSeason && (
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            )}
+            {isCurrentSeason ? `Rodada ${currentRound}/38` : `Edição ${year} • Encerrada`}
           </div>
         </div>
 

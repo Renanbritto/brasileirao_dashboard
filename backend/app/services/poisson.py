@@ -12,6 +12,7 @@ def build_head_to_head_analysis(
     away_team: dict[str, Any],
     league_avg_home_gf: float = 1.48,
     league_avg_away_gf: float = 0.98,
+    year: int = 2026,
 ) -> dict[str, Any]:
     """
     Computes Poisson match probabilities, exact scoreline probability matrix,
@@ -72,7 +73,7 @@ def build_head_to_head_analysis(
     total_p = prob_home_win + prob_draw + prob_away_win
     prob_home_win = round((prob_home_win / total_p) * 100.0, 1)
     prob_draw = round((prob_draw / total_p) * 100.0, 1)
-    prob_away_win = round(max(0.1, 100.0 - prob_home_win - prob_draw), 1)
+    prob_away_win = round(max(0.0, 100.0 - prob_home_win - prob_draw), 1)
 
     top_scores = sorted(scorelines, key=lambda x: x["probability"], reverse=True)[:6]
 
@@ -112,14 +113,22 @@ def build_head_to_head_analysis(
     h2h_home_wins = int(round(total_duels * h_win_ratio))
     h2h_away_wins = int(round(total_duels * a_win_ratio))
     h2h_draws = max(2, total_duels - h2h_home_wins - h2h_away_wins)
+    total_duels = h2h_home_wins + h2h_draws + h2h_away_wins
 
     tabu_games = 2 + (digest % 7)
-    tabu_holder = home_team["club"]["name"] if h2h_home_wins >= h2h_away_wins else away_team["club"]["name"]
-    tabu_victim = away_team["club"]["name"] if h2h_home_wins >= h2h_away_wins else home_team["club"]["name"]
+    home_dominates = h2h_home_wins >= h2h_away_wins
+    tabu_holder = home_team["club"]["name"] if home_dominates else away_team["club"]["name"]
+    tabu_victim = away_team["club"]["name"] if home_dominates else home_team["club"]["name"]
+    tabu_summary = (
+        f"O {tabu_holder} está invicto há {tabu_games} jogos como mandante no {home_team['club']['stadium_name']} contra o {tabu_victim}."
+        if home_dominates
+        else f"O {tabu_holder} venceu ou empatou os últimos {tabu_games} confrontos diretos recentes diante do {tabu_victim}."
+    )
 
     routs = ["4 x 0", "4 x 1", "5 x 1", "3 x 0", "4 x 2"]
     biggest_rout = routs[digest % len(routs)]
-    rout_year = 2008 + (digest % 17)
+    max_span = max(1, min(year - 2008, 17))
+    rout_year = 2008 + (digest % (max_span + 1))
 
     return {
         "home_team": home_team,
@@ -148,7 +157,7 @@ def build_head_to_head_analysis(
             "away_club_wins": h2h_away_wins,
             "home_club_goals": h2h_home_wins * 2 + h2h_draws,
             "away_club_goals": h2h_away_wins * 2 + h2h_draws,
-            "tabu_summary": f"O {tabu_holder} está invicto há {tabu_games} jogos atuando em casa contra o {tabu_victim}.",
+            "tabu_summary": tabu_summary,
             "biggest_rout": f"{tabu_holder} {biggest_rout} {tabu_victim} (Brasileirão {rout_year})",
         },
     }

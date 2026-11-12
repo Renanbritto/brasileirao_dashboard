@@ -141,7 +141,11 @@ def compute_spatial_tactics(club_slug: str, gf: int, ga: int) -> dict[str, Any]:
     }
 
 
-def serialize_season_team(st: SeasonTeam) -> dict[str, Any]:
+def serialize_season_team(
+    st: SeasonTeam,
+    avg_xg_pg: float = 1.38,
+    avg_xga_pg: float = 1.18,
+) -> dict[str, Any]:
     aprov_overall = round((st.points / max(1, st.played * 3)) * 100.0, 1)
     aprov_t1 = round((st.points_turn_1 / max(1, st.played_turn_1 * 3)) * 100.0, 1)
     aprov_t2 = round((st.points_turn_2 / max(1, st.played_turn_2 * 3)) * 100.0, 1)
@@ -160,11 +164,11 @@ def serialize_season_team(st: SeasonTeam) -> dict[str, Any]:
     xg_per_game = round(st.xg_for / max(1, st.played), 2)
     xga_per_game = round(st.xg_against / max(1, st.played), 2)
 
-    if xg_per_game >= 1.38 and xga_per_game <= 1.18:
+    if xg_per_game >= avg_xg_pg and xga_per_game <= avg_xga_pg:
         tactical_quadrant = "Dominante (Criativo & Sólido)"
-    elif xg_per_game < 1.38 and xga_per_game <= 1.18:
+    elif xg_per_game < avg_xg_pg and xga_per_game <= avg_xga_pg:
         tactical_quadrant = "Retranqueiro Letal"
-    elif xg_per_game >= 1.38 and xga_per_game > 1.18:
+    elif xg_per_game >= avg_xg_pg and xga_per_game > avg_xga_pg:
         tactical_quadrant = "Kamikaze (Ataque Forte / Defesa Exposta)"
     else:
         tactical_quadrant = "Vulnerável (Baixa Criação & Sofre Muito)"
@@ -328,7 +332,13 @@ def get_season_overview(division: str, year: int, db: Session = Depends(get_db))
         .order_by(SeasonTeam.position.asc())
         .all()
     )
-    teams = [serialize_season_team(st) for st in st_rows]
+    n_teams = max(1, len(st_rows))
+    avg_xg_pg = round(sum(st.xg_for / max(1, st.played) for st in st_rows) / n_teams, 2)
+    avg_xga_pg = round(sum(st.xg_against / max(1, st.played) for st in st_rows) / n_teams, 2)
+    avg_home_gf = round(sum(st.home_gf / max(1, st.home_played) for st in st_rows) / n_teams, 2)
+    avg_away_gf = round(sum(st.away_gf / max(1, st.away_played) for st in st_rows) / n_teams, 2)
+
+    teams = [serialize_season_team(st, avg_xg_pg=avg_xg_pg, avg_xga_pg=avg_xga_pg) for st in st_rows]
 
     match_rows = (
         db.query(Match)
@@ -377,8 +387,11 @@ def get_season_overview(division: str, year: int, db: Session = Depends(get_db))
             {"points": 58, "target_prob": 38.0},
             {"points": 60, "target_prob": 67.0},
             {"points": 62, "target_prob": 89.0},
+            {"points": 63, "target_prob": 95.8},
             {"points": 64, "target_prob": 98.5},
-            {"points": 66, "target_prob": 99.9},
+            {"points": 66, "target_prob": 99.8},
+            {"points": 67, "target_prob": 99.9},
+            {"points": 68, "target_prob": 100.0},
         ]
     else:
         magic_z4_curve = [
@@ -419,6 +432,12 @@ def get_season_overview(division: str, year: int, db: Session = Depends(get_db))
             "z4_escape": magic_z4_curve,
             "g4_target": magic_top_curve,
         },
+        "benchmarks": {
+            "avg_xg_per_game": avg_xg_pg,
+            "avg_xga_per_game": avg_xga_pg,
+            "avg_home_gf": avg_home_gf,
+            "avg_away_gf": avg_away_gf,
+        },
     }
 
 
@@ -457,12 +476,21 @@ def get_fan_calculator(
     team = next((t for t in overview["standings"] if t["club"]["slug"] == club_slug), None)
     if not team:
         team = overview["standings"][0]
+    season_info = overview["season"]
+    magic_targets = {
+        "TITULO": season_info["magic_title_pts"],
+        "G4": season_info["magic_g4_pts"],
+        "G6": season_info["magic_g6_pts"],
+        "SULA": season_info["magic_sula_pts"],
+        "Z4": season_info["magic_escape_z4_pts"],
+    }
     return calculate_fan_target(
         team=team,
         division=division.upper(),
         target_key=target,
         custom_points=custom_points,
-        total_rounds=overview["season"]["total_rounds"],
+        total_rounds=season_info["total_rounds"],
+        magic_targets=magic_targets,
     )
 
 
@@ -480,7 +508,14 @@ def get_head_to_head(
     away_team = next((t for t in teams if t["club"]["slug"] == away_slug), teams[1])
     if home_team["club"]["slug"] == away_team["club"]["slug"] and len(teams) > 1:
         away_team = teams[1] if home_team != teams[1] else teams[0]
-    return build_head_to_head_analysis(home_team, away_team)
+    bench = overview["benchmarks"]
+    return build_head_to_head_analysis(
+        home_team,
+        away_team,
+        league_avg_home_gf=bench["avg_home_gf"],
+        league_avg_away_gf=bench["avg_away_gf"],
+        year=year,
+    )
 
 
 @router.get("/history/bridge")
@@ -562,8 +597,8 @@ def get_history_bridge(db: Session = Depends(get_db)):
         {"year": 2021, "champion": "Atlético-MG", "champ_pts": 84, "g4_pts": 58, "z4_escape_pts": 46, "serie_b_champ": "Botafogo", "serie_b_access_pts": 64},
         {"year": 2022, "champion": "Palmeiras", "champ_pts": 81, "g4_pts": 65, "z4_escape_pts": 42, "serie_b_champ": "Cruzeiro", "serie_b_access_pts": 62},
         {"year": 2023, "champion": "Palmeiras", "champ_pts": 70, "g4_pts": 66, "z4_escape_pts": 44, "serie_b_champ": "Vitória", "serie_b_access_pts": 64},
-        {"year": 2024, "champion": "Botafogo", "champ_pts": 79, "g4_pts": 65, "z4_escape_pts": 45, "serie_b_champ": "Santos", "serie_b_access_pts": 64},
-        {"year": 2025, "champion": "Palmeiras", "champ_pts": 78, "g4_pts": 63, "z4_escape_pts": 44, "serie_b_champ": "Coritiba", "serie_b_access_pts": 64},
+        {"year": 2024, "champion": "Botafogo", "champ_pts": 79, "g4_pts": 68, "z4_escape_pts": 44, "serie_b_champ": "Santos", "serie_b_access_pts": 64},
+        {"year": 2025, "champion": "Flamengo", "champ_pts": 79, "g4_pts": 67, "z4_escape_pts": 44, "serie_b_champ": "Coritiba", "serie_b_access_pts": 62},
     ]
 
     return {
@@ -585,23 +620,26 @@ def get_history_bridge(db: Session = Depends(get_db)):
 
 @router.post("/sync/official-table")
 def sync_official_table(db: Session = Depends(get_db)):
-    """Sincroniza a tabela oficial da Série A 2026 com os dados oficiais CBF / Google."""
-    result = sync_serie_a_2026_standings(db)
-    return result
+    """Sincroniza todas as temporadas (2024-2026, Série A e B) com os dados oficiais CBF."""
+    from app.services.table_sync import sync_all_official_seasons
+
+    return sync_all_official_seasons(db)
 
 
 @router.get("/sync/official-table")
 def get_sync_status(db: Session = Depends(get_db)):
-    """Retorna o status atual da sincronização da tabela oficial."""
-    season = db.query(Season).filter(Season.division == "A", Season.year == 2026).first()
-    if not season:
-        return {"synced": False, "message": "Temporada 2026 não encontrada"}
-    teams_count = db.query(SeasonTeam).filter(SeasonTeam.season_id == season.id).count()
+    """Retorna o status atual da sincronização das temporadas."""
+    seasons = db.query(Season).order_by(Season.year.desc(), Season.division.asc()).all()
+    if not seasons:
+        return {"synced": False, "message": "Nenhuma temporada sincronizada"}
+    season_2026_a = next((s for s in seasons if s.year == 2026 and s.division == "A"), seasons[0])
+    teams_count = db.query(SeasonTeam).filter(SeasonTeam.season_id == season_2026_a.id).count()
     return {
         "synced": True,
-        "division": "A",
-        "year": 2026,
-        "current_round": season.current_round,
+        "division": season_2026_a.division,
+        "year": season_2026_a.year,
+        "current_round": season_2026_a.current_round,
         "teams_count": teams_count,
+        "total_seasons_synced": len(seasons),
     }
 

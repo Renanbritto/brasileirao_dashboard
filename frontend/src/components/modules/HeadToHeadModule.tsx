@@ -62,11 +62,21 @@ export function HeadToHeadModule({
   }, [data, division, year, favoriteClubSlug]);
 
   useEffect(() => {
-    if (!homeSlug || !awaySlug) return;
+    if (!homeSlug || !awaySlug || homeSlug === awaySlug) return;
+    const homeValid = data.standings.some((t) => t.club.slug === homeSlug);
+    const awayValid = data.standings.some((t) => t.club.slug === awaySlug);
+    if (!homeValid || !awayValid) return;
+
+    let cancelled = false;
     fetchHeadToHead(division, year, homeSlug, awaySlug)
-      .then(setH2h)
+      .then((res) => {
+        if (!cancelled) setH2h(res);
+      })
       .catch(() => {});
-  }, [division, year, homeSlug, awaySlug]);
+    return () => {
+      cancelled = true;
+    };
+  }, [division, year, homeSlug, awaySlug, data.standings]);
 
   function swapClubs() {
     setHomeSlug(awaySlug);
@@ -146,7 +156,9 @@ export function HeadToHeadModule({
                     Simulador de Poisson — Probabilidades & Placares
                   </CardTitle>
                 </div>
-                <Badge variant="default">Modelo Bivariado</Badge>
+                <Badge variant="default">
+                  Poisson • Série {division} ({year})
+                </Badge>
               </div>
               <CardDescription>
                 Cruza a Força de Ataque/Defesa em Casa do {h2h.home_team.club.name} com a Força Visitante do {h2h.away_team.club.name}

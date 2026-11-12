@@ -255,17 +255,19 @@ export function RoundsTurnsModule({
                     />
                   )}
                 />
-                <ReferenceLine
-                  x={19}
-                  stroke="#f59e0b"
-                  strokeDasharray="4 4"
-                  label={{
-                    value: "Fim 1º Turno (R19)",
-                    fill: "#f59e0b",
-                    fontSize: 10,
-                    position: "top",
-                  }}
-                />
+                {data.season.current_round >= 19 && (
+                  <ReferenceLine
+                    x={19}
+                    stroke="#f59e0b"
+                    strokeDasharray="4 4"
+                    label={{
+                      value: "Fim 1º Turno (R19)",
+                      fill: "#f59e0b",
+                      fontSize: 10,
+                      position: "top",
+                    }}
+                  />
+                )}
                 <ReferenceLine y={4} stroke="#10b981" strokeDasharray="2 2" />
                 <ReferenceLine y={16.5} stroke="#f43f5e" strokeDasharray="2 2" />
                 {bumpTeams.map((t, idx) => {
@@ -441,24 +443,47 @@ export function RoundsTurnsModule({
             </div>
 
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs space-y-2 dark:border-slate-800 dark:bg-slate-950/70">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-700 dark:text-slate-400">
-                  Fuga Segura do Z4 (Série {division}):
-                </span>
-                <Badge variant="default">
-                  {data.season.magic_escape_z4_pts} pontos (98,2% salvos)
-                </Badge>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-700 dark:text-slate-400">
-                  {division === "A" ? "Libertadores G4:" : "Acesso Garantido Série A:"}
-                </span>
-                <Badge variant="info">
-                  {data.season.magic_g4_pts} pontos (95,8% garantidos)
-                </Badge>
-              </div>
+              {(() => {
+                const z4Curve = data.magic_curves.z4_escape;
+                const g4Curve = data.magic_curves.g4_target;
+                const z4Match =
+                  z4Curve.find((p) => p.points === data.season.magic_escape_z4_pts) ||
+                  z4Curve[z4Curve.length - 1];
+                const g4Match =
+                  g4Curve.find((p) => p.points >= data.season.magic_g4_pts) ||
+                  g4Curve[g4Curve.length - 1];
+                const z4Pct = (z4Match?.escape_prob ?? (division === "A" ? 98.2 : 94.5))
+                  .toFixed(1)
+                  .replace(".", ",");
+                const g4Pct = (g4Match?.target_prob ?? (division === "A" ? 98.5 : 95.8))
+                  .toFixed(1)
+                  .replace(".", ",");
+
+                return (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-slate-700 dark:text-slate-400">
+                        Fuga Segura do Z4 (Série {division}):
+                      </span>
+                      <Badge variant="default">
+                        {data.season.magic_escape_z4_pts} pontos ({z4Pct}% salvos)
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-slate-700 dark:text-slate-400">
+                        {division === "A" ? "Libertadores G4:" : "Acesso Garantido Série A:"}
+                      </span>
+                      <Badge variant="info">
+                        {data.season.magic_g4_pts} pontos ({g4Pct}% garantidos)
+                      </Badge>
+                    </div>
+                  </>
+                );
+              })()}
               <p className="text-[11px] text-slate-500 dark:text-slate-400 pt-1">
-                Na era dos pontos corridos com 20 clubes, apenas 2 clubes caíram na Série A somando 45 pontos (Coritiba 2009 e Internacional 2016/Goiás).
+                {division === "A"
+                  ? "Na era dos pontos corridos com 20 clubes na Série A, 45 pontos representa a marca histórica de permanência (mais de 98% de sobrevida)."
+                  : "Na Série B de 20 clubes em pontos corridos, a faixa de 43 a 45 pontos assegura permanência e 62 a 64 pontos crava o acesso ao G4."}
               </p>
             </div>
           </CardContent>

@@ -34,10 +34,14 @@ import { HistoryBridgeData, fetchHistoryBridge } from "@/lib/api";
 
 interface HistoryBridgeModuleProps {
   favoriteClubSlug: string;
+  division?: "A" | "B";
+  year?: number;
 }
 
 export function HistoryBridgeModule({
   favoriteClubSlug,
+  division,
+  year,
 }: HistoryBridgeModuleProps) {
   const [bridge, setBridge] = useState<HistoryBridgeData | null>(null);
 
@@ -166,7 +170,16 @@ export function HistoryBridgeModule({
             <div className="grid grid-cols-14 gap-1.5 pb-2 border-b border-slate-300 text-[11px] font-black text-slate-700 text-center dark:border-slate-800 dark:text-slate-400">
               <div className="col-span-2 text-left pl-2">Clube (Ioiô)</div>
               {years.map((yr) => (
-                <div key={yr}>{yr}</div>
+                <div
+                  key={yr}
+                  className={
+                    yr === year
+                      ? "rounded bg-emerald-500/15 text-emerald-700 ring-1 ring-emerald-500/40 dark:text-emerald-300"
+                      : ""
+                  }
+                >
+                  {yr}
+                </div>
               ))}
             </div>
 
@@ -221,7 +234,9 @@ export function HistoryBridgeModule({
                         <div
                           key={yr}
                           title={`${yr}: Série ${cell.division} - ${cell.position}º lugar (${cell.points} pts) [${cell.outcome}]`}
-                          className={`rounded border py-1 text-[10px] ${badgeStyle}`}
+                          className={`rounded border py-1 text-[10px] ${badgeStyle} ${
+                            yr === year ? "ring-2 ring-emerald-400/70" : ""
+                          }`}
                         >
                           <span>{cell.division}</span>{" "}
                           <span className="opacity-85">({cell.position}º)</span>

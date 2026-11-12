@@ -24,7 +24,9 @@ interface DashboardSidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (val: boolean) => void;
   division: "A" | "B";
+  year: number;
   currentRound: number;
+  totalRounds: number;
   isCurrentSeason: boolean;
 }
 
@@ -80,7 +82,9 @@ export function DashboardSidebar({
   isCollapsed,
   setIsCollapsed,
   division,
+  year,
   currentRound,
+  totalRounds,
   isCurrentSeason,
 }: DashboardSidebarProps) {
   const { theme, toggleTheme } = useTheme();
@@ -158,11 +162,21 @@ export function DashboardSidebar({
                 {!isCollapsed && (
                   <div className="flex min-w-0 flex-1 items-center justify-between gap-1.5">
                     <span className="truncate text-xs font-semibold">
-                      {mod.label}
+                      {mod.key === "live"
+                        ? isCurrentSeason
+                          ? "Temporada Atual"
+                          : `Temporada ${year}`
+                        : mod.label}
                     </span>
-                    {mod.badge && (
-                      <span className="shrink-0 rounded-full bg-emerald-500/15 border border-emerald-500/25 px-1.5 py-0.2 text-[9px] font-black uppercase text-emerald-400">
-                        {mod.badge}
+                    {mod.key === "live" && (
+                      <span
+                        className={`shrink-0 rounded-full border px-1.5 py-0.2 text-[9px] font-black uppercase ${
+                          isCurrentSeason
+                            ? "bg-emerald-500/15 border-emerald-500/25 text-emerald-400"
+                            : "bg-slate-200/80 border-slate-300 text-slate-700 dark:bg-white/[0.06] dark:border-white/[0.12] dark:text-zinc-300"
+                        }`}
+                      >
+                        {isCurrentSeason ? "Ao Vivo" : "Final"}
                       </span>
                     )}
                   </div>
@@ -172,7 +186,11 @@ export function DashboardSidebar({
               {/* Flyout Tooltip when Sidebar is Collapsed */}
               {isCollapsed && (
                 <div className="pointer-events-none invisible absolute left-[70px] top-1/2 z-50 -translate-y-1/2 whitespace-nowrap rounded-xl border border-white/10 bg-[#090c14] px-3 py-1.5 text-xs font-bold text-white shadow-xl opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
-                  {mod.label}
+                  {mod.key === "live"
+                    ? isCurrentSeason
+                      ? "Temporada Atual"
+                      : `Temporada ${year}`
+                    : mod.label}
                 </div>
               )}
             </div>
@@ -208,10 +226,14 @@ export function DashboardSidebar({
       <div className="border-t border-white/[0.06] p-2.5">
         {isCollapsed ? (
           <div
-            title={`Série ${division} • Rodada ${currentRound}/38`}
+            title={`Série ${division} • ${year} • Rodada ${currentRound}/${totalRounds}`}
             className="flex flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 text-zinc-400 hover:text-white transition-colors"
           >
-            <Radio className="h-3 w-3 text-emerald-400 animate-pulse" />
+            <Radio
+              className={`h-3 w-3 ${
+                isCurrentSeason ? "text-emerald-400 animate-pulse" : "text-zinc-400"
+              }`}
+            />
             <span className="font-mono text-[9px] font-bold text-zinc-300">
               R{currentRound}
             </span>
@@ -219,13 +241,21 @@ export function DashboardSidebar({
         ) : (
           <div className="flex items-center justify-between rounded-xl bg-white/[0.02] border border-white/[0.06] px-3 py-2 text-xs">
             <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${
+                  isCurrentSeason ? "bg-emerald-400 animate-pulse" : "bg-zinc-400"
+                }`}
+              />
               <span className="text-[11px] font-bold text-zinc-300">
-                Série {division}
+                Série {division} • {year}
               </span>
             </div>
-            <span className="font-mono text-[11px] font-bold text-emerald-400">
-              Rodada {currentRound}/38
+            <span
+              className={`font-mono text-[11px] font-bold ${
+                isCurrentSeason ? "text-emerald-400" : "text-zinc-300"
+              }`}
+            >
+              {isCurrentSeason ? `Rodada ${currentRound}/${totalRounds}` : `${currentRound}/${totalRounds} Final`}
             </span>
           </div>
         )}
