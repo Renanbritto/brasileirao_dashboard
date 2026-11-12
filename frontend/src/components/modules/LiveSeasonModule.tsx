@@ -869,8 +869,8 @@ export function LiveSeasonModule({
         </Card>
 
         {/* Interactive Round Simulator ("Secador Oficial") */}
-        <Card className="xl:col-span-5">
-          <CardHeader className="pb-4">
+        <Card className="xl:col-span-5 flex flex-col">
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="obsidian-well flex h-8 w-8 items-center justify-center rounded-xl text-emerald-400">
@@ -887,12 +887,12 @@ export function LiveSeasonModule({
                 </span>
               )}
             </div>
-            <CardDescription>
+            <CardDescription className="text-xs">
               Altere os placares abaixo e veja a Tabela e as Probabilidades Monte Carlo mudarem em tempo real!
             </CardDescription>
 
             {/* Quick Simulator Action Buttons */}
-            <div className="mt-2.5 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               <Button
                 size="sm"
                 variant="default"
@@ -918,120 +918,124 @@ export function LiveSeasonModule({
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-3 max-h-[680px] overflow-y-auto pr-2">
-            {data.round_matches.map((match) => {
-              const score = simScores[match.id] || { home: "", away: "" };
-              const isFavMatch =
-                match.home_club.slug === favoriteClubSlug ||
-                match.away_club.slug === favoriteClubSlug;
+          <CardContent className="flex flex-1 flex-col pt-0 pb-4">
+            <div className="grid flex-1 grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-1 xl:auto-rows-fr xl:gap-1.5">
+              {data.round_matches.map((match) => {
+                const score = simScores[match.id] || { home: "", away: "" };
+                const isFavMatch =
+                  match.home_club.slug === favoriteClubSlug ||
+                  match.away_club.slug === favoriteClubSlug;
 
-              return (
-                <div
-                  key={match.id}
-                  className={`obsidian-subcard rounded-2xl p-3.5 transition-all ${
-                    isFavMatch
-                      ? "border-amber-400/50 bg-amber-500/10"
-                      : match.is_six_pointer
-                      ? "border-emerald-400/25"
-                      : ""
-                  }`}
-                >
-                  <div className="mb-2.5 flex items-center justify-between text-[10px] text-zinc-400">
-                    <span className="font-medium">
-                      {match.kickoff_slot} • {match.stadium}
-                    </span>
-                    {match.is_six_pointer && (
-                      <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[9px] font-extrabold text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/30">
-                        {match.six_pointer_label}
+                return (
+                  <div
+                    key={match.id}
+                    className={`obsidian-subcard flex flex-col justify-between rounded-xl px-3 py-1.5 transition-all ${
+                      isFavMatch
+                        ? "border-amber-400/50 bg-amber-500/10"
+                        : match.is_six_pointer
+                        ? "border-emerald-400/25"
+                        : ""
+                    }`}
+                  >
+                    <div className="mb-1 flex items-center justify-between gap-2 text-[10px] text-zinc-400">
+                      <span className="min-w-0 truncate font-medium">
+                        {match.kickoff_slot} • {match.stadium}
                       </span>
-                    )}
-                  </div>
+                      {match.is_six_pointer && (
+                        <span className="shrink-0 rounded-full bg-rose-100 px-2 py-0.5 text-[9px] font-extrabold text-rose-800 border border-rose-300 dark:bg-rose-500/20 dark:text-rose-300 dark:border-rose-400/30">
+                          {match.six_pointer_label}
+                        </span>
+                      )}
+                    </div>
 
-                  {/* Teams & Score Inputs */}
-                  <div className="flex items-center justify-between gap-2">
-                    {/* Home Club */}
-                    <div className="flex flex-1 items-center justify-end gap-2.5 text-right">
-                      <div>
-                        <p className="text-xs font-extrabold text-white">
-                          {match.home_club.name}
-                        </p>
-                        <p className="font-mono text-[10px] text-zinc-400">
-                          {match.home_position}º lugar
-                        </p>
+                    {/* Teams & Score Inputs */}
+                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+                      {/* Home Club */}
+                      <div className="flex min-w-0 items-center justify-end gap-2 text-right">
+                        <div className="min-w-0">
+                          <p className="truncate text-xs font-extrabold leading-tight text-white">
+                            {match.home_club.name}
+                          </p>
+                          <p className="font-mono text-[10px] leading-tight text-zinc-400">
+                            {match.home_position}º lugar
+                          </p>
+                        </div>
+                        <ClubCrest club={match.home_club} size="md" />
                       </div>
-                      <ClubCrest club={match.home_club} size="md" />
+
+                      {/* Score Box */}
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          min={0}
+                          max={9}
+                          placeholder="-"
+                          value={score.home}
+                          onChange={(e) =>
+                            handleScoreChange(match.id, "home", e.target.value)
+                          }
+                          className="obsidian-well h-8 w-10 rounded-lg text-center font-mono text-xs font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
+                        />
+                        <span className="text-[11px] font-bold text-zinc-500">×</span>
+                        <input
+                          type="number"
+                          min={0}
+                          max={9}
+                          placeholder="-"
+                          value={score.away}
+                          onChange={(e) =>
+                            handleScoreChange(match.id, "away", e.target.value)
+                          }
+                          className="obsidian-well h-8 w-10 rounded-lg text-center font-mono text-xs font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
+                        />
+                      </div>
+
+                      {/* Away Club */}
+                      <div className="flex min-w-0 items-center gap-2 text-left">
+                        <ClubCrest club={match.away_club} size="md" />
+                        <div className="min-w-0">
+                          <p className="truncate text-xs font-extrabold leading-tight text-white">
+                            {match.away_club.name}
+                          </p>
+                          <p className="font-mono text-[10px] leading-tight text-zinc-400">
+                            {match.away_position}º lugar
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Score Box */}
-                    <div className="flex items-center gap-1.5">
-                      <input
-                        type="number"
-                        min={0}
-                        max={9}
-                        placeholder="-"
-                        value={score.home}
-                        onChange={(e) =>
-                          handleScoreChange(match.id, "home", e.target.value)
-                        }
-                        className="obsidian-well h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
-                      />
-                      <span className="text-xs font-bold text-zinc-500">×</span>
-                      <input
-                        type="number"
-                        min={0}
-                        max={9}
-                        placeholder="-"
-                        value={score.away}
-                        onChange={(e) =>
-                          handleScoreChange(match.id, "away", e.target.value)
-                        }
-                        className="obsidian-well h-10 w-12 rounded-xl text-center font-mono text-sm font-extrabold text-white transition-colors focus:border-emerald-400 focus:outline-none"
-                      />
-                    </div>
-
-                    {/* Away Club */}
-                    <div className="flex flex-1 items-center gap-2.5 text-left">
-                      <ClubCrest club={match.away_club} size="md" />
-                      <div>
-                        <p className="text-xs font-extrabold text-white">
-                          {match.away_club.name}
-                        </p>
-                        <p className="font-mono text-[10px] text-zinc-400">
-                          {match.away_position}º lugar
-                        </p>
+                    {/* Pre-match Probabilities Bar */}
+                    <div className="mt-1.5">
+                      <div className="flex justify-between font-mono text-[9.5px] leading-none">
+                        <span className="font-bold text-emerald-700 dark:text-emerald-400">
+                          Casa {match.pred_home_win}%
+                        </span>
+                        <span className="font-bold text-slate-600 dark:text-zinc-400">
+                          Empate {match.pred_draw}%
+                        </span>
+                        <span className="font-bold text-sky-700 dark:text-sky-400">
+                          Fora {match.pred_away_win}%
+                        </span>
+                      </div>
+                      <div className="mt-1 flex h-1 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-white/[0.05]">
+                        <div
+                          className="bg-emerald-500 dark:bg-emerald-400"
+                          style={{ width: `${match.pred_home_win}%` }}
+                        />
+                        <div
+                          className="bg-slate-400 dark:bg-zinc-600"
+                          style={{ width: `${match.pred_draw}%` }}
+                        />
+                        <div
+                          className="bg-sky-500 dark:bg-sky-400"
+                          style={{ width: `${match.pred_away_win}%` }}
+                        />
                       </div>
                     </div>
                   </div>
-
-                  {/* Pre-match Probabilities Bar */}
-                  <div className="mt-3">
-                    <div className="flex justify-between font-mono text-[10px]">
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400">
-                        Casa {match.pred_home_win}%
-                      </span>
-                      <span className="font-bold text-slate-600 dark:text-zinc-400">Empate {match.pred_draw}%</span>
-                      <span className="font-bold text-sky-700 dark:text-sky-400">
-                        Fora {match.pred_away_win}%
-                      </span>
-                    </div>
-                    <div className="mt-1 flex h-1.5 w-full overflow-hidden rounded-full bg-slate-200 border border-slate-300 dark:bg-black/60 dark:border-white/[0.05]">
-                      <div
-                        className="bg-emerald-500 dark:bg-emerald-400"
-                        style={{ width: `${match.pred_home_win}%` }}
-                      />
-                      <div
-                        className="bg-slate-400 dark:bg-zinc-600"
-                        style={{ width: `${match.pred_draw}%` }}
-                      />
-                      <div
-                        className="bg-sky-500 dark:bg-sky-400"
-                        style={{ width: `${match.pred_away_win}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </CardContent>
         </Card>
       </div>
